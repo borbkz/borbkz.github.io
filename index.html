@@ -7,7 +7,7 @@
 			text-align:center;
                 border-collapse: collapse;
                 border: 2px black solid;
-                font: 12px sans-serif;
+                font: 14px sans-serif;
             }
 
             td {
@@ -17,7 +17,7 @@
             }
 			
 
-			body {background-color: #ADADAD;}
+			body {background-color: #CbCbCb;}
 			.center {
 			margin: auto;
 			width: 80%;
@@ -36,12 +36,16 @@
 	
 	
 	var difficultyArray = {};
-	var headerArray =  ["Map Name", "Difficulty", "TP TIME", "TELEPORTS", "TP RANK", "PRO TIME", "PRO TELEPORTS", "PRO RANK"];
-
+	var headerArray =  ["MAP NAME", "DIFFICULTY", "TP TIME", "TELEPORTS", "TP RANK", "PRO TIME", "PRO TELEPORTS", "PRO RANK"];
+	var tiers = {0: "Non-global", 1: "Very Easy", 2: "Easy", 3: "Medium", 4: "Hard", 5: "Very Hard", 6: "Death"};
+	
 	$.getJSON("maps.json", function(data){
 		
 		$.each(data, function(i,field){
-			difficultyArray[field["Map"]] = [field["TP Difficulty"]];
+			tier = field["TP Difficulty"]
+			if(!Number.isInteger(tier) && (tier >=0 && tier <= 6))
+				tier = 0;
+			difficultyArray[field["Map"]] = [tiers[tier]];
 		});
 	}); //end json
 	
