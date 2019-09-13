@@ -4,16 +4,19 @@
 	 <title>Borb's KZ</title>
 	 <style>
             table {
+			text-align:center;
                 border-collapse: collapse;
                 border: 2px black solid;
                 font: 12px sans-serif;
             }
 
             td {
+
                 border: 2px black solid;
                 padding: 10px;
             }
 			
+
 			body {background-color: #ADADAD;}
 			.center {
 			margin: auto;
@@ -123,7 +126,7 @@
    
 			var table = document.createElement('table');
 			var tableBody = document.createElement('tbody');
-
+	
 			tableData.forEach(function(rowData) {
 			var row = document.createElement('tr');
 
@@ -160,7 +163,16 @@
 	   
 	   <h2> Input</h2>
 	   
-	   <textarea  rows="20" cols="100" id="inputMapsTextArea">Paste your finished times here...</textarea>
+	   <textarea  rows="20" cols="100" id="inputMapsTextArea">
+Paste your finished times here...
+
+
+Example:
+kz_11342, Time: 01:29.58 (PRO), Teleports: 0, Rank: 1/2
+kz_11342, Time: 01:29.95 (TP), Teleports: 1, Rank: 1/18
+kz_11735, Time: 01:29.82 (TP), Teleports: 4, Rank: 1/21
+kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
+</textarea>
 	   
 	   <div class="RunSelection">
 		<input type="checkbox" name="finishedStatus"  checked="checked">Finished Runs 
@@ -174,7 +186,7 @@
 	   
 	   <textarea  rows="20" cols="100" id="outputMapsTextArea"></textarea>-->
 	   
-	   <table id="mapSpreadsheet">
+	   <table class="centerTable" id="mapSpreadsheet">
 	   
 	   </table>
 	   </div>
