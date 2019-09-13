@@ -1,116 +1,153 @@
 <!DOCTYPE html>
-<html>
-    <head>
-	 <title>Borb's KZ</title>
-	 <style>
-            table {
-			text-align:center;
-                border-collapse: collapse;
-                border: 2px black solid;
-                font: 14px sans-serif;
-            }
 
-            td {
+<head>
+	<title>Borb's KZ</title>
+	<style>
+		table {
+			text-align: center;
+			border-collapse: collapse;
+			border: 2px black solid;
+			font: 12px sans-serif;
+			width: 50%;
+			margin: 10px auto;
+			background-color:#cdcdcd;
+		}
 
-                border: 2px black solid;
-                padding: 10px;
-            }
-			
+		td {
+			padding-top: 12px;
+			padding-bottom: 12px;
+			text-align: left;
 
-			body {background-color: #CbCbCb;}
-			.center {
+			border: 1px grey solid;
+			padding: 10px;
+		}
+		th {
+			padding-top: 12px;
+			padding-bottom: 12px;
+			text-align: left;
+			background-color: #EDC397;
+
+			border: 1px grey solid;
+			padding: 10px;
+		}
+
+		tr:nth-child(even) {
+			background-color: 	white;
+		}
+
+		#mapSpreadsheet tr:hover {
+
+			background-color: #ddd;
+		}
+
+
+		body {
+			background-color: #657782
+		}
+
+
+		.center {
+			color: white;
 			margin: auto;
-			width: 80%;
-			
+			width: 50%;
+
 			padding: 20px;
-			}
-			
-			textarea{
-				width:100%;
-			}
-			
-        </style>
+		}
+
+		textarea {
+			width: 100%;
+		}
+	</style>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	
+
 	<script>
-	
-	
-	var difficultyArray = {};
-	var headerArray =  ["MAP NAME", "DIFFICULTY", "TP TIME", "TELEPORTS", "TP RANK", "PRO TIME", "PRO TELEPORTS", "PRO RANK"];
-	var tiers = {0: "Non-global", 1: "Very Easy", 2: "Easy", 3: "Medium", 4: "Hard", 5: "Very Hard", 6: "Death"};
-	
-	$.getJSON("maps.json", function(data){
-		
-		$.each(data, function(i,field){
-			tier = field["TP Difficulty"]
-			if(!Number.isInteger(tier) && (tier >=0 && tier <= 6))
-				tier = 0;
-			difficultyArray[field["Map"]] = [tiers[tier]];
-		});
-	}); //end json
-	
-	$(document).ready(function(){
-		$("#convertButton").click(function(){
-		
-			var textIn = $("#inputMapsTextArea");
-			//var textOut = $("#outputMapsTextArea");
-			
-		
-			$.each(textIn.val().split("\n"), function(i, line){
-				if(!(/.+,.+,.+,.+$/.test(line))){
-					
-					line=",,,,"
-				}
-				mapInfo = line.split(",");
+		var difficultyArray = {};
+		var headerArray = ["MAP NAME", "DIFFICULTY", "TP TIME", "TELEPORTS", "TP RANK", "PRO TIME", "PRO TELEPORTS",
+			"PRO RANK"
+		];
+		var tiers = {
+			0: "Non-global",
+			1: "Very Easy",
+			2: "Easy",
+			3: "Medium",
+			4: "Hard",
+			5: "Very Hard",
+			6: "Death"
+		};
+
+		$.getJSON("maps.json", function (data) {
+
+			$.each(data, function (i, field) {
+				tier = field["TP Difficulty"]
+				if (!Number.isInteger(tier) && (tier >= 0 && tier <= 6))
+					tier = 0;
+				difficultyArray[field["Map"]] = [tiers[tier]];
+			});
+		}); //end json
+
+		$(document).ready(function () {
+			$("#convertButton").click(function () {
+
+				var textIn = $("#inputMapsTextArea");
+				//var textOut = $("#outputMapsTextArea");
+
+
+				$.each(textIn.val().split("\n"), function (i, line) {
+					if (!(/.+,.+,.+,.+$/.test(line))) {
+
+						line = ",,,,"
+					}
+					mapInfo = line.split(",");
 					//[mapname][difficulty, TP time, TP Teleports, TP Rank, Pro time, PRO teleports, Pro Rank]		 
-					offset = mapInfo[1].includes("(PRO)")?3:0;
+					offset = mapInfo[1].includes("(PRO)") ? 3 : 0;
 					mapName = mapInfo[0];
-				
-					if(mapName in difficultyArray){
+
+					if (mapName in difficultyArray) {
 						writeToArray(mapInfo, difficultyArray[mapName], offset);
-					}else{
-						temp = [ difficultyArray[mapName]];
-						writeToArray(mapInfo,temp, offset);
-						difficultyArray[mapName] =temp;
+					} else {
+						temp = [difficultyArray[mapName]];
+						writeToArray(mapInfo, temp, offset);
+						difficultyArray[mapName] = temp;
 					}
 
-				
-			});
-			
-			function writeToArray(arrIn, arrOut, offset){
-				for(i = 1; i < 4; i++){
-					arrOut[i+offset]= arrIn[i].replace(/Time: /g,'').replace(/Teleports: /g,'' )
-							.replace(/Rank: /g,'');
+
+				});
+
+				function writeToArray(arrIn, arrOut, offset) {
+					for (i = 1; i < 4; i++) {
+						arrOut[i + offset] = arrIn[i].replace(/Time: /g, '').replace(/Teleports: /g, '')
+							.replace(/Rank: /g, '');
+					}
 				}
-			}
-			printAllMaps();
-			function printAllMaps(){
+				printAllMaps();
+
+				function printAllMaps() {
 					//clear area first
 					//textOut[0].value = "";
-					
+
 					outputBuffer = [""];
-					tableBuffer = [headerArray];
-				
+					tableBuffer = [];
+
 					finishedStatus = $('input[name=finishedStatus]:checked').val();
 					unfinishedStatus = $('input[name=unfinishedStatus]:checked').val();
-					for (var map in difficultyArray){
-						
-						
-						
-					if(finishedStatus && difficultyArray[map].length >1 ||
-							unfinishedStatus && difficultyArray[map].length<=1){
-							line = map + ", " + difficultyArray[map] ;
+					for (var map in difficultyArray) {
+
+
+
+						if (finishedStatus && difficultyArray[map].length > 1 ||
+							unfinishedStatus && difficultyArray[map].length <= 1) {
+							line = map + ", " + difficultyArray[map];
 							outputBuffer.push(map + ", " + difficultyArray[map] + "\n");
-							
+
 							length = difficultyArray[map].length;
 							row = line.split(",");
-							
-							for (i = length; i < (headerArray.length-1); i++){
+
+							for (i = length; i < (headerArray.length - 1); i++) {
 								row.push("");
 							}
 							tableBuffer.push(row);
-						
-							}
+
+						}
 					}
 					/*
 					textOut[0].value += headerArray+"\n";
@@ -119,55 +156,67 @@
 						textOut[0].value += outputBuffer[i];
 						textOut[0].value +=difficultyArray[map].length + " | " + map + ", " + difficultyArray[map] + "\n";
 					}*/
-				
-			
-			}
-		
-			function createTable(tableData) {
-			var tables = document.getElementsByTagName("TABLE");
-				for (var i=tables.length-1; i>=0;i-=1)
-				if (tables[i]) tables[i].parentNode.removeChild(tables[i]);
-   
-			var table = document.createElement('table');
-			var tableBody = document.createElement('tbody');
-	
-			tableData.forEach(function(rowData) {
-			var row = document.createElement('tr');
 
-			rowData.forEach(function(cellData) {
-				var cell = document.createElement('td');
-				cell.appendChild(document.createTextNode(cellData));
-				row.appendChild(cell);
-			});
 
-			tableBody.appendChild(row);
-			});
+				}
 
-			table.appendChild(tableBody);
-			document.body.appendChild(table);
-			}
-	
-			createTable(tableBuffer);
+				function createTable(tableData) {
+					var tables = document.getElementsByTagName("TABLE");
+					for (var i = tables.length - 1; i >= 0; i -= 1)
+						if (tables[i]) tables[i].parentNode.removeChild(tables[i]);
 
-		}); //end click
-		
+					var table = document.createElement('table');
+					var tableBody = document.createElement('tbody');
 
-	}); //end ready
-		
+					var headerRow = document.createElement('tr');
+					for(var header in headerArray){
+						var cell = document.createElement('th');
 
+						cell.appendChild(document.createTextNode(headerArray[header]));
+						headerRow.appendChild(cell);
+
+					}
+					tableBody.appendChild(headerRow);
+					tableData.forEach(function (rowData) {
+						var row = document.createElement('tr');
+
+
+						rowData.forEach(function (cellData) {
+							var cell = document.createElement('td');
+							cell.appendChild(document.createTextNode(cellData));
+							row.appendChild(cell);
+						});
+
+						tableBody.appendChild(row);
+					});
+
+					table.appendChild(tableBody);
+					document.body.appendChild(table);
+				}
+
+				createTable(tableBuffer);
+
+			}); //end click
+
+
+		}); //end ready
 	</script>
-	
-	
-	</head>
 
-	   <body>
-	   <div class="center">
-	   
-	   <h1> Local Maps Organizer (Under Construction)</h1>
-	   
-	   <h2> Input</h2>
-	   
-	   <textarea  rows="20" cols="100" id="inputMapsTextArea">
+
+</head>
+
+<body>
+	<div class="center">
+
+
+		<div class="titlediv">
+
+		<h1> Local Maps Organizer (Under Construction)</h1>
+
+		</div>
+
+
+		<textarea rows="20" cols="100" id="inputMapsTextArea">
 Paste your finished times here...
 
 
@@ -177,22 +226,25 @@ kz_11342, Time: 01:29.95 (TP), Teleports: 1, Rank: 1/18
 kz_11735, Time: 01:29.82 (TP), Teleports: 4, Rank: 1/21
 kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 </textarea>
-	   
-	   <div class="RunSelection">
-		<input type="checkbox" name="finishedStatus"  checked="checked">Finished Runs 
-		<input type="checkbox" name="unfinishedStatus"checked="checked">Unfinished Runs<br>
-	 
 
-	   </div>
-	   <button id="convertButton">Generate Spreadsheet</button>
+		<div class="RunSelection">
+			<input type="checkbox" name="finishedStatus" checked="checked">Finished Runs
+			<input type="checkbox" name="unfinishedStatus" checked="checked">Unfinished Runs<br>
+
+
+		</div>
+		<button id="convertButton">Generate Spreadsheet</button>
 
 		<!--  <h2>Output</h2>
 	   
 	   <textarea  rows="20" cols="100" id="outputMapsTextArea"></textarea>-->
-	   
-	   <table class="centerTable" id="mapSpreadsheet">
-	   
-	   </table>
-	   </div>
-    </body>
+
+			<table class="centerTable" id="mapSpreadsheet">
+
+
+
+		</table>
+	</div>
+</body>
+
 </html>
