@@ -50,6 +50,10 @@
 			
 		
 			$.each(textIn.val().split("\n"), function(i, line){
+				if(!(/.+,.+,.+,.+$/.test(line))){
+					
+					line=",,,,"
+				}
 				mapInfo = line.split(",");
 					//[mapname][difficulty, TP time, TP Teleports, TP Rank, Pro time, PRO teleports, Pro Rank]		 
 					offset = mapInfo[1].includes("(PRO)")?3:0;
@@ -93,10 +97,8 @@
 							
 							length = difficultyArray[map].length;
 							row = line.split(",");
-							console.log("row length " + row.length + " map name " + map);
-							console.log("headerArray " + (headerArray.length-row.length));
+							
 							for (i = length; i < (headerArray.length-1); i++){
-								console.log("push " + i);
 								row.push("");
 							}
 							tableBuffer.push(row);
@@ -143,7 +145,6 @@
 		}); //end click
 		
 
-		
 	}); //end ready
 		
 
@@ -151,8 +152,7 @@
 	
 	
 	</head>
-       
-       
+
 	   <body>
 	   <div class="center">
 	   
