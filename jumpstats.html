@@ -19,17 +19,29 @@
 			var requestMinimum = "&greater_than_distance=" + jumpMin;
 			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
 
+			var stats = ["longjump", "bhop", "multihop", "weirdjump", "ladderjump", "dropbhop"];
 
 			URI = getUrlVars();
 			steamID = "";
-			if(typeof URI["steamid"] !== 'undefined'){
+			if(typeof URI["steamid"] !== 'undefined' && typeof URI["jumptype"] !== 'undefined'){
 				steamID = URI["steamid"];
+				jumptype = "longjump";
 				if(isValid(steamID)){
 
 				$('#steamIDText').val(steamID);
-					retrieveStats(getRequestURL(steamID, "longjump"), "longjump");
+				if(isValidStat(URI["jumptype"]))
+				jumptype = URI["jumptype"];
+
+
+					$("#" +jumptype +"Radio").click();
+				
+					retrieveStats(getRequestURL(steamID, jumptype), jumptype);
 				}
 
+			}
+
+			function isValidStat(stat){
+				return stats.includes(stat);
 			}
 
 			function getUrlVars() {
@@ -93,6 +105,9 @@
 
 
 
+
+				window.history.pushState("object or string", "Title", "?steamid="+steamID+"&jumptype="+jumpstatType);;
+
 				retrieveStats(getRequestURL(steamID, jumpstatType), jumpstatType);
 			});
 
@@ -140,12 +155,12 @@
 				<div class="inputSelection">
 
 					<div class="innerSelection">
-						<input type="radio" name="jumpstat" value="longjump" checked>Longjump
-						<input type="radio" name="jumpstat" value="bhop">Bunnyhop
-						<input type="radio" name="jumpstat" value="multihop">Multihop
-						<input type="radio" name="jumpstat" value="weirdjump">Weirdjump
-						<input type="radio" name="jumpstat" value="dropbhop">Dropbhop
-						<input type="radio" name="jumpstat" value="ladderjump">Ladderjump
+						<input type="radio" id = "longjumpRadio" name="jumpstat" value="longjump" checked>Longjump
+						<input type="radio" id = "bhopRadio" name="jumpstat" value="bhop">Bunnyhop
+						<input type="radio" id = multihopRadio" name="jumpstat" value="multihop">Multihop
+						<input type="radio" id = "weirdjumpRadio" name="jumpstat" value="weirdjump">Weirdjump
+						<input type="radio" id = dropbhopRadio" name="jumpstat" value="dropbhop">Dropbhop
+						<input type="radio" id = "ladderjumpRadio" name="jumpstat" value="ladderjump">Ladderjump
 					</div>
 
 					<div class="innerSelection">
