@@ -9,14 +9,15 @@
 	<script>
 		$(document).ready(function () {
 
-			var jumpLimit = 10, jumpMin = 100;
+			var jumpLimit = 10,
+				jumpMin = 100;
+			var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 			var requestURLBase = "https://kztimerglobal.com/api/v1.0/jumpstats?";
 			var requestSteamID = "steam_id=";
 			var requestJumpType = "&jumptype=";
-			var requestLimit = "&limit="+ jumpLimit;
-			var requestMinimum = "&greater_than_distance="+jumpMin;
+			var requestLimit = "&limit=" + jumpLimit;
+			var requestMinimum = "&greater_than_distance=" + jumpMin;
 			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
-
 			$("#jumpstatButton").click(function () {
 				var steamID = $('#steamIDText').val();
 
@@ -35,14 +36,41 @@
 				console.log(requestURL);
 				$.getJSON(requestURL, function (data) {
 					var jumpstats = [];
+					var servers = {};
 					$.each(data, function (i, field) {
 
-						var statRow = [field["player_name"], field["jump_type"], field["distance"], field["strafe_count"],
-						field["is_crouch_bind"], field["created_on"], field["server_id"]];
+						server = "N/A";
+						serverID = field["server_id"];
+
+						if (serverID in servers) {
+							server = servers[serverID];
+						} else {
+
+							server = getValue(serverID);
+							servers[serverID] = server.substring(0, 25);
+
+						}
+						var statRow = [field["player_name"], jumpstatType,
+							field["distance"], field[
+								"strafe_count"],
+							field["is_crouch_bind"] ? "Yes" : "No", field[
+								"created_on"],
+							server
+						];
 						jumpstats.push(statRow);
+						createTable(jumpstats, header);
+
 
 					});
-						createTable(jumpstats, header);
+
+					function getValue(serverID) {
+						serverReq = serverIDRequest + serverID;
+						var value = JSON.parse($.ajax({
+							url: serverReq,
+							async: false
+						}).responseText);
+						return value["name"];
+					}
 				}); //end json
 
 			});
@@ -95,7 +123,7 @@
 
 						<div class="innerSelection">
 
-						<a href="https://steamid.io/lookup/">Look up your Steam ID</a><br>
+							<a href="https://steamid.io/lookup/">Look up your Steam ID</a><br>
 						</div>
 						Steam ID: <input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
 						<input type="button" id="jumpstatButton" value="Fetch Jumpstat" />
