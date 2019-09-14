@@ -8,7 +8,6 @@
 
 	<script>
 		$(document).ready(function () {
-			var x = false;
 			var jumpLimit = 10,
 				jumpMin = 100;
 			var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
@@ -17,6 +16,7 @@
 			var requestJumpType = "&jumptype=";
 			var requestLimit = "&limit=" + jumpLimit;
 			var requestMinimum = "&greater_than_distance=" + jumpMin;
+			var requestBind = "&is_crouch_bind=";
 			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "MSL", "Date", "Server"];
 
 			var stats = ["longjump", "bhop", "multihop", "weirdjump", "ladderjump", "dropbhop"];
@@ -35,10 +35,8 @@
 
 					$("#" +jumptype +"Radio").click();
 					//HI MAN MAN, STOP MSLING
-					if(steamID === "STEAM_1:1:195986308")
-						x = true;
 				
-					retrieveStats(getRequestURL(steamID, jumptype), jumptype);
+					retrieveStats(getRequestURL(steamID, jumptype, "both"), jumptype);
 				}
 
 			}
@@ -75,7 +73,7 @@
 						var statRow = [field["player_name"], jumpstatType,
 							field["distance"], field[
 								"strafe_count"],
-							field["is_crouch_bind"] ? "Yes" : "No", x?"yes":field["msl_count"], field[
+							field["is_crouch_bind"] ? "Yes" : "No", field["msl_count"], field[
 								"created_on"],
 							server
 						];
@@ -87,17 +85,21 @@
 
 					function getValue(serverID) {
 						serverReq = serverIDRequest + serverID;
-						var value = JSON.parse($.ajax({
+						var temp = $.ajax({
 							url: serverReq,
-							async: false
-						}).responseText);
-						return value["name"];
+							async: false,
+						});//.responseText;
+						var serverName = "N/A";
+						if(typeof temp !== 'undefined'){
+							if(temp.responseText!=="")
+							serverName = JSON.parse(temp.responseText)["name"];
+						}
+						return serverName;
 					}
 				}); //end json
 			}
 
 			$("#jumpstatButton").click(function () {
-				x = false;
 
 				var steamID = $('#steamIDText').val();
 
@@ -106,20 +108,28 @@
 					return;
 				}
 				jumpstatType = $('input[name=jumpstat]:checked').val();
-
-
+				isbinded = $('input[name=bind]:checked').val();
 
 
 				window.history.pushState("object or string", "Title", "?steamid="+steamID+"&jumptype="+jumpstatType);;
 
-				retrieveStats(getRequestURL(steamID, jumpstatType), jumpstatType);
+				retrieveStats(getRequestURL(steamID, jumpstatType, isbinded), jumpstatType);
 			});
 
-			function getRequestURL(steamID, jumpstatType){
-					
+			function getRequestURL(steamID, jumpstatType, binded){
+				requestBindURI = requestBind;
+				if(binded === "both")
+					requestBindURI = "";
+				else if (binded === "bind")
+					requestBindURI = requestBind + "true";
+				else 
+					requestBindURI = requestBind + "false";
+
+
 				var requestURL = requestURLBase +
 					requestSteamID + steamID +
 					requestJumpType + jumpstatType +
+					requestBindURI+
 					requestMinimum + requestLimit;
 				return requestURL;
 
@@ -152,11 +162,17 @@
 
 				<div id="titleDiv">
 					<div id="innerTitleDiv">
-						<h1> Your Jumpstat Personal Bests</h1>
+						<h1> Your Top 10 Jumpstat Personal Bests</h1>
 					</div>
 				</div>
 
 				<div class="inputSelection">
+
+					<div class="innerSelection">
+						<input type="radio" id = "bindRadio" name="bind" value="bind" checked>Binded
+						<input type="radio" id = "nobindRadio" name="bind" value="nobind">No Bind
+						<input type="radio" id = "bothRadio" name="bind" value="both">Both
+					</div>
 
 					<div class="innerSelection">
 						<input type="radio" id = "longjumpRadio" name="jumpstat" value="longjump" checked>Longjump
