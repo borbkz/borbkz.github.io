@@ -18,22 +18,28 @@
 			var requestLimit = "&limit=" + jumpLimit;
 			var requestMinimum = "&greater_than_distance=" + jumpMin;
 			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
-			$("#jumpstatButton").click(function () {
-				var steamID = $('#steamIDText').val();
 
-				if (!isValid(steamID)) {
-					alert("invalid Steam ID!");
-					return;
+
+			URI = getUrlVars();
+			steamID = "";
+			if(typeof URI["steamid"] !== 'undefined'){
+				steamID = URI["steamid"];
+				if(isValid(steamID)){
+
+					retrieveStats(getRequestURL(steamID, "longjump"), "longjump");
 				}
-				jumpstatType = $('input[name=jumpstat]:checked').val();
 
+			}
 
-				var requestURL = requestURLBase +
-					requestSteamID + steamID +
-					requestJumpType + jumpstatType +
-					requestMinimum + requestLimit;
+			function getUrlVars() {
+				var vars = {};
+				var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+					vars[key] = value;
+				});
+				return vars;
+			}
+			function retrieveStats(requestURL, jumpstatType){
 
-				console.log(requestURL);
 				$.getJSON(requestURL, function (data) {
 					var jumpstats = [];
 					var servers = {};
@@ -72,13 +78,36 @@
 						return value["name"];
 					}
 				}); //end json
+			}
 
+			$("#jumpstatButton").click(function () {
+
+				var steamID = $('#steamIDText').val();
+
+				if (!isValid(steamID)) {
+					alert("invalid Steam ID!");
+					return;
+				}
+				jumpstatType = $('input[name=jumpstat]:checked').val();
+
+
+
+				retrieveStats(getRequestURL(steamID, jumpstatType), jumpstatType);
 			});
 
+			function getRequestURL(steamID, jumpstatType){
+					
+				var requestURL = requestURLBase +
+					requestSteamID + steamID +
+					requestJumpType + jumpstatType +
+					requestMinimum + requestLimit;
+				return requestURL;
+
+			}
 
 			function isValid(steamID) {
 
-				return /^STEAM_[0-5]:[01]:\d+$/.test(steamID);
+				return /^STEAM_[0-5]:[01]:\d+$/.test(steamID.trim());
 			}
 
 		});
