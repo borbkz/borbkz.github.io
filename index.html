@@ -2,63 +2,9 @@
 
 <head>
 	<title>Borb's KZ</title>
-	<style>
-		table {
-			text-align: center;
-			border-collapse: collapse;
-			border: 2px black solid;
-			font: 12px sans-serif;
-			width: 50%;
-			margin: 10px auto;
-			background-color:#cdcdcd;
-		}
-
-		td {
-			padding-top: 12px;
-			padding-bottom: 12px;
-			text-align: left;
-
-			border: 1px grey solid;
-			padding: 10px;
-		}
-		th {
-			padding-top: 12px;
-			padding-bottom: 12px;
-			text-align: left;
-			background-color: #EDC397;
-
-			border: 1px grey solid;
-			padding: 10px;
-		}
-
-		tr:nth-child(even) {
-			background-color: 	white;
-		}
-
-		#mapSpreadsheet tr:hover {
-
-			background-color: #ddd;
-		}
-
-
-		body {
-			background-color: #657782
-		}
-
-
-		.center {
-			color: white;
-			margin: auto;
-			width: 50%;
-
-			padding: 20px;
-		}
-
-		textarea {
-			width: 100%;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="utils.js"></script>
 
 	<script>
 		var difficultyArray = {};
@@ -86,6 +32,23 @@
 		}); //end json
 
 		$(document).ready(function () {
+
+			$("#downloadButton").click(function(){
+				var csvText = headerArray.join(",")+"\r\n";
+				if(typeof outputBuffer !== 'undefined'){
+					for(i=0;i<outputBuffer.length;i++)
+					csvText += outputBuffer[i];
+				}
+					this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(csvText);
+			});
+			$("#downloadButton2").click(function(){
+				var csvText = headerArray.join(",")+"\r\n";
+				if(typeof outputBuffer !== 'undefined'){
+					for(i=0;i<outputBuffer.length;i++)
+					csvText += outputBuffer[i];
+				}
+					this.location.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(csvText);
+			});
 			$("#convertButton").click(function () {
 
 				var textIn = $("#inputMapsTextArea");
@@ -160,41 +123,7 @@
 
 				}
 
-				function createTable(tableData) {
-					var tables = document.getElementsByTagName("TABLE");
-					for (var i = tables.length - 1; i >= 0; i -= 1)
-						if (tables[i]) tables[i].parentNode.removeChild(tables[i]);
-
-					var table = document.createElement('table');
-					var tableBody = document.createElement('tbody');
-
-					var headerRow = document.createElement('tr');
-					for(var header in headerArray){
-						var cell = document.createElement('th');
-
-						cell.appendChild(document.createTextNode(headerArray[header]));
-						headerRow.appendChild(cell);
-
-					}
-					tableBody.appendChild(headerRow);
-					tableData.forEach(function (rowData) {
-						var row = document.createElement('tr');
-
-
-						rowData.forEach(function (cellData) {
-							var cell = document.createElement('td');
-							cell.appendChild(document.createTextNode(cellData));
-							row.appendChild(cell);
-						});
-
-						tableBody.appendChild(row);
-					});
-
-					table.appendChild(tableBody);
-					document.body.appendChild(table);
-				}
-
-				createTable(tableBuffer);
+				createTable(tableBuffer, headerArray);
 
 			}); //end click
 
@@ -206,17 +135,26 @@
 </head>
 
 <body>
-	<div class="center">
+	<div class="container">
+		<ul>
+
+			<li><a class="active" href="index.html">Map Organizer</a></li>
+			<li><a href="jumpstats.html">Jumpstats</a></li>
+
+		</ul>
+		<div class="center">
 
 
-		<div class="titlediv">
 
-		<h1> Local Maps Organizer (Under Construction)</h1>
+			<div class="textDiv">
 
-		</div>
+				<div id="titleDiv">
+					<div id="innerTitleDiv">
+						<h1> Local Maps Organizer</h1>
+					</div>
+				</div>
 
-
-		<textarea rows="20" cols="100" id="inputMapsTextArea">
+				<textarea rows="20" cols="100" id="inputMapsTextArea">
 Paste your finished times here...
 
 
@@ -227,24 +165,32 @@ kz_11735, Time: 01:29.82 (TP), Teleports: 4, Rank: 1/21
 kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 </textarea>
 
-		<div class="RunSelection">
-			<input type="checkbox" name="finishedStatus" checked="checked">Finished Runs
-			<input type="checkbox" name="unfinishedStatus" checked="checked">Unfinished Runs<br>
+				<div class="inputSelection">
+					<div class="innerSelection">
+						<input type="checkbox" name="finishedStatus" checked="checked">Finished Runs
+						<input type="checkbox" name="unfinishedStatus" checked="checked">Unfinished Runs<br>
+					</div>
 
+					<div class="innerSelection">
 
-		</div>
-		<button id="convertButton">Generate Spreadsheet</button>
+						<button id="convertButton">Generate Spreadsheet</button>
+						<a id="downloadButton" href="" download="kzmaps.csv"><button>Download CSV</button></a>
 
-		<!--  <h2>Output</h2>
+					</div>
+
+				</div>
+
+				<!--  <h2>Output</h2>
 	   
 	   <textarea  rows="20" cols="100" id="outputMapsTextArea"></textarea>-->
 
-			<table class="centerTable" id="mapSpreadsheet">
 
 
+				<table class="centerTable" id="mapSpreadsheet">
 
-		</table>
-	</div>
+				</table>
+			</div>
+		</div>
 </body>
 
 </html>

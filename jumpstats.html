@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<head>
+	<title>Borb's KZ</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="utils.js"></script>
+
+	<script>
+		$(document).ready(function () {
+
+			var jumpLimit = 10, jumpMin = 100;
+			var requestURLBase = "https://kztimerglobal.com/api/v1.0/jumpstats?";
+			var requestSteamID = "steam_id=";
+			var requestJumpType = "&jumptype=";
+			var requestLimit = "&limit="+ jumpLimit;
+			var requestMinimum = "&greater_than_distance="+jumpMin;
+			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
+
+			$("#jumpstatButton").click(function () {
+				var steamID = $('#steamIDText').val();
+
+				if (!isValid(steamID)) {
+					alert("invalid Steam ID!");
+					return;
+				}
+				jumpstatType = $('input[name=jumpstat]:checked').val();
+
+
+				var requestURL = requestURLBase +
+					requestSteamID + steamID +
+					requestJumpType + jumpstatType +
+					requestMinimum + requestLimit;
+
+				console.log(requestURL);
+				$.getJSON(requestURL, function (data) {
+					var jumpstats = [];
+					$.each(data, function (i, field) {
+
+						var statRow = [field["player_name"], field["jump_type"], field["distance"], field["strafe_count"],
+						field["is_crouch_bind"], field["created_on"], field["server_id"]];
+						jumpstats.push(statRow);
+
+					});
+						createTable(jumpstats, header);
+				}); //end json
+
+			});
+
+
+			function isValid(steamID) {
+
+				return /^STEAM_[0-5]:[01]:\d+$/.test(steamID);
+			}
+
+		});
+	</script>
+
+
+</head>
+
+<body>
+	<div class="container">
+		<ul>
+
+			<li><a href="index.html">Map Organizer</a></li>
+			<li><a class="active" href="jumpstats.html">Jumpstats</a></li>
+
+		</ul>
+		<div class="center">
+
+
+
+			<div class="textDiv">
+
+				<div id="titleDiv">
+					<div id="innerTitleDiv">
+						<h1> Your Jumpstat Personal Bests</h1>
+					</div>
+				</div>
+
+				<div class="inputSelection">
+
+					<div class="innerSelection">
+						<input type="radio" name="jumpstat" value="longjump" checked>Longjump
+						<input type="radio" name="jumpstat" value="bhop">Bunnyhop
+						<input type="radio" name="jumpstat" value="multihop">Multihop
+						<input type="radio" name="jumpstat" value="weirdjump">Weirdjump
+						<input type="radio" name="jumpstat" value="dropbhop">Dropbhop
+						<input type="radio" name="jumpstat" value="ladderjump">Ladderjump
+					</div>
+
+					<div class="innerSelection">
+
+
+						<div class="innerSelection">
+
+						<a href="https://steamid.io/lookup/">Look up your Steam ID</a><br>
+						</div>
+						Steam ID: <input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
+						<input type="button" id="jumpstatButton" value="Fetch Jumpstat" />
+					</div>
+					<table class="centerTable" id="jumpstatTable">
+
+					</table>
+
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+</body>
+
+</html>
