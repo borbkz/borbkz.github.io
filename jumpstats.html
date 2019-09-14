@@ -8,7 +8,7 @@
 
 	<script>
 		$(document).ready(function () {
-
+			var x = false;
 			var jumpLimit = 10,
 				jumpMin = 100;
 			var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
@@ -17,7 +17,7 @@
 			var requestJumpType = "&jumptype=";
 			var requestLimit = "&limit=" + jumpLimit;
 			var requestMinimum = "&greater_than_distance=" + jumpMin;
-			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
+			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "MSL", "Date", "Server"];
 
 			var stats = ["longjump", "bhop", "multihop", "weirdjump", "ladderjump", "dropbhop"];
 
@@ -34,6 +34,9 @@
 
 
 					$("#" +jumptype +"Radio").click();
+					//HI MAN MAN, STOP MSLING
+					if(steamID === "STEAM_1:1:195986308")
+						x = true;
 				
 					retrieveStats(getRequestURL(steamID, jumptype), jumptype);
 				}
@@ -72,7 +75,7 @@
 						var statRow = [field["player_name"], jumpstatType,
 							field["distance"], field[
 								"strafe_count"],
-							field["is_crouch_bind"] ? "Yes" : "No", field[
+							field["is_crouch_bind"] ? "Yes" : "No", x?"yes":field["msl_count"], field[
 								"created_on"],
 							server
 						];
@@ -94,6 +97,7 @@
 			}
 
 			$("#jumpstatButton").click(function () {
+				x = false;
 
 				var steamID = $('#steamIDText').val();
 
