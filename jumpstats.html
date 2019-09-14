@@ -26,6 +26,7 @@
 				steamID = URI["steamid"];
 				if(isValid(steamID)){
 
+				$('#steamIDText').val(steamID);
 					retrieveStats(getRequestURL(steamID, "longjump"), "longjump");
 				}
 
