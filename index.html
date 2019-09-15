@@ -45,9 +45,9 @@
 					var maps = [];
 
 					var playerName = data[0]["player_name"];
-					var ispro = $('input[name=isprorun]:checked').val();
+					var ispro = $('input[name=isprorun-radio]:checked').val();
 					var runtype = "Pro Times";
-					if(!ispro)
+					if(ispro !== "proradio")
 						runtype = "TP Times";
 
 
