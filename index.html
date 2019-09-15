@@ -1,196 +1,123 @@
 <!DOCTYPE html>
+de
 
 <head>
 	<title>Borb's KZ</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script type="text/javascript" src="utils.js"></script>
+	<script type="text/javascript" src="utils/utils.js"></script>
 
 	<script>
-		var difficultyArray = {};
-		var headerArray = ["MAP NAME", "DIFFICULTY", "TP TIME", "TELEPORTS", "TP RANK", "PRO TIME", "PRO TELEPORTS",
-			"PRO RANK"
-		];
-		var tiers = {
-			0: "Non-global",
-			1: "Very Easy",
-			2: "Easy",
-			3: "Medium",
-			4: "Hard",
-			5: "Very Hard",
-			6: "Death"
-		};
-
-		$.getJSON("maps.json", function (data) {
-
-			$.each(data, function (i, field) {
-				tier = field["TP Difficulty"]
-				if (!Number.isInteger(tier) && (tier >= 0 && tier <= 6))
-					tier = 0;
-				difficultyArray[field["Map"]] = [tiers[tier]];
-			});
-		}); //end json
-
 		$(document).ready(function () {
+			var header = ["Player", "Map", "Time", "Teleports Count", "Points", "Date", "Server"];
+			var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
 
-			$("#downloadButton").click(function(){
-				var csvText = headerArray.join(",")+"\r\n";
-				if(typeof outputBuffer !== 'undefined'){
-					for(i=0;i<outputBuffer.length;i++)
-					csvText += outputBuffer[i];
+			URI = getURIVars();
+			steamID = "";
+			if (typeof URI["steamid"] !== 'undefined') {
+				steamID = URI["steamid"];
+				if (isValidSteamID(steamID)) {
+
+					$('#steamIDText').val(steamID);
+
 				}
-					this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(csvText);
+			}
+
+			function retrieveStats(requestURL) {
+
+				$.getJSON(requestURL, function (data) {
+					var maps = [];
+					$.each(data, function (i, field) {
+
+						var statRow = [field["player_name"], field["map_name"],
+							field["time"], field["teleports"], field["points"],
+							field["updated_on"], field["server_name"],
+						];
+						maps.push(statRow);
+						createTable(maps, header);
+
+
+					}); //.each
+				}); //end json
+			}
+
+			$("#getGlobalMapsButton").click(function () {
+
+				var steamID = $('#steamIDText').val();
+
+				if (!isValidSteamID(steamID)) {
+					alert("invalid Steam ID!");
+					return;
+				}
+
+
+				window.history.pushState("object or string", "Title", "?steamid=");;
+
+				retrieveStats(
+					"https://kztimerglobal.com/api/v1.0/records/top?steam_id=STEAM_1:1:213837979&tickrate=128&stage=0&has_teleports=true&limit=50&modes_list_string=kz_timer"
+				);
 			});
-			$("#downloadButton2").click(function(){
-				var csvText = headerArray.join(",")+"\r\n";
-				if(typeof outputBuffer !== 'undefined'){
-					for(i=0;i<outputBuffer.length;i++)
-					csvText += outputBuffer[i];
-				}
-					this.location.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(csvText);
-			});
-			$("#convertButton").click(function () {
-
-				var textIn = $("#inputMapsTextArea");
-				//var textOut = $("#outputMapsTextArea");
 
 
-				$.each(textIn.val().split("\n"), function (i, line) {
-					if (!(/.+,.+,.+,.+$/.test(line))) {
-
-						line = ",,,,"
-					}
-					mapInfo = line.split(",");
-					//[mapname][difficulty, TP time, TP Teleports, TP Rank, Pro time, PRO teleports, Pro Rank]		 
-					offset = mapInfo[1].includes("(PRO)") ? 3 : 0;
-					mapName = mapInfo[0];
-
-					if (mapName in difficultyArray) {
-						writeToArray(mapInfo, difficultyArray[mapName], offset);
-					} else {
-						temp = [difficultyArray[mapName]];
-						writeToArray(mapInfo, temp, offset);
-						difficultyArray[mapName] = temp;
-					}
-
-
-				});
-
-				function writeToArray(arrIn, arrOut, offset) {
-					for (i = 1; i < 4; i++) {
-						arrOut[i + offset] = arrIn[i].replace(/Time: /g, '').replace(/Teleports: /g, '')
-							.replace(/Rank: /g, '');
-					}
-				}
-				printAllMaps();
-
-				function printAllMaps() {
-					//clear area first
-					//textOut[0].value = "";
-
-					outputBuffer = [""];
-					tableBuffer = [];
-
-					finishedStatus = $('input[name=finishedStatus]:checked').val();
-					unfinishedStatus = $('input[name=unfinishedStatus]:checked').val();
-					for (var map in difficultyArray) {
-
-
-
-						if (finishedStatus && difficultyArray[map].length > 1 ||
-							unfinishedStatus && difficultyArray[map].length <= 1) {
-							line = map + ", " + difficultyArray[map];
-							outputBuffer.push(map + ", " + difficultyArray[map] + "\n");
-
-							length = difficultyArray[map].length;
-							row = line.split(",");
-
-							for (i = length; i < (headerArray.length - 1); i++) {
-								row.push("");
-							}
-							tableBuffer.push(row);
-
-						}
-					}
-					/*
-					textOut[0].value += headerArray+"\n";
-
-					for(i = 0; i < outputBuffer.length; i++){
-						textOut[0].value += outputBuffer[i];
-						textOut[0].value +=difficultyArray[map].length + " | " + map + ", " + difficultyArray[map] + "\n";
-					}*/
-
-
-				}
-
-				createTable(tableBuffer, headerArray);
-
-			}); //end click
-
-
-		}); //end ready
+		});
 	</script>
 
 
 </head>
 
 <body>
-	<div class="container">
+	<div class="nav-container">
 		<ul>
 
-			<li><a class="active" href="index.html">Map Organizer</a></li>
+			<li><a class="active" href="index.html">Global Maps</a></li>
+			<li><a href="local.html">Local Maps</a></li>
 			<li><a href="jumpstats.html">Jumpstats</a></li>
 
 		</ul>
 		<div class="center">
 
+			<div id="titleDiv">
+				<div id="innerTitleDiv">
+					<h1>Your Times Across All Servers (under construction)</h1>
+				</div>
+			</div>
+
+			<div class="innerSelection">
 
 
-			<div class="textDiv">
+				<div class="innerSelection">
+					<a href="https://steamid.io/lookup/">Look up your Steam ID</a><br>
+				</div>
+				Steam ID: <input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
+				<input type="button" id="getGlobalMapsButton" value="Fetch Times" />
+			</div>
 
-				<div id="titleDiv">
-					<div id="innerTitleDiv">
-						<h1> Local Maps Organizer</h1>
-					</div>
+			<div class="inputSelection">
+				<div class="innerSelection">
+					<input type="checkbox" name="pro-runs-check" checked="checked">TP Runs
+					<input type="checkbox" name="tp-runs-check" checked="checked">Pro Runs<br>
+					<input type="checkbox" name="very-easy-tier" checked="checked">Very Easy
+					<input type="checkbox" name="easy-tier" checked="checked">Easy
+					<input type="checkbox" name="medium-tier" checked="checked">Medium
+					<input type="checkbox" name="hard-tier" checked="checked">Hard
+					<input type="checkbox" name="very-hard-tier" checked="checked">Very Hard
+					<input type="checkbox" name="death-tier" checked="checked">Death
+
+					<h2>TODO: sorting by any column, tiers</h2>
 				</div>
 
-				<textarea rows="20" cols="100" id="inputMapsTextArea">
-Paste your finished times here...
+			</div>
 
+			<div class="table-container">
 
-Example:
-kz_11342, Time: 01:29.58 (PRO), Teleports: 0, Rank: 1/2
-kz_11342, Time: 01:29.95 (TP), Teleports: 1, Rank: 1/18
-kz_11735, Time: 01:29.82 (TP), Teleports: 4, Rank: 1/21
-kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
-</textarea>
-
-				<div class="inputSelection">
-					<div class="innerSelection">
-						<input type="checkbox" name="finishedStatus" checked="checked">Finished Runs
-						<input type="checkbox" name="unfinishedStatus" checked="checked">Unfinished Runs<br>
-					</div>
-
-					<div class="innerSelection">
-
-						<button id="convertButton">Generate Spreadsheet</button>
-						<a id="downloadButton" href="" download="kzmaps.csv"><button>Download CSV</button></a>
-
-					</div>
-
-				</div>
-
-				<!--  <h2>Output</h2>
-	   
-	   <textarea  rows="20" cols="100" id="outputMapsTextArea"></textarea>-->
-
-
-
-				<table class="centerTable" id="mapSpreadsheet">
+				<table class="centerTable" id="mapTable">
 
 				</table>
+
 			</div>
+
 		</div>
+	</div>
 </body>
 
 </html>

@@ -2,57 +2,41 @@
 
 <head>
 	<title>Borb's KZ</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script type="text/javascript" src="utils.js"></script>
+	<script type="text/javascript" src="utils/utils.js"></script>
 
 	<script>
 		$(document).ready(function () {
-			var jumpLimit = 10,
-				jumpMin = 100;
-			var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
-			var requestURLBase = "https://kztimerglobal.com/api/v1.0/jumpstats?";
-			var requestSteamID = "steam_id=";
-			var requestJumpType = "&jumptype=";
-			var requestLimit = "&limit=" + jumpLimit;
-			var requestMinimum = "&greater_than_distance=" + jumpMin;
-			var requestBind = "&is_crouch_bind=";
 			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "MSL", "Date", "Server"];
 
 			var stats = ["longjump", "bhop", "multihop", "weirdjump", "ladderjump", "dropbhop"];
 
-			URI = getUrlVars();
+			URI = getURIVars();
 			steamID = "";
-			if(typeof URI["steamid"] !== 'undefined' && typeof URI["jumptype"] !== 'undefined'){
+			if (typeof URI["steamid"] !== 'undefined' && typeof URI["jumptype"] !== 'undefined') {
 				steamID = URI["steamid"];
 				jumptype = "longjump";
-				if(isValid(steamID)){
+				if (isValidSteamID(steamID)) {
 
-				$('#steamIDText').val(steamID);
-				if(isValidStat(URI["jumptype"]))
-				jumptype = URI["jumptype"];
+					$('#steamIDText').val(steamID);
+					if (isValidStat(URI["jumptype"]))
+						jumptype = URI["jumptype"];
 
 
-					$("#" +jumptype +"Radio").click();
-					//HI MAN MAN, STOP MSLING
-				
+					$("#" + jumptype + "Radio").click();
+
 					retrieveStats(getRequestURL(steamID, jumptype, "both"), jumptype);
 				}
 
 			}
 
-			function isValidStat(stat){
+			function isValidStat(stat) {
 				return stats.includes(stat);
 			}
 
-			function getUrlVars() {
-				var vars = {};
-				var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-					vars[key] = value;
-				});
-				return vars;
-			}
-			function retrieveStats(requestURL, jumpstatType){
+
+			function retrieveStats(requestURL, jumpstatType) {
 
 				$.getJSON(requestURL, function (data) {
 					var jumpstats = [];
@@ -66,7 +50,7 @@
 							server = servers[serverID];
 						} else {
 
-							server = getValue(serverID);
+							server = getServerName(serverID);
 							servers[serverID] = server.substring(0, 25);
 
 						}
@@ -83,27 +67,14 @@
 
 					});
 
-					function getValue(serverID) {
-						serverReq = serverIDRequest + serverID;
-						var temp = $.ajax({
-							url: serverReq,
-							async: false,
-						});//.responseText;
-						var serverName = "N/A";
-						if(typeof temp !== 'undefined'){
-							if(temp.responseText!=="")
-							serverName = JSON.parse(temp.responseText)["name"];
-						}
-						return serverName;
-					}
 				}); //end json
 			}
 
 			$("#jumpstatButton").click(function () {
 
-				var steamID = $('#steamIDText').val();
+				var steamID = $('#steamIDText').val().trim();
 
-				if (!isValid(steamID)) {
+				if (!isValidSteamID(steamID)) {
 					alert("invalid Steam ID!");
 					return;
 				}
@@ -111,34 +82,31 @@
 				isbinded = $('input[name=bind]:checked').val();
 
 
-				window.history.pushState("object or string", "Title", "?steamid="+steamID+"&jumptype="+jumpstatType);;
+				window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&jumptype=" +
+					jumpstatType);;
 
 				retrieveStats(getRequestURL(steamID, jumpstatType, isbinded), jumpstatType);
 			});
 
-			function getRequestURL(steamID, jumpstatType, binded){
+			function getRequestURL(steamID, jumpstatType, binded) {
 				requestBindURI = requestBind;
-				if(binded === "both")
+				if (binded === "both")
 					requestBindURI = "";
 				else if (binded === "bind")
 					requestBindURI = requestBind + "true";
-				else 
+				else
 					requestBindURI = requestBind + "false";
 
 
 				var requestURL = requestURLBase +
 					requestSteamID + steamID +
 					requestJumpType + jumpstatType +
-					requestBindURI+
+					requestBindURI +
 					requestMinimum + requestLimit;
 				return requestURL;
 
 			}
 
-			function isValid(steamID) {
-
-				return /^STEAM_[0-5]:[01]:\d+$/.test(steamID.trim());
-			}
 
 		});
 	</script>
@@ -147,10 +115,11 @@
 </head>
 
 <body>
-	<div class="container">
+	<div class="nav-container">
 		<ul>
 
-			<li><a href="index.html">Map Organizer</a></li>
+			<li><a href="index.html">Global Maps</a></li>
+			<li><a href="index.html">Local Maps</a></li>
 			<li><a class="active" href="jumpstats.html">Jumpstats</a></li>
 
 		</ul>
@@ -169,33 +138,37 @@
 				<div class="inputSelection">
 
 					<div class="innerSelection">
-						<input type="radio" id = "bindRadio" name="bind" value="bind" checked>Binded
-						<input type="radio" id = "nobindRadio" name="bind" value="nobind">No Bind
-						<input type="radio" id = "bothRadio" name="bind" value="both">Both
+						<input type="radio" id="bindRadio" name="bind" value="bind" checked>Binded
+						<input type="radio" id="nobindRadio" name="bind" value="nobind">No Bind
+						<input type="radio" id="bothRadio" name="bind" value="both">Both
 					</div>
 
 					<div class="innerSelection">
-						<input type="radio" id = "longjumpRadio" name="jumpstat" value="longjump" checked>Longjump
-						<input type="radio" id = "bhopRadio" name="jumpstat" value="bhop">Bunnyhop
-						<input type="radio" id = multihopRadio" name="jumpstat" value="multihop">Multihop
-						<input type="radio" id = "weirdjumpRadio" name="jumpstat" value="weirdjump">Weirdjump
-						<input type="radio" id = dropbhopRadio" name="jumpstat" value="dropbhop">Dropbhop
-						<input type="radio" id = "ladderjumpRadio" name="jumpstat" value="ladderjump">Ladderjump
+						<input type="radio" id="longjumpRadio" name="jumpstat" value="longjump" checked>Longjump
+						<input type="radio" id="bhopRadio" name="jumpstat" value="bhop">Bunnyhop
+						<input type="radio" id=multihopRadio" name="jumpstat" value="multihop">Multihop
+						<input type="radio" id="weirdjumpRadio" name="jumpstat" value="weirdjump">Weirdjump
+						<input type="radio" id=dropbhopRadio" name="jumpstat" value="dropbhop">Dropbhop
+						<input type="radio" id="ladderjumpRadio" name="jumpstat" value="ladderjump">Ladderjump
 					</div>
 
 					<div class="innerSelection">
 
 
 						<div class="innerSelection">
-
 							<a href="https://steamid.io/lookup/">Look up your Steam ID</a><br>
 						</div>
 						Steam ID: <input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
 						<input type="button" id="jumpstatButton" value="Fetch Jumpstat" />
 					</div>
+
+					<div class ="table-container">
+
 					<table class="centerTable" id="jumpstatTable">
 
 					</table>
+
+					</div>
 
 				</div>
 

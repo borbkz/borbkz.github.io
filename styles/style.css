@@ -1,0 +1,133 @@
+ul {
+	width: 100%;
+
+	display: inline-block;
+	list-style-type: none;
+	margin: 0 auto;
+	padding: 20px;
+	overflow: hidden;
+	background-color: #333;
+}
+
+li {
+	float: left
+}
+
+a {
+	color: white;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+
+	font: 16px sans-serif;
+}
+
+.table-container {
+	height: 100%;
+}
+
+.nav-container {
+	margin: 0 auto;
+	width: 1200px;
+	height: 85%;
+}
+
+.innerSelection {
+	padding: 10px 10px 10px 10px;
+
+}
+
+.runSelection {
+	display: inline-block;
+	text-align: center;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.textDiv {
+	margin: 0 auto;
+	text-align: center;
+}
+
+li aa:hover:not(.active) {
+	background-color: #111;
+}
+
+.active {
+	background-color: #EDC397;
+}
+
+table {
+	height: 80%;
+	text-align: center;
+	border-collapse: collapse;
+	border: 2px black solid;
+	font: 12px sans-serif;
+	margin: 10px auto;
+	background-color: #cdcdcd;
+	color: black;
+}
+
+td {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+
+	border: 1px grey solid;
+	padding: 10px;
+}
+
+th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+	background-color: #EDC397;
+
+	border: 1px grey solid;
+	padding: 10px;
+}
+
+tr:nth-child(even) {
+	background-color: white;
+}
+
+
+button {
+	margin: 10px;
+}
+
+input {
+	margin: 10px;
+}
+
+html,
+body {
+	margin: 0 auto;
+	text-align: center;
+	background-color: #657782;
+	width: 100%;
+	height: 100%;
+}
+
+
+.center {
+	overflow: auto;
+	background-color: #313A3F;
+	height: 100%;
+	color: white;
+	margin: auto;
+	width: 100%;
+	padding: 20px;
+}
+
+textarea {
+	margin-left: auto;
+	margin-right: auto;
+	padding: 20px;
+
+}
