@@ -30,6 +30,10 @@ li a {
 .table-container {
 	height: 100%;
 }
+#spreadsheet{
+
+		margin: auto;
+}
 
 .nav-container {
 	margin: 0 auto;
@@ -40,6 +44,15 @@ li a {
 .innerSelection {
 	padding: 10px 10px 10px 10px;
 
+}
+
+#playername{
+
+	margin: auto;
+	padding: 20px;
+	font: 20px sans-serif;
+	font-weight: bold;
+	color: white;
 }
 
 .runSelection {

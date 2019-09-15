@@ -4,12 +4,16 @@ de
 <head>
 	<title>Borb's KZ</title>
 	<link rel="stylesheet" type="text/css" href="styles/style.css">
+	<link rel="stylesheet" type="text/css"
+		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js">
+	</script>
 	<script type="text/javascript" src="utils/utils.js"></script>
 
 	<script>
 		$(document).ready(function () {
-			var header = ["Player", "Map", "Time", "Teleports Count", "Points", "Date", "Server"];
+			var header = [ "Map", "Time", "Teleports Count", "Points", "Date", "Server"];
 			var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
 
 			URI = getURIVars();
@@ -27,17 +31,30 @@ de
 
 				$.getJSON(requestURL, function (data) {
 					var maps = [];
+
+					$("#playername").text("Player: " + data[0]["player_name"])
 					$.each(data, function (i, field) {
 
-						var statRow = [field["player_name"], field["map_name"],
+						var statRow = [ field["map_name"],
 							field["time"], field["teleports"], field["points"],
 							field["updated_on"], field["server_name"],
 						];
 						maps.push(statRow);
-						createTable(maps, header);
+						//createTable(maps, header);
 
 
 					}); //.each
+
+					var spreadsheetContainer = $("#spreadsheet")[0];
+					var hot = new Handsontable(spreadsheetContainer, {
+						data: maps,
+						height: 1000,
+						width: 1000,
+						colHeaders: header,
+						columnSorting: true,
+						filters: true,
+						dropdownMenu: ["filter_by_condition"]
+					});
 				}); //end json
 			}
 
@@ -54,7 +71,8 @@ de
 				window.history.pushState("object or string", "Title", "?steamid=");;
 
 				retrieveStats(
-					"https://kztimerglobal.com/api/v1.0/records/top?steam_id="+steamID+"&tickrate=128&stage=0&has_teleports=true&limit=50&modes_list_string=kz_timer"
+					"https://kztimerglobal.com/api/v1.0/records/top?steam_id=" + steamID +
+					"&tickrate=128&stage=0&has_teleports=true&limit=500&modes_list_string=kz_timer"
 				);
 			});
 
@@ -96,23 +114,15 @@ de
 				<div class="innerSelection">
 					<input type="checkbox" name="pro-runs-check" checked="checked">TP Runs
 					<input type="checkbox" name="tp-runs-check" checked="checked">Pro Runs<br>
-					<input type="checkbox" name="very-easy-tier" checked="checked">Very Easy
-					<input type="checkbox" name="easy-tier" checked="checked">Easy
-					<input type="checkbox" name="medium-tier" checked="checked">Medium
-					<input type="checkbox" name="hard-tier" checked="checked">Hard
-					<input type="checkbox" name="very-hard-tier" checked="checked">Very Hard
-					<input type="checkbox" name="death-tier" checked="checked">Death
 
-					<h2>TODO: sorting by any column, tiers</h2>
-				</div>
+					<div id="playername"></div>
+				</di>
 
 			</div>
 
-			<div class="table-container">
 
-				<table class="centerTable" id="mapTable">
+			<div class="table-container" id="spreadsheet">
 
-				</table>
 
 			</div>
 
