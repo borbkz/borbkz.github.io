@@ -12,7 +12,7 @@
 	<script type="text/javascript" src="utils/utils.js"></script>
 	<script>
 		var difficultyArray = {};
-		var headerArray = ["MAP NAME", "DIFFICULTY", "TP TIME", "TELEPORTS", "TP RANK", "PRO TIME", "PRO TELEPORTS",
+		var headerArray = ["Map (Click to Sort)", "Tier", "TP Time", "TPs", "TP Rank", "Pro Time", "Pro Tp's",
 			"PRO RANK"
 		];
 		var tiers = {
@@ -49,7 +49,6 @@
 
 				var textIn = $("#inputMapsTextArea");
 				//var textOut = $("#outputMapsTextArea");
-
 
 				$.each(textIn.val().split("\n"), function (i, line) {
 					if (!(/.+,.+,.+,.+$/.test(line))) {
@@ -153,8 +152,8 @@
 <body>
 	<div class="nav-container">
 		<ul>
-			<li><a href="index.html">Global Maps</a></li>
-			<li><a class="active" href="local.html">Local Maps</a></li>
+			<li><a href="index.html">Global Times</a></li>
+			<li><a class="active" href="local.html">Local Times</a></li>
 			<li><a href="jumpstats.html">Jumpstats</a></li>
 			<li><a href="contact.html">Contact</a></li>
 		</ul>

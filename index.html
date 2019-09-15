@@ -13,7 +13,7 @@
 	<script>
 		var mapTable;
 		$(document).ready(function () {
-			var header = ["Map", "Tier", "Time", "TPs", "Pts", "Date", "Server"];
+			var header = ["Map (Click to Sort)", "Tier", "Time", "TPs", "Pts", "Date", "Server"];
 			var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
 
 			URI = getURIVars();
@@ -25,7 +25,7 @@
 
 					$('#steamIDText').val(steamID);
 
-					if(teleports === "true")
+					if (teleports === "true")
 						retrieveStats(steamID, true);
 					else if (teleports === "false")
 						retrieveStats(steamID, false);
@@ -43,15 +43,23 @@
 
 				$.getJSON(requestURL, function (data) {
 					var maps = [];
-					$("#playername").text("Player: " + data[0]["player_name"])
+
+					var playerName = data[0]["player_name"];
+					var ispro = $('input[name=isprorun]:checked').val();
+					var runtype = "Pro Times";
+					if(!ispro)
+						runtype = "TP Times";
+
+
+					$("#player-title").text(playerName + "'s " + runtype + " Across All Servers");
 					$.each(data, function (i, field) {
 
 						//server is sometimes null, and throws exception
-						server = "N/A"; 
-						if(typeof field["server_name"] === "string"){
-							server = field["server_name"].substring(0,35);
+						server = "N/A";
+						if (typeof field["server_name"] === "string") {
+							server = field["server_name"].substring(0, 35);
 						}
-						var statRow = [field["map_name"], "N/A",
+						var statRow = [field["map_name"], "Coming Soon",
 							getTimeFromSeconds(field["time"]), field["teleports"], field[
 								"points"],
 							field["updated_on"], server
@@ -63,18 +71,18 @@
 					}); //.each
 
 					cols = [{}, //map name
-							{}, //tier
-							{
-								type: "time",
-								timeFormat: "h:mm:ss"
-							},
-							{}, //tp
-							{}, //pts
-							{},
-							{} //server
-						];
+						{}, //tier
+						{
+							type: "time",
+							timeFormat: "h:mm:ss"
+						},
+						{}, //tp
+						{}, //pts
+						{},
+						{} //server
+					];
 					var spreadsheetContainer = $("#spreadsheet")[0];
-					genTable(spreadsheetContainer, maps, header, [0,1,6], cols);
+					genTable(spreadsheetContainer, maps, header, [0, 1, 6], cols);
 				}); //end json
 			}
 
@@ -112,8 +120,8 @@
 	<div class="nav-container">
 		<ul>
 
-			<li><a class="active" href="index.html">Global Maps</a></li>
-			<li><a href="local.html">Local Maps</a></li>
+			<li><a class="active" href="index.html">Global Times</a></li>
+			<li><a href="local.html">Local Times</a></li>
 			<li><a href="jumpstats.html">Jumpstats</a></li>
 			<li><a href="contact.html">Contact</a></li>
 			<li>Your Times Across All Servers</li>
@@ -123,17 +131,14 @@
 
 			<div id="titleDiv">
 				<div id="innerTitleDiv">
-					<h1>Your Times Across All Servers (under construction)</h1>
+					<h2 id="player-title">Your Times Across All Servers</h2>
 				</div>
 			</div>
 
 			<div class="innerSelection">
 
-
-				<div class="innerSelection">
-					<a href="https://steamid.io/lookup/">Look up your Steam ID</a><br>
-				</div>
-				Steam ID: <input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
+				<a href="https://steamid.io/lookup/">Steam ID</a>
+				<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
 				<input type="button" id="getGlobalMapsButton" value="Fetch Times" />
 			</div>
 
@@ -142,11 +147,9 @@
 					<input type="radio" name="isprorun-radio" value="tpradio" checked>TP Runs
 					<input type="radio" name="isprorun-radio" value="proradio">Pro Runs
 
-					<div id="playername"></div>
 					</di>
 
 				</div>
-				<p>click on any header below to sort, tier information coming soon...</p>
 
 
 				<div class="table-container" id="spreadsheet">

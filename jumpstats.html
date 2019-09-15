@@ -8,7 +8,7 @@
 
 	<script>
 		$(document).ready(function () {
-			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "MSL", "Date", "Server"];
+			var header = ["Jump Type", "Distance", "Strafe Count", "Binded", "MSL", "Date", "Server"];
 
 			var stats = ["longjump", "bhop", "multihop", "weirdjump", "ladderjump", "dropbhop"];
 
@@ -41,6 +41,11 @@
 				$.getJSON(requestURL, function (data) {
 					var jumpstats = [];
 					var servers = {};
+					var playerName = data[0]["player_name"];
+					var isbinded = $('input[name=bind]:checked').val();
+					if (isbinded === "both")
+						isbinded = "";
+					$("#player-title").text(playerName + "'s Top 10 " + isbinded + " " + jumpstatType + "s");
 					$.each(data, function (i, field) {
 
 						server = "N/A";
@@ -54,7 +59,7 @@
 							servers[serverID] = server.substring(0, 25);
 
 						}
-						var statRow = [field["player_name"], jumpstatType,
+						var statRow = [jumpstatType,
 							field["distance"], field[
 								"strafe_count"],
 							field["is_crouch_bind"] ? "Yes" : "No", field["msl_count"], field[
@@ -92,7 +97,7 @@
 				requestBindURI = requestBind;
 				if (binded === "both")
 					requestBindURI = "";
-				else if (binded === "bind")
+				else if (binded === "binded")
 					requestBindURI = requestBind + "true";
 				else
 					requestBindURI = requestBind + "false";
@@ -118,8 +123,8 @@
 	<div class="nav-container">
 		<ul>
 
-			<li><a href="index.html">Global Maps</a></li>
-			<li><a href="local.html">Local Maps</a></li>
+			<li><a href="index.html">Global Times</a></li>
+			<li><a href="local.html">Local Times</a></li>
 			<li><a class="active" href="jumpstats.html">Jumpstats</a></li>
 			<li><a href="contact.html">Contact</a></li>
 
@@ -132,15 +137,15 @@
 
 				<div id="titleDiv">
 					<div id="innerTitleDiv">
-						<h1> Your Top 10 Jumpstat Personal Bests</h1>
+						<h2 id="player-title"> Your Top 10 Jumpstat PB's</h2>
 					</div>
 				</div>
 
 				<div class="inputSelection">
 
 					<div class="innerSelection">
-						<input type="radio" id="bindRadio" name="bind" value="bind">Binded
-						<input type="radio" id="nobindRadio" name="bind" value="nobind">No Bind
+						<input type="radio" id="bindRadio" name="bind" value="binded">Binded
+						<input type="radio" id="nobindRadio" name="bind" value="unbinded">No Bind
 						<input type="radio" id="bothRadio" name="bind" value="both" checked>Both
 					</div>
 
@@ -155,19 +160,17 @@
 
 					<div class="innerSelection">
 
+						<a href="https://steamid.io/lookup/">Steam ID</a>
+						<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
 
-						<div class="innerSelection">
-							<a href="https://steamid.io/lookup/">Look up your Steam ID</a><br>
-						</div>
-						Steam ID: <input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
 						<input type="button" id="jumpstatButton" value="Fetch Jumpstat" />
 					</div>
 
-					<div class ="table-container">
+					<div class="table-container">
 
-					<table class="centerTable" id="jumpstatTable">
+						<table class="centerTable" id="jumpstatTable">
 
-					</table>
+						</table>
 
 					</div>
 
