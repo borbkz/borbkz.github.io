@@ -2,10 +2,14 @@
 
 <head>
 	<title>Borb's KZ</title>
-	<link rel="stylesheet" type="text/css" href="styles/style.css">
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script type="text/javascript" src="utils/utils.js"></script>
 
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
+	<link rel="stylesheet" type="text/css"
+		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js">
+	</script>
+	<script type="text/javascript" src="utils/utils.js"></script>
 	<script>
 		var difficultyArray = {};
 		var headerArray = ["MAP NAME", "DIFFICULTY", "TP TIME", "TELEPORTS", "TP RANK", "PRO TIME", "PRO TELEPORTS",
@@ -115,7 +119,74 @@
 
 				}
 
-				createTable(tableBuffer, headerArray);
+					var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
+						var filtersPlugin = mapTable.getPlugin('filters');
+
+						filtersPlugin.removeConditions(colIndex);
+						filtersPlugin.addCondition(colIndex, 'contains', [event.realTarget.value]);
+						filtersPlugin.filter();
+					}, 200);
+
+					var addEventListeners = function (input, colIndex) {
+						input.addEventListener('keydown', function (event) {
+							debounceFn(colIndex, event);
+						});
+					};
+
+					// Build elements which will be displayed in header.
+					var getInitializedElements = function (colIndex) {
+						var div = document.createElement('div');
+						var input = document.createElement('input');
+
+						div.className = 'filterHeader';
+
+						addEventListeners(input, colIndex);
+
+						div.appendChild(input);
+
+						return div;
+					};
+
+					// Add elements to header on `afterGetColHeader` hook.
+					var addInput = function (col, TH) {
+						// Hooks can return value other than number (for example `columnSorting` plugin use this).
+						if (typeof col !== 'number') {
+							return col;
+						}
+
+						if ((col == 0 || col == 1 ) && TH.childElementCount < 2) {
+							TH.appendChild(getInitializedElements(col));
+						}
+					};
+
+					// Deselect column after click on input.
+					var doNotSelectColumn = function (event, coords) {
+						if (coords.row === -1 && event.realTarget.nodeName === 'INPUT') {
+							event.stopImmediatePropagation();
+							this.deselectCell();
+						}
+					};
+					var spreadsheetContainer = $("#spreadsheet")[0];
+
+					if (typeof mapTable !== "undefined")
+						mapTable.updateSettings({ data: [] }); //clear table after click
+
+					var mapTable = new Handsontable(spreadsheetContainer, {
+						data: tableBuffer,
+						height: 1000,
+						width: 1000,
+						colHeaders: headerArray,
+						columnSorting: true,
+						filters: true,
+						autoColumnSize: {
+							syncLimit: '40%'
+						},
+						className: 'typefilter',
+						afterGetColHeader: addInput,
+						beforeOnCellMouseDown: doNotSelectColumn,
+						licenseKey: 'non-commercial-and-evaluation'
+					});
+				//createTable(tableBuffer, headerArray);
 
 			}); //end click
 
@@ -174,9 +245,10 @@ kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 				<div class="table-container">
 
 
-				<table class="centerTable" id="mapSpreadsheet">
 
-				</table>
+				<div class="table-container" id="spreadsheet">
+				</div>
+
 				</div>
 			</div>
 		</div>
