@@ -12,8 +12,9 @@ de
 	<script type="text/javascript" src="utils/utils.js"></script>
 
 	<script>
+		var mapTable;
 		$(document).ready(function () {
-			var header = [ "Map", "Time", "Teleports Count", "Points", "Date", "Server"];
+			var header = ["Map", "Tier", "Time", "TP", "Pts", "Date", "Server"];
 			var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
 
 			URI = getURIVars();
@@ -31,29 +32,97 @@ de
 
 				$.getJSON(requestURL, function (data) {
 					var maps = [];
-
 					$("#playername").text("Player: " + data[0]["player_name"])
 					$.each(data, function (i, field) {
 
-						var statRow = [ field["map_name"],
-							field["time"], field["teleports"], field["points"],
-							field["updated_on"], field["server_name"],
+						var statRow = [field["map_name"], "N/A",
+							getTimeFromSeconds(field["time"]), field["teleports"], field[
+								"points"],
+							field["updated_on"], field["server_name"].substring(0, 30),
 						];
 						maps.push(statRow);
 						//createTable(maps, header);
 
 
 					}); //.each
+					var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
+						var filtersPlugin = mapTable.getPlugin('filters');
 
+						filtersPlugin.removeConditions(colIndex);
+						filtersPlugin.addCondition(colIndex, 'contains', [event.realTarget.value]);
+						filtersPlugin.filter();
+					}, 200);
+
+					var addEventListeners = function (input, colIndex) {
+						input.addEventListener('keydown', function (event) {
+							debounceFn(colIndex, event);
+						});
+					};
+
+					// Build elements which will be displayed in header.
+					var getInitializedElements = function (colIndex) {
+						var div = document.createElement('div');
+						var input = document.createElement('input');
+
+						div.className = 'filterHeader';
+
+						addEventListeners(input, colIndex);
+
+						div.appendChild(input);
+
+						return div;
+					};
+
+					// Add elements to header on `afterGetColHeader` hook.
+					var addInput = function (col, TH) {
+						// Hooks can return value other than number (for example `columnSorting` plugin use this).
+						if (typeof col !== 'number') {
+							return col;
+						}
+
+						if ((col == 0 || col == 5) && TH.childElementCount < 2) {
+							TH.appendChild(getInitializedElements(col));
+						}
+					};
+
+					// Deselect column after click on input.
+					var doNotSelectColumn = function (event, coords) {
+						if (coords.row === -1 && event.realTarget.nodeName === 'INPUT') {
+							event.stopImmediatePropagation();
+							this.deselectCell();
+						}
+					};
 					var spreadsheetContainer = $("#spreadsheet")[0];
-					var hot = new Handsontable(spreadsheetContainer, {
+
+					if (typeof mapTable !== "undefined")
+						mapTable.updateSettings({ data: [] }); //clear table after click
+
+					var mapTable = new Handsontable(spreadsheetContainer, {
 						data: maps,
 						height: 1000,
-						width: 1000,
+						width: 800,
 						colHeaders: header,
+						columns: [{}, //map name
+							{}, //tier
+							{
+								type: "time",
+								timeFormat: "h:mm:ss"
+							},
+							{}, //tp
+							{}, //pts
+							{},
+							{} //server
+						],
+
 						columnSorting: true,
 						filters: true,
-						dropdownMenu: ["filter_by_condition"]
+						autoColumnSize: {
+							syncLimit: '40%'
+						},
+						className: 'as-you-type-demo',
+						afterGetColHeader: addInput,
+						beforeOnCellMouseDown: doNotSelectColumn,
+						licenseKey: 'non-commercial-and-evaluation'
 					});
 				}); //end json
 			}
@@ -69,10 +138,21 @@ de
 
 
 				window.history.pushState("object or string", "Title", "?steamid=");;
+				ispro = $('input[name=isprorun-radio]:checked').val();
+				prorunURL = "has_teleports=";
+				if (ispro === "tpradio")
+					prorunURL += "true";
+				else
+					prorunURL += "false";
+
+				//temp max limit based on ~440 maps, eventually should change to indexdb storage 
+				//so you dont fetch every map all the time, and just fetch the latest runs
+				var tempLimit = 500;
 
 				retrieveStats(
 					"https://kztimerglobal.com/api/v1.0/records/top?steam_id=" + steamID +
-					"&tickrate=128&stage=0&has_teleports=true&limit=500&modes_list_string=kz_timer"
+					"&tickrate=128&stage=0&" + prorunURL + "&limit=" + tempLimit +
+					"&modes_list_string=kz_timer"
 				);
 			});
 
@@ -112,22 +192,23 @@ de
 
 			<div class="inputSelection">
 				<div class="innerSelection">
-					<input type="checkbox" name="pro-runs-check" checked="checked">TP Runs
-					<input type="checkbox" name="tp-runs-check" checked="checked">Pro Runs<br>
+					<input type="radio" name="isprorun-radio" value="tpradio" checked>TP Runs
+					<input type="radio" name="isprorun-radio" value="proradio">Pro Runs
 
 					<div id="playername"></div>
-				</di>
+					</di>
+
+				</div>
+				<p>click on any header below to sort, tier information coming soon...</p>
+
+
+				<div class="table-container" id="spreadsheet">
+
+
+				</div>
 
 			</div>
-
-
-			<div class="table-container" id="spreadsheet">
-
-
-			</div>
-
 		</div>
-	</div>
 </body>
 
 </html>

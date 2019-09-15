@@ -95,6 +95,14 @@ td {
 	padding: 10px;
 }
 
+.handsontable th {
+	background-color: red;
+	
+}
+.ht_master tr:nth-of-type(even) > td {
+  background-color: lightgrey;
+}
+
 th {
 	padding-top: 12px;
 	padding-bottom: 12px;
