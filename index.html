@@ -13,7 +13,7 @@
 	<script>
 		var mapTable;
 		$(document).ready(function () {
-			var header = ["Map", "Tier", "Time", "TP", "Pts", "Date", "Server"];
+			var header = ["Map", "Tier", "Time", "TPs", "Pts", "Date", "Server"];
 			var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
 
 			URI = getURIVars();
@@ -61,64 +61,8 @@
 
 
 					}); //.each
-					var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
-						var filtersPlugin = mapTable.getPlugin('filters');
 
-						filtersPlugin.removeConditions(colIndex);
-						filtersPlugin.addCondition(colIndex, 'contains', [event.realTarget.value]);
-						filtersPlugin.filter();
-					}, 200);
-
-					var addEventListeners = function (input, colIndex) {
-						input.addEventListener('keydown', function (event) {
-							debounceFn(colIndex, event);
-						});
-					};
-
-					// Build elements which will be displayed in header.
-					var getInitializedElements = function (colIndex) {
-						var div = document.createElement('div');
-						var input = document.createElement('input');
-
-						div.className = 'filterHeader';
-
-						addEventListeners(input, colIndex);
-
-						div.appendChild(input);
-
-						return div;
-					};
-
-					// Add elements to header on `afterGetColHeader` hook.
-					var addInput = function (col, TH) {
-						// Hooks can return value other than number (for example `columnSorting` plugin use this).
-						if (typeof col !== 'number') {
-							return col;
-						}
-
-						if ((col == 0 || col == 6) && TH.childElementCount < 2) {
-							TH.appendChild(getInitializedElements(col));
-						}
-					};
-
-					// Deselect column after click on input.
-					var doNotSelectColumn = function (event, coords) {
-						if (coords.row === -1 && event.realTarget.nodeName === 'INPUT') {
-							event.stopImmediatePropagation();
-							this.deselectCell();
-						}
-					};
-					var spreadsheetContainer = $("#spreadsheet")[0];
-
-					if (typeof mapTable !== "undefined")
-						mapTable.updateSettings({ data: [] }); //clear table after click
-
-					var mapTable = new Handsontable(spreadsheetContainer, {
-						data: maps,
-						height: 1000,
-						width: 800,
-						colHeaders: header,
-						columns: [{}, //map name
+					cols = [{}, //map name
 							{}, //tier
 							{
 								type: "time",
@@ -128,18 +72,9 @@
 							{}, //pts
 							{},
 							{} //server
-						],
-
-						columnSorting: true,
-						filters: true,
-						autoColumnSize: {
-							syncLimit: '40%'
-						},
-						className: 'typefilter',
-						afterGetColHeader: addInput,
-						beforeOnCellMouseDown: doNotSelectColumn,
-						licenseKey: 'non-commercial-and-evaluation'
-					});
+						];
+					var spreadsheetContainer = $("#spreadsheet")[0];
+					genTable(spreadsheetContainer, maps, header, [0,1,6], cols);
 				}); //end json
 			}
 
@@ -181,6 +116,7 @@
 			<li><a href="local.html">Local Maps</a></li>
 			<li><a href="jumpstats.html">Jumpstats</a></li>
 			<li><a href="contact.html">Contact</a></li>
+			<li>Your Times Across All Servers</li>
 
 		</ul>
 		<div class="center">

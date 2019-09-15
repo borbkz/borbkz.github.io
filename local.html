@@ -37,13 +37,13 @@
 
 		$(document).ready(function () {
 
-			$("#downloadButton").click(function(){
-				var csvText = headerArray.join(",")+"\r\n";
-				if(typeof outputBuffer !== 'undefined'){
-					for(i=0;i<outputBuffer.length;i++)
-					csvText += outputBuffer[i];
+			$("#downloadButton").click(function () {
+				var csvText = headerArray.join(",") + "\r\n";
+				if (typeof outputBuffer !== 'undefined') {
+					for (i = 0; i < outputBuffer.length; i++)
+						csvText += outputBuffer[i];
 				}
-					this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(csvText);
+				this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(csvText);
 			});
 			$("#convertButton").click(function () {
 
@@ -115,78 +115,31 @@
 						textOut[0].value += outputBuffer[i];
 						textOut[0].value +=difficultyArray[map].length + " | " + map + ", " + difficultyArray[map] + "\n";
 					}*/
+					var spreadsheetContainer = $("#spreadsheet")[0];
+
+					cols = [{}, //map name
+							{}, //tier
+							{
+								type: "time",
+								timeFormat: "h:mm:ss"
+							},
+							{}, //tp
+							{}, //tp rank
+							{ 
+								type: "time",
+								timeFormat: "h:mm:ss"
+							}, 
+							{}, //pro teleports
+							{} //pro rank
+						];
+						genTable(spreadsheetContainer, tableBuffer, headerArray, [0, 1], cols);
+
+					//if (typeof mapTable !== "undefined")
+					//mapTable.updateSettings({ data: [] }); //clear table after click
 
 
 				}
 
-					var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
-						var filtersPlugin = mapTable.getPlugin('filters');
-
-						filtersPlugin.removeConditions(colIndex);
-						filtersPlugin.addCondition(colIndex, 'contains', [event.realTarget.value]);
-						filtersPlugin.filter();
-					}, 200);
-
-					var addEventListeners = function (input, colIndex) {
-						input.addEventListener('keydown', function (event) {
-							debounceFn(colIndex, event);
-						});
-					};
-
-					// Build elements which will be displayed in header.
-					var getInitializedElements = function (colIndex) {
-						var div = document.createElement('div');
-						var input = document.createElement('input');
-
-						div.className = 'filterHeader';
-
-						addEventListeners(input, colIndex);
-
-						div.appendChild(input);
-
-						return div;
-					};
-
-					// Add elements to header on `afterGetColHeader` hook.
-					var addInput = function (col, TH) {
-						// Hooks can return value other than number (for example `columnSorting` plugin use this).
-						if (typeof col !== 'number') {
-							return col;
-						}
-
-						if ((col == 0 || col == 1 ) && TH.childElementCount < 2) {
-							TH.appendChild(getInitializedElements(col));
-						}
-					};
-
-					// Deselect column after click on input.
-					var doNotSelectColumn = function (event, coords) {
-						if (coords.row === -1 && event.realTarget.nodeName === 'INPUT') {
-							event.stopImmediatePropagation();
-							this.deselectCell();
-						}
-					};
-					var spreadsheetContainer = $("#spreadsheet")[0];
-
-					if (typeof mapTable !== "undefined")
-						mapTable.updateSettings({ data: [] }); //clear table after click
-
-					var mapTable = new Handsontable(spreadsheetContainer, {
-						data: tableBuffer,
-						height: 1000,
-						width: 1000,
-						colHeaders: headerArray,
-						columnSorting: true,
-						filters: true,
-						autoColumnSize: {
-							syncLimit: '40%'
-						},
-						className: 'typefilter',
-						afterGetColHeader: addInput,
-						beforeOnCellMouseDown: doNotSelectColumn,
-						licenseKey: 'non-commercial-and-evaluation'
-					});
-				//createTable(tableBuffer, headerArray);
 
 			}); //end click
 
@@ -217,7 +170,7 @@
 					</div>
 				</div>
 
-				<textarea rows="20" cols="100" id="inputMapsTextArea">
+				<textarea rows="10" cols="100" id="inputMapsTextArea">
 On any KZTimer enabled server, type !profile in the chat and select "finished maps" 
 Paste your times here.
 
@@ -248,8 +201,8 @@ kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 
 
 
-				<div class="table-container" id="spreadsheet">
-				</div>
+					<div class="table-container" id="spreadsheet">
+					</div>
 
 				</div>
 			</div>

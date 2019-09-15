@@ -90,7 +90,7 @@ function getTimeFromSeconds(seconds) {
 		min = "0" + min;
 
 	seconds -= min * 60;
-	
+
 	seconds = seconds.toFixed(2);
 	if (seconds < 10)
 		seconds = "0" + seconds
@@ -98,3 +98,80 @@ function getTimeFromSeconds(seconds) {
 	return hours + ":" + min + ":" + seconds;
 }
 
+
+function genTable(container, maps, header, filterArray, myColumns, colWidth) {
+
+	colWidth = colWidth || 900;
+	var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
+		var filtersPlugin = mapTable.getPlugin('filters');
+
+		filtersPlugin.removeConditions(colIndex);
+		filtersPlugin.addCondition(colIndex, 'contains', [event.realTarget.value]);
+		filtersPlugin.filter();
+	}, 200);
+
+	var addEventListeners = function (input, colIndex) {
+		input.addEventListener('keydown', function (event) {
+			debounceFn(colIndex, event);
+		});
+	};
+
+	// Build elements which will be displayed in header.
+	var getInitializedElements = function (colIndex) {
+		var div = document.createElement('div');
+		var input = document.createElement('input');
+
+		div.className = 'filterHeader';
+
+		addEventListeners(input, colIndex);
+
+		div.appendChild(input);
+
+		return div;
+	};
+
+	// Add elements to header on `afterGetColHeader` hook.
+	var addInput = function (col, TH) {
+		// Hooks can return value other than number (for example `columnSorting` plugin use this).
+		if (typeof col !== 'number') {
+			return col;
+		}
+
+		if (TH.childElementCount < 2) {
+
+			for (i = 0; i < filterArray.length; i++) {
+				if (col == filterArray[i]) {
+					TH.appendChild(getInitializedElements(col));
+				}
+			}
+		}
+	};
+
+	// Deselect column after click on input.
+	var doNotSelectColumn = function (event, coords) {
+		if (coords.row === -1 && event.realTarget.nodeName === 'INPUT') {
+			event.stopImmediatePropagation();
+			this.deselectCell();
+		}
+	};
+
+	console.log(colWidth);
+	var mapTable = new Handsontable(container, {
+		data: maps,
+		height: 1000,
+		width: colWidth,
+		colHeaders: header,
+		columns: myColumns, 
+
+		columnSorting: true,
+		filters: true,
+		autoColumnSize: {
+			syncLimit: '40%'
+		},
+		className: 'typefilter',
+		afterGetColHeader: addInput,
+		beforeOnCellMouseDown: doNotSelectColumn,
+		licenseKey: 'non-commercial-and-evaluation'
+	});
+
+}
