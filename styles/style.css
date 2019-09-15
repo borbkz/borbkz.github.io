@@ -35,6 +35,11 @@ li a {
 		margin: auto;
 }
 
+.titleDiv{
+
+	font: 20px sans-serif;
+	font-weight: bold;
+}
 .nav-container {
 	margin: 0 auto;
 	width: 1200px;
