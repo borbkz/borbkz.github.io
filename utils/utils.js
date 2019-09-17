@@ -10,9 +10,32 @@ var requestLimit = "&limit=" + jumpLimit;
 var requestMinimum = "&greater_than_distance=" + jumpMin;
 
 var requestBind = "&is_crouch_bind=";
+var first = true;
+var mapTable;
 
 
+function getDifficultyArray() {
+	difficultyArray = {};
+	var mapKeys = {
+		"Map": 0,
+		"Tier": 1,
+		"Pro Tier": 2,
+		"Length": 3,
+	}
+	$.getJSON("maps.json", function (data) {
 
+		$.each(data, function (i, field) {
+			if (i == 0) return true;
+			tier = field[mapKeys["Tier"]];
+			protier = field[mapKeys["Pro Tier"]];
+			length = field[mapKeys["Length"]];
+			difficultyArray[field[mapKeys["Map"]]] = [tier, protier, length];
+		});
+
+	}); //end json
+
+	return difficultyArray;
+}
 function createTable(tableData, headerArray) {
 	var tables = document.getElementsByTagName("table");
 	for (var i = tables.length - 1; i >= 0; i -= 1)
@@ -101,7 +124,7 @@ function getTimeFromSeconds(seconds) {
 
 function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 
-	colWidth = colWidth || 900;
+	colWidth = colWidth || 1000;
 	var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
 		var filtersPlugin = mapTable.getPlugin('filters');
 
@@ -155,23 +178,63 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 		}
 	};
 
-	console.log(colWidth);
-	var mapTable = new Handsontable(container, {
+	if(first){
+	mapTable = new Handsontable(container, {
 		data: maps,
 		height: 1000,
 		width: colWidth,
 		colHeaders: header,
-		columns: myColumns, 
-
+		columns: myColumns,
 		columnSorting: true,
 		filters: true,
-		autoColumnSize: {
-			syncLimit: '40%'
+		dropdownMenu: ["filter_by_value", "filter_action_bar"],
+		contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
+		hiddenColumns: {
+			indicators: false,
+			columns: [] //hide pro teleports by default
 		},
 		className: 'typefilter',
 		afterGetColHeader: addInput,
 		beforeOnCellMouseDown: doNotSelectColumn,
 		licenseKey: 'non-commercial-and-evaluation'
 	});
+
+}else{
+
+	mapTable.updateSettings({
+    data : []
+});
+}
+
+	var originalColWidths = [];
+	var colWidths = [];
+	var inputs;
+
+	inputs = document.querySelectorAll('input.toggle');
+
+	for (var i = 0; i < inputs.length; i++) {
+		(function (input) {
+
+				input.addEventListener('click', function () {
+					toggleColumnAt(parseInt(input.dataset.column, 10));
+				});
+		}(inputs[i]));
+	}
+
+	toggleColumnAt = function (column) {
+		if (colWidths[column] === 0.1) {
+			colWidths[column] = originalColWidths[column];
+		} else {
+			colWidths[column] = 0.1;
+		}
+		mapTable.updateSettings({ colWidths: colWidths });
+	};
+
+	for (var i = 0, l = inputs.length; i < l; i++) {
+		originalColWidths.push(mapTable.getColWidth(i));
+	}
+	colWidths = originalColWidths.slice();
+
+	return mapTable;
 
 }

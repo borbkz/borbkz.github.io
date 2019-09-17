@@ -12,30 +12,15 @@
 	<script type="text/javascript" src="utils/utils.js"></script>
 	<script>
 		var difficultyArray = {};
-		var headerArray = ["Map (Click to Sort)", "Tier", "TP Time", "TPs", "TP Rank", "Pro Time", "Pro Tp's",
-			"PRO RANK"
+		var headerArray = ["Map", "Tier", "Pro Tier", "Length", "TP Time", "Teleports", "TP Rank", "Pro Time",
+			"Pro Teleports", "Pro Rank"
 		];
-		var tiers = {
-			0: "Non-global",
-			1: "Very Easy",
-			2: "Easy",
-			3: "Medium",
-			4: "Hard",
-			5: "Very Hard",
-			6: "Death"
-		};
+		var plugin;
 
-		$.getJSON("maps.json", function (data) {
-
-			$.each(data, function (i, field) {
-				tier = field["TP Difficulty"]
-				if (!Number.isInteger(tier) && (tier >= 0 && tier <= 6))
-					tier = 0;
-				difficultyArray[field["Map"]] = [tiers[tier]];
-			});
-		}); //end json
-
+		var table;
 		$(document).ready(function () {
+			difficultyArray = getDifficultyArray();
+			var beginOffset = 2;
 
 			$("#downloadButton").click(function () {
 				var csvText = headerArray.join(",") + "\r\n";
@@ -52,12 +37,12 @@
 
 				$.each(textIn.val().split("\n"), function (i, line) {
 					if (!(/.+,.+,.+,.+$/.test(line))) {
-
-						line = ",,,,"
+						return true;
 					}
 					mapInfo = line.split(",");
 					//[mapname][difficulty, TP time, TP Teleports, TP Rank, Pro time, PRO teleports, Pro Rank]		 
-					offset = mapInfo[1].includes("(PRO)") ? 3 : 0;
+					offset = beginOffset + (mapInfo[1].includes("(PRO)") ? 3 :
+						0);
 					mapName = mapInfo[0];
 
 					if (mapName in difficultyArray) {
@@ -79,6 +64,10 @@
 				}
 				printAllMaps();
 
+				function test2() {
+
+				}
+
 				function printAllMaps() {
 					//clear area first
 					//textOut[0].value = "";
@@ -86,26 +75,23 @@
 					outputBuffer = [""];
 					tableBuffer = [];
 
-					finishedStatus = $('input[name=finishedStatus]:checked').val();
-					unfinishedStatus = $('input[name=unfinishedStatus]:checked').val();
+					//finishedStatus = $('input[name=finishedStatus]:checked').val();
+					//unfinishedStatus = $('input[name=unfinishedStatus]:checked').val();
 					for (var map in difficultyArray) {
 
 
 
-						if (finishedStatus && difficultyArray[map].length > 1 ||
-							unfinishedStatus && difficultyArray[map].length <= 1) {
-							line = map + ", " + difficultyArray[map];
-							outputBuffer.push(map + ", " + difficultyArray[map] + "\n");
+						line = map + ", " + difficultyArray[map];
+						outputBuffer.push(map + ", " + difficultyArray[map] + "\n");
 
-							length = difficultyArray[map].length;
-							row = line.split(",");
+						length = difficultyArray[map].length;
+						row = line.split(",");
 
-							for (i = length; i < (headerArray.length - 1); i++) {
-								row.push("");
-							}
-							tableBuffer.push(row);
-
+						for (i = length; i < (headerArray.length - 1); i++) {
+							row.push("");
 						}
+						tableBuffer.push(row);
+
 					}
 					/*
 					textOut[0].value += headerArray+"\n";
@@ -117,21 +103,26 @@
 					var spreadsheetContainer = $("#spreadsheet")[0];
 
 					cols = [{}, //map name
-							{}, //tier
-							{
-								type: "time",
-								timeFormat: "h:mm:ss"
-							},
-							{}, //tp
-							{}, //tp rank
-							{ 
-								type: "time",
-								timeFormat: "h:mm:ss"
-							}, 
-							{}, //pro teleports
-							{} //pro rank
-						];
-						genTable(spreadsheetContainer, tableBuffer, headerArray, [0, 1], cols);
+						{}, //tier
+						{}, //pro tier
+						{}, //length
+						{
+							type: "time",
+							timeFormat: "h:mm:ss"
+						},
+						{}, //tp
+						{}, //tp rank
+						{
+							type: "time",
+							timeFormat: "h:mm:ss"
+						},
+						{}, //pro teleports
+						{} //pro rank
+					];
+					//filters for map, tp&pro tiers, length, tp& pro times
+
+					table = genTable(spreadsheetContainer, tableBuffer, headerArray, [0], cols);
+					plugin = table.getPlugin('hiddenColumns');
 
 					//if (typeof mapTable !== "undefined")
 					//mapTable.updateSettings({ data: [] }); //clear table after click
@@ -141,8 +132,6 @@
 
 
 			}); //end click
-
-
 		}); //end ready
 	</script>
 
@@ -183,8 +172,15 @@ kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 
 				<div class="inputSelection">
 					<div class="innerSelection">
-						<input type="checkbox" name="finishedStatus" checked="checked">Finished Runs
-						<input type="checkbox" name="unfinishedStatus" checked="checked">Unfinished Runs<br>
+					<input class="toggle" data-column="1" type="checkbox" checked>TP Tier
+					<input class="toggle" data-column="2" type="checkbox" checked>Pro Tier
+					<input class="toggle" data-column="3" type="checkbox" checked>Length
+					<input class="toggle" data-column="4" type="checkbox" checked>TP Times
+					<input class="toggle" data-column="5" type="checkbox" checked>Teleports
+					<input class="toggle" data-column="6" type="checkbox" checked>TP Rank
+					<input class="toggle" data-column="7" type="checkbox" checked>Pro Times
+					<input class="toggle" data-column="8" type="checkbox" checked>Pro Teleports
+					<input class="toggle" data-column="9" type="checkbox" checked>Pro Rank
 					</div>
 
 					<div class="innerSelection">
@@ -199,8 +195,9 @@ kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 				<div class="table-container">
 
 
+						<div id="example" class="handsontable"></div>
 
-					<div class="table-container" id="spreadsheet">
+					<div class="handsontable" id="spreadsheet">
 					</div>
 
 				</div>
