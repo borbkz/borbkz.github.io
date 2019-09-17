@@ -16,7 +16,6 @@
 			"Pro Teleports", "Pro Rank"
 		];
 		var plugin;
-
 		var table;
 		$(document).ready(function () {
 			difficultyArray = getDifficultyArray();
@@ -77,8 +76,6 @@
 					//finishedStatus = $('input[name=finishedStatus]:checked').val();
 					//unfinishedStatus = $('input[name=unfinishedStatus]:checked').val();
 					for (var map in difficultyArray) {
-
-
 
 						line = map + ", " + difficultyArray[map];
 						outputBuffer.push(map + ", " + difficultyArray[map] + "\n");
@@ -142,6 +139,7 @@
 		<ul>
 			<li><a href="index.html">Global Times</a></li>
 			<li><a class="active" href="local.html">Local Times</a></li>
+			<li><a href="maps.html">Map Picker</a></li>
 			<li><a href="jumpstats.html">Jumpstats</a></li>
 			<li><a href="contact.html">Contact</a></li>
 		</ul>

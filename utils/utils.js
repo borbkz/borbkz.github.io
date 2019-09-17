@@ -14,6 +14,48 @@ var first = true;
 var mapTable;
 
 
+function getHeaderArray(){
+	//var header = {};
+	$.getJSON("header.json", function (data) {
+		//header = data;
+	}); //end json
+	//return header;
+
+}
+
+function getMapArray(){
+	var maps = [];
+	var mapKeys = {
+		"Map": 0,
+		"Tier": 1,
+		"Pro Tier": 2,
+		"Length": 3,
+		"Strafe": 4,
+		"Bhop": 5,
+		"Ladder": 6,
+		"Surf": 7,
+		"Tech": 8,
+	}
+	$.getJSON("maps.json", function (data) {
+
+		$.each(data, function (i, field) {
+			map = field[mapKeys["Map"]];
+			tier = field[mapKeys["Tier"]];
+			protier = field[mapKeys["Pro Tier"]];
+			length = field[mapKeys["Length"]];
+			strafe = field[mapKeys["Strafe"]];
+			bhop = field[mapKeys["Bhop"]];
+			ladder = field[mapKeys["Ladder"]];
+			surf = field[mapKeys["Surf"]];
+			tech = field[mapKeys["Tech"]];
+			maps.push([ map,tier, protier, length, strafe, bhop, ladder, surf, tech]);
+		});
+
+	console.log("inside " + maps[0])
+	}); //end json
+	return maps;
+
+}
 function getDifficultyArray() {
 	difficultyArray = {};
 	var mapKeys = {
@@ -26,7 +68,7 @@ function getDifficultyArray() {
 
 		$.each(data, function (i, field) {
 			if (i == 0) return true;
-			tier = field[mapKeys["Tier"]]
+			tier = field[mapKeys["Tier"]];
 			protier = field[mapKeys["Pro Tier"]];
 			length = field[mapKeys["Length"]];
 			difficultyArray[field[mapKeys["Map"]]] = [tier, protier, length];

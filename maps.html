@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<head>
+	<title>Borb's KZ</title>
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
+	<link rel="stylesheet" type="text/css"
+		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js">
+	</script>
+	<script type="text/javascript" src="utils/utils.js"></script>
+
+	<script>
+		$(document).ready(function () {
+			var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
+
+
+			cols = [{}, //map name
+				{}, //tier
+				{}, //pro tier
+				{}, //length
+				{ },//strafe
+				{}, //bhop
+				{}, //ladder
+				{}, //surf
+				{} //sech
+			];
+			var spreadsheetContainer = $("#spreadsheet")[0];
+
+			$.getJSON(); //??
+				//myHeader = getHeaderArray();
+			myMaps = getMapArray();
+			genTable(spreadsheetContainer, myMaps,header, [0], cols);
+
+
+		}); //end ready
+	</script>
+
+
+</head>
+
+<body>
+	<div class="nav-container">
+		<ul>
+
+			<li><a href="index.html">Global Times</a></li>
+			<li><a href="local.html">Local Times</a></li>
+			<li><a class="active" href="maps.html">Map Picker</a></li>
+			<li><a href="jumpstats.html">Jumpstats</a></li>
+			<li><a href="contact.html">Contact</a></li>
+
+		</ul>
+		<div class="center">
+
+			<div id="titleDiv">
+				<div id="innerTitleDiv">
+					<h2 id="player-title">Chose your next map! (Under Construction)</h2>
+				</div>
+			</div>
+
+
+			<div id="table-container">
+				<div id="table-tips"></div>
+				<div class="handsontable" id="spreadsheet"> </div>
+			</div>
+
+		</div>
+	</div>
+</body>
+
+</html>
