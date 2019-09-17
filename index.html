@@ -18,7 +18,6 @@
 			];
 			var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
 
-			difficultyArray = getDifficultyArray();
 			finishedArray =
 				URI = getURIVars();
 			steamID = "";
@@ -41,6 +40,7 @@
 			}
 
 			function retrieveStats(steamID, teleports) {
+				difficultyArray = getDifficultyArray();
 				//temp max limit based on ~440 maps, eventually should change to indexdb storage 
 				//so you dont fetch every map all the time, and just fetch the latest runs
 				var tempLimit = 500;
