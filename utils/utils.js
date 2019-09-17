@@ -193,7 +193,7 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 			dropdownMenu: ["filter_by_value", "filter_action_bar"],
 			contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
 			hiddenColumns: {
-				indicators: false,
+				indicators: true,
 				columns: [] //hide pro teleports by default
 			},
 			className: 'typefilter',
@@ -234,7 +234,7 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 	
 		*/
 
-		$("#table-tips").text("Click on any column to sort. Left click to hide. You can filter maps by typing in the filter bar.")
+		$("#table-tips").text("Click on any column to sort. Right click to hide. You can filter maps by typing in the filter bar.")
 	first = false;
 	return mapTable;
 
