@@ -115,13 +115,12 @@
 					var spreadsheetContainer = $("#spreadsheet")[0];
 
 					for (map in difficultyArray) {
-						if (difficultyArray[map].length != 4) {
+						if (difficultyArray[map].length < 4) {
 							unfinished = Array(header.length).fill("N/A");
 							unfinished[0] = map; 
 							unfinished[1] = difficultyArray[map][0]; //tp tier
 							unfinished[2] = difficultyArray[map][1]; //pro tier
 							unfinished[3] = difficultyArray[map][2]; //length
-							console.log("unfinished " + map + " : " + unfinished)
 							maps.push(unfinished);
 						}
 
