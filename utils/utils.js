@@ -26,7 +26,7 @@ function getDifficultyArray() {
 
 		$.each(data, function (i, field) {
 			if (i == 0) return true;
-			tier = field[mapKeys["Tier"]];
+			tier = field[mapKeys["Tier"]]
 			protier = field[mapKeys["Pro Tier"]];
 			length = field[mapKeys["Length"]];
 			difficultyArray[field[mapKeys["Map"]]] = [tier, protier, length];
