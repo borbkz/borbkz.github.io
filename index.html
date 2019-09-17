@@ -13,11 +13,14 @@
 	<script>
 		var mapTable;
 		$(document).ready(function () {
-			var header = ["Map (Click to Sort)", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date", "Server"];
+			var header = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
+				"Server"
+			];
 			var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
 
 			difficultyArray = getDifficultyArray();
-			URI = getURIVars();
+			finishedArray =
+				URI = getURIVars();
 			steamID = "";
 			if (typeof URI["steamid"] !== 'undefined' && URI["teleports"] !== 'undefined') {
 				steamID = URI["steamid"];
@@ -26,11 +29,10 @@
 
 					$('#steamIDText').val(steamID);
 
-					if (teleports === "true"){
+					if (teleports === "true") {
 						retrieveStats(steamID, true);
 						$('#tpradio').click();
-					}
-					else if (teleports === "false"){
+					} else if (teleports === "false") {
 						retrieveStats(steamID, false);
 						$('#proradio').click();
 					}
@@ -56,37 +58,51 @@
 						runtype = "TP Times";
 
 
-					$("#player-title").text(playerName + "'s " + runtype + " Across All Servers (Under Construction)");
+					$("#player-title").text(playerName + "'s " + runtype +
+						" Across All Servers (Under Construction)");
 					$.each(data, function (i, field) {
 
-				var map = field["map_name"]
+						var map = field["map_name"]
 						//server is sometimes null, and throws exception
-						server = "N/A";
-						if (typeof field["server_name"] === "string") {
-							server = field["server_name"].substring(0, 35);
-						}
-						tptier = "N/A", protier = "N/A", length = "N/A";
-						if(map in difficultyArray){
+						var tptier = "N/A",
+							protier = "N/A",
+							length = "N/A",
+							time = "N/A",
+							teleports = "N/A",
+							points = "N/A",
+							date = "N/A",
+							server = "N/A";
+						if (map in difficultyArray) {
+
+							//flag to see if map is finished, most of the new death maps have not been added to global api
+							difficultyArray[map].push("finished");
 
 							tptier = difficultyArray[field["map_name"]][0];
 							protier = difficultyArray[field["map_name"]][1];
 							length = difficultyArray[field["map_name"]][2];
+							time = getTimeFromSeconds(field["time"]);
+							teleports = field["teleports"];
+							points = field["points"];
+							date = field["updated_on"];
+							if (typeof field["server_name"] === "string") {
+								server = field["server_name"].substring(0, 35);
+							}
 
 						}
 						var statRow = [map, tptier, protier, length,
-							getTimeFromSeconds(field["time"]), field["teleports"], field[
-								"points"],
-							field["updated_on"], server ];
+							time, teleports, points, date, server
+						];
 						maps.push(statRow);
 						//createTable(maps, header);
 
 
 					}); //.each
 
+
 					cols = [{}, //map name
 						{}, //tier
-						{},//pro tier
-						{},//length
+						{}, //pro tier
+						{}, //length
 						{
 							type: "time",
 							timeFormat: "h:mm:ss"
@@ -97,7 +113,16 @@
 						{} //server
 					];
 					var spreadsheetContainer = $("#spreadsheet")[0];
-					genTable(spreadsheetContainer, maps, header, [0,8], cols);
+
+					for (map in difficultyArray) {
+						if (difficultyArray[map].length != 4) {
+							unfinished = Array(header.length).fill("N/A");
+							unfinished[0] = map;
+							maps.push(unfinished);
+						}
+
+					}
+					genTable(spreadsheetContainer, maps, header, [0, 8], cols);
 				}); //end json
 			}
 
@@ -161,6 +186,8 @@
 					<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
 					<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
 				</div>
+				<!--
+					
 				<div class="innerSelection">
 					<input class="toggle" data-column="1" type="checkbox" checked>TP Tier
 					<input class="toggle" data-column="2" type="checkbox" checked>Pro Tier
@@ -171,13 +198,14 @@
 					<input class="toggle" data-column="7" type="checkbox" checked>Date
 					<input class="toggle" data-column="8" type="checkbox" checked>Server
 				</div>
+				-->
 
 			</div>
 
 
-			<div class="table-container" id="spreadsheet">
-
-
+			<div id="table-container">
+				<div id="table-tips"></div>
+				<div class="handsontable" id="spreadsheet"> </div>
 			</div>
 
 		</div>

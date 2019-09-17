@@ -31,7 +31,6 @@
 				this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(csvText);
 			});
 			$("#convertButton").click(function () {
-
 				var textIn = $("#inputMapsTextArea");
 				//var textOut = $("#outputMapsTextArea");
 
@@ -171,6 +170,10 @@ kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 </textarea>
 
 				<div class="inputSelection">
+
+					<!--
+
+
 					<div class="innerSelection">
 					<input class="toggle" data-column="1" type="checkbox" checked>TP Tier
 					<input class="toggle" data-column="2" type="checkbox" checked>Pro Tier
@@ -182,6 +185,7 @@ kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 					<input class="toggle" data-column="8" type="checkbox" checked>Pro Teleports
 					<input class="toggle" data-column="9" type="checkbox" checked>Pro Rank
 					</div>
+					-->
 
 					<div class="innerSelection">
 
@@ -192,14 +196,9 @@ kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 				</div>
 				<!-- <textarea  rows="20" cols="100" id="outputMapsTextArea"></textarea>-->
 
-				<div class="table-container">
-
-
-						<div id="example" class="handsontable"></div>
-
-					<div class="handsontable" id="spreadsheet">
-					</div>
-
+				<div id="table-container">
+					<div id="table-tips"></div>
+					<div class="handsontable" id="spreadsheet"> </div>
 				</div>
 			</div>
 		</div>

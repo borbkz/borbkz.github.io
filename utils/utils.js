@@ -178,63 +178,64 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 		}
 	};
 
-	if(first){
-	mapTable = new Handsontable(container, {
-		data: maps,
-		height: 1000,
-		width: colWidth,
-		colHeaders: header,
-		columns: myColumns,
-		columnSorting: true,
-		filters: true,
-		dropdownMenu: ["filter_by_value", "filter_action_bar"],
-		contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
-		hiddenColumns: {
-			indicators: false,
-			columns: [] //hide pro teleports by default
-		},
-		className: 'typefilter',
-		afterGetColHeader: addInput,
-		beforeOnCellMouseDown: doNotSelectColumn,
-		licenseKey: 'non-commercial-and-evaluation'
-	});
-
-}else{
-
-	mapTable.updateSettings({
-    data : []
-});
-}
-
-	var originalColWidths = [];
-	var colWidths = [];
-	var inputs;
-
-	inputs = document.querySelectorAll('input.toggle');
-
-	for (var i = 0; i < inputs.length; i++) {
-		(function (input) {
-
-				input.addEventListener('click', function () {
-					toggleColumnAt(parseInt(input.dataset.column, 10));
-				});
-		}(inputs[i]));
+	if (!first) {
+		mapTable.destroy();
 	}
 
-	toggleColumnAt = function (column) {
-		if (colWidths[column] === 0.1) {
-			colWidths[column] = originalColWidths[column];
-		} else {
-			colWidths[column] = 0.1;
+		mapTable = new Handsontable(container, {
+			data: maps,
+			height: 1000,
+			width: colWidth,
+			colHeaders: header,
+			columns: myColumns,
+			columnSorting: true,
+			filters: true,
+			dropdownMenu: ["filter_by_value", "filter_action_bar"],
+			contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
+			hiddenColumns: {
+				indicators: false,
+				columns: [] //hide pro teleports by default
+			},
+			className: 'typefilter',
+			afterGetColHeader: addInput,
+			beforeOnCellMouseDown: doNotSelectColumn,
+			licenseKey: 'non-commercial-and-evaluation'
+		});
+	//FIX: problem with old table and event listeners not clearing when requesting new times
+	/*
+		var originalColWidths = [];
+		var colWidths = [];
+		var inputs;
+	
+		inputs = document.querySelectorAll('input.toggle');
+	
+		for (var i = 0; i < inputs.length; i++) {
+			(function (input) {
+	
+					input.addEventListener('click', function () {
+						toggleColumnAt(parseInt(input.dataset.column, 10));
+					});
+			}(inputs[i]));
 		}
-		mapTable.updateSettings({ colWidths: colWidths });
-	};
+	
+		toggleColumnAt = function (column) {
+			if (colWidths[column] === 0.1) {
+				colWidths[column] = originalColWidths[column];
+			} else {
+				colWidths[column] = 0.1;
+			}
+			mapTable.updateSettings({ colWidths: colWidths });
+		};
+	
+		for (var i = 0, l = inputs.length; i < l; i++) {
+			originalColWidths.push(mapTable.getColWidth(i));
+		}
+		colWidths = originalColWidths.slice();
+	
+		*/
 
-	for (var i = 0, l = inputs.length; i < l; i++) {
-		originalColWidths.push(mapTable.getColWidth(i));
-	}
-	colWidths = originalColWidths.slice();
-
+		$("#table-tips").text("Click on any column to sort. Left click to hide. You can filter maps by typing in the filter bar.")
+	first = false;
 	return mapTable;
 
 }
