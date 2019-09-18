@@ -67,7 +67,7 @@ function getDifficultyArray() {
 	$.getJSON("maps.json", function (data) {
 
 		$.each(data, function (i, field) {
-			if (i == 0) return true;
+			//if (i == 0) return true;
 			tier = field[mapKeys["Tier"]];
 			protier = field[mapKeys["Pro Tier"]];
 			length = field[mapKeys["Length"]];

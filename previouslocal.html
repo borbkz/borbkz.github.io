@@ -3,22 +3,13 @@
 <head>
 	<title>Borb's KZ</title>
 
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
 	<link rel="stylesheet" type="text/css"
 		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="styles/style.css">
-
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js">
 	</script>
 	<script type="text/javascript" src="utils/utils.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-	</script>
-
 	<script>
 		var difficultyArray = {};
 		var headerArray = ["Map", "Tier", "Pro Tier", "Length", "TP Time", "Teleports", "TP Rank", "Pro Time",
@@ -144,132 +135,71 @@
 </head>
 
 <body>
-
-	<div class="page-container">
-
-
+	<div class="nav-container">
 		<ul>
 			<li><a href="index.html">Global Times</a></li>
-			<li><a class="active" href="local.html">Your Times</a></li>
+			<li><a class="active" href="local.html">Local Times</a></li>
 			<li><a href="maps.html">Map Picker</a></li>
 			<li><a href="jumpstats.html">Jumpstats</a></li>
 			<li><a href="contact.html">Contact</a></li>
 		</ul>
-		<div class="content-wrap">
+		<div class="center">
 
 
-			<div class="accordion" id="accordion-times">
-				<div class="card">
-					<div class="card-header" id="headingOne">
-						<h5 class="mb-0">
-							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-								aria-expanded="true" aria-controls="collapseOne">
-								<h4>Your Times Across All Servers</h4>
-							</button>
-						</h5>
-					</div>
 
-					<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion-times">
-						<div class="card-body">
+			<div class="textDiv">
 
-							<div class="content-wrap">
-								<div class="innerSelection">
-									<a href="https://steamid.io/lookup/">Steam ID Lookup</a>
-									<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
-									<input type="button" id="getGlobalMapsButton" value="Fetch Times" />
-								</div>
-
-								<div class="inputSelection">
-									<div class="innerSelection">
-										<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio"
-											checked>TP Runs
-										<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro
-										Runs
-									</div>
-
-								</div>
-
-
-								<div id="table-container">
-									<div id="table-tips"></div>
-									<div class="handsontable" id="spreadsheet2"> </div>
-								</div>
-
-							</div>
-						</div>
+				<div id="titleDiv">
+					<div id="innerTitleDiv">
+						<h2> Local Maps Organizer</h2>
 					</div>
 				</div>
-				<div class="card">
-					<div class="card-header" id="headingTwo">
-						<h5 class="mb-0">
-							<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-								data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-								<h4>Your Local Server Times</h4>
-							</button>
-						</h5>
-					</div>
-					<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion-times">
-						<div class="card-body">
 
-							<div>
-
-
-
-								<div class="textDiv">
-
-
-									<textarea rows="6" cols="100" id="inputMapsTextArea">
-On any KZTimer enabled server, type !profile in the chat and select "finished maps".
-Copy and paste your times from the console to here.
+				<textarea rows="10" cols="100" id="inputMapsTextArea">
+On any KZTimer enabled server, type !profile in the chat and select "finished maps" 
+Paste your times here.
 
 Example:
-kz_11342, Time: 01:29.58 (TP), Teleports: 0, Rank: 1/2
-kz_spacemario_h, Time: 09:59.99 (PRO), Teleports: 4, Rank: 99/100
+
+kz_11342, Time: 01:29.58 (PRO), Teleports: 0, Rank: 1/2
+kz_11342, Time: 01:29.95 (TP), Teleports: 1, Rank: 1/18
+kz_11735, Time: 01:29.82 (TP), Teleports: 4, Rank: 1/21
+kz_11735, Time: 01:29.63 (PRO), Teleports: 0, Rank: 1/7
 </textarea>
 
-									<div class="inputSelection">
+				<div class="inputSelection">
+
+					<!--
 
 
-										<div class="innerSelection">
-
-											<button id="convertButton">Fetch Times</button>
-											<a id="downloadButton" href="" download="kzmaps.csv"><button>Download</button></a>
-
-										</di>
-									</div>
-
-									<div id="table-container">
-										<div id="table-tips"></div>
-										<div class="handsontable" id="spreadsheet"> </div>
-									</div>
-								</div>
-							</div>
-						</div>
+					<div class="innerSelection">
+					<input class="toggle" data-column="1" type="checkbox" checked>TP Tier
+					<input class="toggle" data-column="2" type="checkbox" checked>Pro Tier
+					<input class="toggle" data-column="3" type="checkbox" checked>Length
+					<input class="toggle" data-column="4" type="checkbox" checked>TP Times
+					<input class="toggle" data-column="5" type="checkbox" checked>Teleports
+					<input class="toggle" data-column="6" type="checkbox" checked>TP Rank
+					<input class="toggle" data-column="7" type="checkbox" checked>Pro Times
+					<input class="toggle" data-column="8" type="checkbox" checked>Pro Teleports
+					<input class="toggle" data-column="9" type="checkbox" checked>Pro Rank
 					</div>
+					-->
+
+					<div class="innerSelection">
+
+						<button id="convertButton">Generate Spreadsheet</button>
+						<a id="downloadButton" href="" download="kzmaps.csv"><button>Download CSV</button></a>
+
+					</div>
+				</div>
+				<!-- <textarea  rows="20" cols="100" id="outputMapsTextArea"></textarea>-->
+
+				<div id="table-container">
+					<div id="table-tips"></div>
+					<div class="handsontable" id="spreadsheet"> </div>
 				</div>
 			</div>
 		</div>
-	</div>
-
-
-
-		<footer class="container">
-			<hr>
-			<div class="text-center center-block">
-				<a href="https://github.com/borbkz"><i id="social-github"
-						class="fa fa-github-square fa-3x social"></i></a>
-				<a href="https://steamcommunity.com/id/borbkz"><i id="social-steam"
-						class="fa fa-steam-square fa-3x social"></i></a>
-				<a href="mailto:borbkz@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
-			</div>
-
-		</footer>
-
-
-
-
-
-	</div>
 </body>
 
 </html>
