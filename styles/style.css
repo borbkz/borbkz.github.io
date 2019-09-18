@@ -56,14 +56,13 @@ footer {
 	height: 2.5rem;
 }
 
+.handsontable{
+	margin: auto;
+}
 #table-container {
 	height: 100%;
 }
 
-#spreadsheet {
-
-	margin: auto;
-}
 
 .titleDiv {
 

@@ -10,8 +10,6 @@ var requestLimit = "&limit=" + jumpLimit;
 var requestMinimum = "&greater_than_distance=" + jumpMin;
 
 var requestBind = "&is_crouch_bind=";
-var first = true;
-var mapTable;
 
 
 function getHeaderArray(){
@@ -220,11 +218,8 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 		}
 	};
 
-	if (!first) {
-		mapTable.destroy();
-	}
 
-		mapTable = new Handsontable(container, {
+		var mapTable = new Handsontable(container, {
 			data: maps,
 			height: 1000,
 			width: colWidth,
