@@ -3,13 +3,6 @@ var jumpLimit = 10,
 	jumpMin = 100;
 
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
-var requestURLBase = "https://kztimerglobal.com/api/v1.0/jumpstats?";
-var requestSteamID = "steam_id=";
-var requestJumpType = "&jumptype=";
-var requestLimit = "&limit=" + jumpLimit;
-var requestMinimum = "&greater_than_distance=" + jumpMin;
-
-var requestBind = "&is_crouch_bind=";
 
 
 function getHeaderArray(){
@@ -76,7 +69,7 @@ function getDifficultyArray() {
 
 	return difficultyArray;
 }
-function createTable(tableData, headerArray) {
+function createTable(tableData, headerArray,tableContainer) {
 	var tables = document.getElementsByTagName("table");
 	for (var i = tables.length - 1; i >= 0; i -= 1)
 		if (tables[i]) tables[i].parentNode.removeChild(tables[i]);
@@ -107,7 +100,7 @@ function createTable(tableData, headerArray) {
 	});
 
 	table.appendChild(tableBody);
-	document.body.getElementsByClassName("table-container")[0].appendChild(table);
+	tableContainer.appendChild(table);
 }
 
 

@@ -19,13 +19,31 @@
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 	</script>
 	<script>
+		var requestSteamID = "steam_id=";
+		var requestJumpType = "&jumptype=";
+		var requestLimit = "&limit=" + jumpLimit;
+		var requestMinimum = "&greater_than_distance=" + jumpMin;
+
+		var requestBind = "&is_crouch_bind=";
+		var jumpstatsPBURLBase = "https://kztimerglobal.com/api/v1.0/jumpstats?";
+		var globalTable;
+		var personalTable;
+		var steamID = "";
+		var jumpstatsKey = {
+			1: "longjump",
+			2: "bhop",
+			3: "multihop",
+			4: "weirdjump",
+			5: "dropbhop",
+			6: "countjump",
+			7: "ladder",
+		}
 		$(document).ready(function () {
-			var header = ["Jump Type", "Distance", "Strafe Count", "Binded", "MSL", "Date", "Server"];
+			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
 
-			var stats = ["longjump", "bhop", "multihop", "weirdjump", "ladderjump", "dropbhop"];
 
+			var localContainer = $("#localJumpstatsContainer")[0];
 			URI = getURIVars();
-			steamID = "";
 			if (typeof URI["steamid"] !== 'undefined' && typeof URI["jumptype"] !== 'undefined') {
 				steamID = URI["steamid"];
 				jumptype = "longjump";
@@ -38,23 +56,30 @@
 
 					$("#" + jumptype + "Radio").click();
 
-					retrieveStats(getRequestURL(steamID, jumptype, "both"), jumptype);
+
+					retrieveStats(getRequestURL(steamID, jumptype, "both"), localContainer);
 				}
 
 			}
 
 			function isValidStat(stat) {
-				return stats.includes(stat);
+				for(key in jumpstatsKey)
+					if(jumpstatsKey[key] === stat )
+						return true;
+
+				return false; 
 			}
 
 
-			function retrieveStats(requestURL, jumpstatType) {
+			function retrieveStats(requestURL, container) {
 
+				console.log(requestURL);
 				$.getJSON(requestURL, function (data) {
 					var jumpstats = [];
 					var servers = {};
 					var playerName = data[0]["player_name"];
 					var isbinded = $('input[name=bind]:checked').val();
+					var jumpstatType = jumpstatsKey[data[0]["jump_type"]];
 					if (isbinded === "both")
 						isbinded = "";
 					$("#player-title").text(playerName + "'s Top 10 " + isbinded + " " + jumpstatType + "s");
@@ -71,15 +96,20 @@
 							servers[serverID] = server.substring(0, 25);
 
 						}
-						var statRow = [jumpstatType,
+						var statRow = [field["player_name"], jumpstatType,
 							field["distance"], field[
 								"strafe_count"],
-							field["is_crouch_bind"] ? "Yes" : "No", field["msl_count"], field[
+							field["is_crouch_bind"] ? "Yes" : "No", field[
 								"created_on"],
 							server
 						];
 						jumpstats.push(statRow);
-						createTable(jumpstats, header);
+
+
+//							if (!first && typeof localTable !== "undefined")
+
+							//genTable(tableContainer, jumpstats, header, [], [{},{},{},{},{},{},{},]);
+							createTable(jumpstats,header,container)
 
 
 					});
@@ -102,10 +132,11 @@
 				window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&jumptype=" +
 					jumpstatType);;
 
-				retrieveStats(getRequestURL(steamID, jumpstatType, isbinded), jumpstatType);
+				retrieveStats(getRequestURL(steamID, jumpstatType, isbinded), localContainer);
 			});
 
 			function getRequestURL(steamID, jumpstatType, binded) {
+
 				requestBindURI = requestBind;
 				if (binded === "both")
 					requestBindURI = "";
@@ -114,9 +145,12 @@
 				else
 					requestBindURI = requestBind + "false";
 
+				steamParam = ""; //empty steamid parameter will fetch top global stats instead
+				if (isValidSteamID(steamID))
+					steamParam = requestSteamID + steamID;
 
-				var requestURL = requestURLBase +
-					requestSteamID + steamID +
+				var requestURL = jumpstatsPBURLBase +
+					steamParam +
 					requestJumpType + jumpstatType +
 					requestBindURI +
 					requestMinimum + requestLimit;
@@ -143,62 +177,62 @@
 		</ul>
 		<div class="content-wrap">
 
-				<div id="titleDiv">
-					<div id="innerTitleDiv">
-						<h2 id="player-title"> Your Top 10 Jumpstat PB's</h2>
-					</div>
+			<div id="titleDiv">
+				<div id="innerTitleDiv">
+					<h4 id="player-title"> Your Top 10 Jumpstat PB's</h4>
+				</div>
+			</div>
+
+			<div class="inputSelection">
+
+				<div class="innerSelection">
+					<input type="radio" id="bindRadio" name="bind" value="binded">Binded
+					<input type="radio" id="nobindRadio" name="bind" value="unbinded">No Bind
+					<input type="radio" id="bothRadio" name="bind" value="both" checked>Both
 				</div>
 
-				<div class="inputSelection">
-
-					<div class="innerSelection">
-						<input type="radio" id="bindRadio" name="bind" value="binded">Binded
-						<input type="radio" id="nobindRadio" name="bind" value="unbinded">No Bind
-						<input type="radio" id="bothRadio" name="bind" value="both" checked>Both
-					</div>
-
-					<div class="innerSelection">
-						<input type="radio" id="longjumpRadio" name="jumpstat" value="longjump" checked>Longjump
-						<input type="radio" id="bhopRadio" name="jumpstat" value="bhop">Bunnyhop
-						<input type="radio" id=multihopRadio" name="jumpstat" value="multihop">Multihop
-						<input type="radio" id="weirdjumpRadio" name="jumpstat" value="weirdjump">Weirdjump
-						<input type="radio" id=dropbhopRadio" name="jumpstat" value="dropbhop">Dropbhop
-						<input type="radio" id="ladderjumpRadio" name="jumpstat" value="ladderjump">Ladderjump
-					</div>
-
-					<div class="innerSelection">
-
-						<a href="https://steamid.io/lookup/">Steam ID Lookup</a>
-						<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
-	
-						<input type="button" id="jumpstatButton" value="Fetch Jumpstat" />
-					</div>
-
-					<div class="table-container">
-
-						<table class="centerTable" id="jumpstatTable">
-
-						</table>
-
-					</div>
-
+				<div class="innerSelection">
+					<input type="radio" id="longjumpRadio" name="jumpstat" value="longjump" checked>Longjump
+					<input type="radio" id="bhopRadio" name="jumpstat" value="bhop">Bunnyhop
+					<input type="radio" id=multihopRadio" name="jumpstat" value="multihop">Multihop
+					<input type="radio" id="weirdjumpRadio" name="jumpstat" value="weirdjump">Weirdjump
+					<input type="radio" id=dropbhopRadio" name="jumpstat" value="dropbhop">Dropbhop
+					<input type="radio" id="ladderjumpRadio" name="jumpstat" value="ladderjump">Ladder
+					<input type="radio" id="countjumpRadio" name="jumpstat" value="countjump">Countjump
 				</div>
+
+				<div class="innerSelection">
+
+					<a href="https://steamid.io/lookup/">Steam ID Lookup</a>
+					<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
+
+					<input type="button" id="jumpstatButton" value="Fetch Jumpstat" />
+				</div>
+
+
+					<div id="localJumpstatsContainer">
+						<table class="centertable" id="jumpstatTable"></table>
+					</div>
+			</div>
 
 
 
 		</div>
 
-	<footer class="container">
-		<hr>
-		<div class="text-center center-block">
-			<a href="https://github.com/borbkz"><i id="social-github" class="fa fa-github-square fa-3x social"></i></a>
-			<a href="https://steamcommunity.com/id/borbkz"><i id="social-steam" class="fa fa-steam-square fa-3x social"></i></a>
-			<a href="mailto:borbkz@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
-		</div>
+		<footer class="container">
+			<hr>
+			<div class="text-center center-block">
+				<a href="https://github.com/borbkz"><i id="social-github"
+						class="fa fa-github-square fa-3x social"></i></a>
+				<a href="https://steamcommunity.com/id/borbkz"><i id="social-steam"
+						class="fa fa-steam-square fa-3x social"></i></a>
+				<a href="mailto:borbkz@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+			</div>
 
-	</footer>
+		</footer>
 
-	</div><!--page container-->
+	</div>
+	<!--page container-->
 </body>
 
 </html>
