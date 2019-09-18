@@ -2,10 +2,20 @@
 var jumpLimit = 10,
 	jumpMin = 100;
 
+var jumpBinds = ["bind", "nobind", "both"]
+var jumpstatsKey = {
+	1: "longjump",
+	2: "bhop",
+	3: "multihop",
+	4: "weirdjump",
+	5: "dropbhop",
+	6: "countjump",
+	7: "ladder",
+}
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 
 
-function getHeaderArray(){
+function getHeaderArray() {
 	//var header = {};
 	$.getJSON("header.json", function (data) {
 		//header = data;
@@ -14,7 +24,7 @@ function getHeaderArray(){
 
 }
 
-function getMapArray(){
+function getMapArray() {
 	var maps = [];
 	var mapKeys = {
 		"Map": 0,
@@ -39,10 +49,10 @@ function getMapArray(){
 			ladder = field[mapKeys["Ladder"]];
 			surf = field[mapKeys["Surf"]];
 			tech = field[mapKeys["Tech"]];
-			maps.push([ map,tier, protier, length, strafe, bhop, ladder, surf, tech]);
+			maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
 		});
 
-	console.log("inside " + maps[0])
+		console.log("inside " + maps[0])
 	}); //end json
 	return maps;
 
@@ -69,12 +79,13 @@ function getDifficultyArray() {
 
 	return difficultyArray;
 }
-function createTable(tableData, headerArray,tableContainer) {
+function createTable(tableData, headerArray, tableContainer) {
 	var tables = document.getElementsByTagName("table");
 	for (var i = tables.length - 1; i >= 0; i -= 1)
 		if (tables[i]) tables[i].parentNode.removeChild(tables[i]);
 
 	var table = document.createElement('table');
+
 	var tableBody = document.createElement('tbody');
 
 	var headerRow = document.createElement('tr');
@@ -116,6 +127,19 @@ function getServerName(serverID) {
 			serverName = JSON.parse(temp.responseText)["name"];
 	}
 	return serverName;
+}
+
+function isValidStat(stat) {
+	for (key in jumpstatsKey)
+		if (jumpstatsKey[key] === stat)
+			return true;
+
+	return false;
+}
+
+function isValidBind(bind){
+	console.log("bind in jumpbinds? " + jumpBinds.includes(bind))
+	return jumpBinds.includes(bind);
 }
 /*
 * returns true if steamID is valid
@@ -212,25 +236,25 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 	};
 
 
-		var mapTable = new Handsontable(container, {
-			data: maps,
-			height: 1000,
-			width: colWidth,
-			colHeaders: header,
-			columns: myColumns,
-			columnSorting: true,
-			filters: true,
-			dropdownMenu: ["filter_by_value", "filter_action_bar"],
-			contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
-			hiddenColumns: {
-				indicators: true,
-				columns: [] //hide pro teleports by default
-			},
-			className: 'typefilter',
-			afterGetColHeader: addInput,
-			beforeOnCellMouseDown: doNotSelectColumn,
-			licenseKey: 'non-commercial-and-evaluation'
-		});
+	var mapTable = new Handsontable(container, {
+		data: maps,
+		height: 1000,
+		width: colWidth,
+		colHeaders: header,
+		columns: myColumns,
+		columnSorting: true,
+		filters: true,
+		dropdownMenu: ["filter_by_value", "filter_action_bar"],
+		contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
+		hiddenColumns: {
+			indicators: true,
+			columns: [] //hide pro teleports by default
+		},
+		className: 'typefilter',
+		afterGetColHeader: addInput,
+		beforeOnCellMouseDown: doNotSelectColumn,
+		licenseKey: 'non-commercial-and-evaluation'
+	});
 	//FIX: problem with old table and event listeners not clearing when requesting new times
 	/*
 		var originalColWidths = [];
@@ -264,7 +288,7 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 	
 		*/
 
-		$("#table-tips").text("Click on any column to sort. Right click to hide. You can filter maps by typing in the filter bar.")
+	$("#table-tips").text("Click on any column to sort. Right click to hide. You can filter maps by typing in the filter bar.")
 	first = false;
 	return mapTable;
 

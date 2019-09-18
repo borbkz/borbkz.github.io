@@ -3,8 +3,8 @@
 <head>
 	<title>Borb's KZ</title>
 
-
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
 	<link rel="stylesheet" type="text/css"
 		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -18,6 +18,8 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 	</script>
+
+
 	<script>
 		var requestSteamID = "steam_id=";
 		var requestJumpType = "&jumptype=";
@@ -29,25 +31,17 @@
 		var globalTable;
 		var personalTable;
 		var steamID = "";
-		var jumpstatsKey = {
-			1: "longjump",
-			2: "bhop",
-			3: "multihop",
-			4: "weirdjump",
-			5: "dropbhop",
-			6: "countjump",
-			7: "ladder",
-		}
 		$(document).ready(function () {
 			var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
 
 
 			var localContainer = $("#localJumpstatsContainer")[0];
+			var globalContainer = $("#globalJumpstatsContainer")[0];
 			URI = getURIVars();
 			if (typeof URI["steamid"] !== 'undefined' && typeof URI["jumptype"] !== 'undefined') {
 				steamID = URI["steamid"];
-				jumptype = "longjump";
-				if (isValidSteamID(steamID)) {
+				jumptype = URI["jumptype"];
+				if (isValidSteamID(steamID) && isValidStat(jumptype)) {
 
 					$('#steamIDText').val(steamID);
 					if (isValidStat(URI["jumptype"]))
@@ -57,23 +51,26 @@
 					$("#" + jumptype + "Radio").click();
 
 
+					$("#expandLocal").click(); //autoexpand if url linked by steamid
 					retrieveStats(getRequestURL(steamID, jumptype, "both"), localContainer);
 				}
 
-			}
+			}else{
+				steamID = localStorage.getItem("jumpstatSteamID");
+				jumptype = localStorage.getItem("jumpstatType");
+				binded = localStorage.getItem("jumpstatBinded");
 
-			function isValidStat(stat) {
-				for(key in jumpstatsKey)
-					if(jumpstatsKey[key] === stat )
-						return true;
+				if(isValidSteamID(steamID) && isValidStat(jumptype) && isValidBind(binded)){
+					$('#steamIDText').val(steamID);
+					$("#expandLocal").click(); 
+					retrieveStats(getRequestURL(steamID, jumptype, binded), localContainer);
 
-				return false; 
+				}
 			}
 
 
 			function retrieveStats(requestURL, container) {
 
-				console.log(requestURL);
 				$.getJSON(requestURL, function (data) {
 					var jumpstats = [];
 					var servers = {};
@@ -82,7 +79,6 @@
 					var jumpstatType = jumpstatsKey[data[0]["jump_type"]];
 					if (isbinded === "both")
 						isbinded = "";
-					$("#player-title").text(playerName + "'s Top 10 " + isbinded + " " + jumpstatType + "s");
 					$.each(data, function (i, field) {
 
 						server = "N/A";
@@ -105,11 +101,7 @@
 						];
 						jumpstats.push(statRow);
 
-
-//							if (!first && typeof localTable !== "undefined")
-
-							//genTable(tableContainer, jumpstats, header, [], [{},{},{},{},{},{},{},]);
-							createTable(jumpstats,header,container)
+						createTable(jumpstats, header, container)
 
 
 					});
@@ -117,7 +109,7 @@
 				}); //end json
 			}
 
-			$("#jumpstatButton").click(function () {
+			$("#localJumpstatsButton").click(function () {
 
 				var steamID = $('#steamIDText').val().trim();
 
@@ -132,7 +124,20 @@
 				window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&jumptype=" +
 					jumpstatType);;
 
+				localStorage.setItem("jumpstatSteamID", steamID)
+				localStorage.setItem("jumpstatType", jumpstatType)
+				localStorage.setItem("jumpstatBinded", isbinded)
+
 				retrieveStats(getRequestURL(steamID, jumpstatType, isbinded), localContainer);
+			});
+			$("#globalJumpstatsButton").click(function () {
+
+
+				jumpstatType = $('input[name=globalJumpstat]:checked').val();
+				isbinded = $('input[name=globalBind]:checked').val();
+
+
+				retrieveStats(getRequestURL("", jumpstatType, isbinded), globalContainer);
 			});
 
 			function getRequestURL(steamID, jumpstatType, binded) {
@@ -154,6 +159,7 @@
 					requestJumpType + jumpstatType +
 					requestBindURI +
 					requestMinimum + requestLimit;
+
 				return requestURL;
 
 			}
@@ -162,62 +168,139 @@
 		});
 	</script>
 
-
 </head>
 
 <body>
-	<div class="page-container">
-		<ul>
 
+	<div class="page-container">
+
+
+		<ul>
 			<li><a href="index.html">Global Times</a></li>
 			<li><a href="local.html">Your Times</a></li>
 			<li><a href="maps.html">Map Picker</a></li>
 			<li><a class="active" href="jumpstats.html">Jumpstats</a></li>
-
 		</ul>
 		<div class="content-wrap">
 
-			<div id="titleDiv">
-				<div id="innerTitleDiv">
-					<h4 id="player-title"> Your Top 10 Jumpstat PB's</h4>
-				</div>
-			</div>
-
-			<div class="inputSelection">
-
-				<div class="innerSelection">
-					<input type="radio" id="bindRadio" name="bind" value="binded">Binded
-					<input type="radio" id="nobindRadio" name="bind" value="unbinded">No Bind
-					<input type="radio" id="bothRadio" name="bind" value="both" checked>Both
-				</div>
-
-				<div class="innerSelection">
-					<input type="radio" id="longjumpRadio" name="jumpstat" value="longjump" checked>Longjump
-					<input type="radio" id="bhopRadio" name="jumpstat" value="bhop">Bunnyhop
-					<input type="radio" id=multihopRadio" name="jumpstat" value="multihop">Multihop
-					<input type="radio" id="weirdjumpRadio" name="jumpstat" value="weirdjump">Weirdjump
-					<input type="radio" id=dropbhopRadio" name="jumpstat" value="dropbhop">Dropbhop
-					<input type="radio" id="ladderjumpRadio" name="jumpstat" value="ladderjump">Ladder
-					<input type="radio" id="countjumpRadio" name="jumpstat" value="countjump">Countjump
-				</div>
-
-				<div class="innerSelection">
-
-					<a href="https://steamid.io/lookup/">Steam ID Lookup</a>
-					<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
-
-					<input type="button" id="jumpstatButton" value="Fetch Jumpstat" />
-				</div>
-
-
-					<div id="localJumpstatsContainer">
-						<table class="centertable" id="jumpstatTable"></table>
+			<div class="accordion" id="accordion-times">
+				<div class="card">
+					<div class="card-header" id="headingGlobal">
+						<h5 class="mb-0">
+							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+								aria-expanded="true" aria-controls="collapseOne" id="expandGlobal">
+								<h4>Global Top 10 Jumpstats</h4>
+							</button>
+						</h5>
 					</div>
+
+					<div id="collapseOne" class="collapse" aria-labelledby="headingGlobal"
+						data-parent="#accordion-times">
+						<div class="card-body">
+							<div class="content-wrap">
+
+
+								<div class="inputSelection">
+
+									<div class="innerSelection">
+										<input type="radio" id="globalBindRadio" name="globalBind" value="binded">Binded
+										<input type="radio" id="globalNobindRadio" name="globalBind" value="unbinded">No Bind
+										<input type="radio" id="globalBothRadio" name="globalBind" value="both" checked>Both
+									</div>
+
+									<div class="innerSelection">
+										<input type="radio" id="globalLongjumpRadio" name="globalJumpstat" value="longjump"
+											checked>Longjump
+										<input type="radio" id="globalBhopRadio" name="globalJumpstat" value="bhop">Bunnyhop
+										<input type="radio" id="globalMultihopRadio" name="globalJumpstat" value="multihop">Multihop
+										<input type="radio" id="globalWeirdjumpRadio" name="globalJumpstat"
+											value="weirdjump">Weirdjump
+										<input type="radio" id="globalDropbhopRadio" name="globalJumpstat" value="dropbhop">Dropbhop
+										<input type="radio" id="globalLadderjumpRadio" name="globalJumpstat"
+											value="ladderjump">Ladder
+										<input type="radio" id="globalCountjumpRadio" name="globalJumpstat"
+											value="countjump">Countjump
+									</div>
+
+									<div class="innerSelection">
+										<input type="button" id="globalJumpstatsButton" value="Fetch Jumpstat" />
+									</div>
+
+
+									<div id="globalJumpstatsContainer">
+										<table class="global-table" id="jumpstatTable"></table>
+									</div>
+								</div>
+
+
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" id="headingLocal">
+						<h5 class="mb-0">
+							<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+								data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+								id="expandLocal">
+								<h4>Your Top 10 Jumpstats</h4>
+							</button>
+						</h5>
+					</div>
+					<div id="collapseTwo" class="collapse" aria-labelledby="headingLocal"
+						data-parent="#accordion-times">
+						<div class="card-body">
+
+							<div class="content-wrap">
+
+
+								<div class="inputSelection">
+
+									<div class="innerSelection">
+										<input type="radio" id="bindRadio" name="bind" value="binded">Binded
+										<input type="radio" id="nobindRadio" name="bind" value="unbinded">No Bind
+										<input type="radio" id="bothRadio" name="bind" value="both" checked>Both
+									</div>
+
+									<div class="innerSelection">
+										<input type="radio" id="longjumpRadio" name="jumpstat" value="longjump"
+											checked>Longjump
+										<input type="radio" id="bhopRadio" name="jumpstat" value="bhop">Bunnyhop
+										<input type="radio" id="multihopRadio" name="jumpstat" value="multihop">Multihop
+										<input type="radio" id="weirdjumpRadio" name="jumpstat"
+											value="weirdjump">Weirdjump
+										<input type="radio" id="dropbhopRadio" name="jumpstat" value="dropbhop">Dropbhop
+										<input type="radio" id="ladderjumpRadio" name="jumpstat"
+											value="ladderjump">Ladder
+										<input type="radio" id="countjumpRadio" name="jumpstat"
+											value="countjump">Countjump
+									</div>
+
+									<div class="innerSelection">
+
+										<a href="https://steamid.io/lookup/">Steam ID Lookup</a>
+										<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
+
+										<input type="button" id="localJumpstatsButton" value="Fetch Jumpstat" />
+									</div>
+
+
+									<div id="localJumpstatsContainer">
+										<table class="local-table" id="jumpstatTable"></table>
+									</div>
+								</div>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-
-
-
 		</div>
+
+
+
 
 		<footer class="container">
 			<hr>
@@ -231,8 +314,11 @@
 
 		</footer>
 
+
+
+
+
 	</div>
-	<!--page container-->
 </body>
 
 </html>
