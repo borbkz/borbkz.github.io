@@ -65,15 +65,14 @@
 							map = field["map_name"],
 							time = field["time"];
 
-							field["medal"] = "gold";
+						field["medal"] = "gold";
 
 						if (place == 1) {
 							playerContainer = $('#top-1-container')[0];
 							playerArr = top1Players;
 							field["medal"] = "gold";
 
-						}
-						else if (place > 1 && place < 20) {
+						} else if (place > 1 && place < 20) {
 							playerContainer = $('#top-20-container')[0];
 							playerArr = top20Players;
 							field["medal"] = "silver";
@@ -89,7 +88,13 @@
 						}
 
 					}); //.each
-					publishPlayerTimes(playerContainer, playerArr);
+					if (ranking == "gold") {
+						publishPlayerTimes($('#top-1-container')[0], top1Players);
+					} else if (ranking == "silver") {
+						publishPlayerTimes($('#top-20-container')[0], top20Players);
+					} else {
+						publishPlayerTimes($('#top-100-container')[0], top100Players);
+					}
 				}
 			})(ranking));
 
@@ -117,6 +122,7 @@
 
 			for (var playerKey in playerEntries) {
 
+
 				//player:[record1, record2, record3]
 
 				var bestTime = parseFloat(playerEntries[playerKey][0]["time"]);
@@ -125,7 +131,7 @@
 
 				for (var i = 0; i < playerEntries[playerKey].length; i++) {
 					var recordTimeText = "";
-					var indent = i == 0 ? 0 : 10 + 4 * i;
+					var indent = i == 0 ? 0 : 10;
 
 					var timeDiff = "";
 					if (i < playerEntries[playerKey].length - 1) {
@@ -183,9 +189,10 @@
 				" with a time " + " of " +
 				timeText + recordTimeText + ", " + dateText;
 
-				//indented previous times under the same player and map, no font decorations
+			//indented previous times under the same player and map, no font decorations
 			if (indentLevel != 0) {
-				recordText = player + " placed #" + place + " " + runtype + " with " + time + recordTimeText + ", " + dateText;
+				recordText = player + " placed #" + place + " " + runtype + " with " + time + recordTimeText + ", " +
+					dateText;
 
 			}
 			//var recordText = playerText + " placed ";
