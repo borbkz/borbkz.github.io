@@ -21,12 +21,14 @@
 
 	<script>
 		var imagepath = "img/";
+		var timesLimit = 150;
 		var globalsRequestURL =
-			"https://kztimerglobal.com/api/v1.0/records/top/recent?stage=0&tickrate=128&modes_list_string=kz_timer&limit=150"
+			"https://kztimerglobal.com/api/v1.0/records/top/recent?stage=0&tickrate=128&modes_list_string=kz_timer&limit=" + timesLimit;
 
 		var top1Times = [],
 			top20Times = [],
 			top100Times = [];
+
 
 		$.getJSON(globalsRequestURL, function (data) {
 			var maps = [];
@@ -35,7 +37,7 @@
 				silvers = 0,
 				bronzes = 0;
 
-			var playerMax = 10;
+			var playerMax = 30;//don't limit for now
 			var recordEntries = [];
 			$.each(data, function (i, field) {
 
