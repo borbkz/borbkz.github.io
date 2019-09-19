@@ -57,22 +57,31 @@
 					var playerContainer = $('#top-1-container')[0];
 
 
-					if (ranking == "silver") {
-						playerContainer = $('#top-20-container')[0];
-						playerArr = top20Players;
-					} else if (ranking == "bronze") {
-						playerContainer = $('#top-100-container')[0];
-						playerArr = top100Players;
-					}
 
 					$.each(data, function (i, field) {
 
 						var player = field["player_name"],
-							place = parseInt(field["top_100"]),
+							place = parseInt(field["place"]),
 							map = field["map_name"],
 							time = field["time"];
 
-						field["medal"] = ranking;
+							field["medal"] = "gold";
+
+						if (place == 1) {
+							playerContainer = $('#top-1-container')[0];
+							playerArr = top1Players;
+							field["medal"] = "gold";
+
+						}
+						else if (place > 1 && place < 20) {
+							playerContainer = $('#top-20-container')[0];
+							playerArr = top20Players;
+							field["medal"] = "silver";
+						} else if (place > 20) {
+							playerContainer = $('#top-100-container')[0];
+							playerArr = top100Players;
+							field["medal"] = "bronze";
+						}
 
 
 						if (Object.keys(playerArr).length < playerMax) {
@@ -142,14 +151,13 @@
 				map = recordEntry["map_name"],
 				time = getTimeFromSeconds(recordEntry["time"]),
 				teleports = recordEntry["teleports"],
-				teleportsBool = parseInt(teleports)>0,
+				teleportsBool = parseInt(teleports) > 0,
 				runtype = recordEntry["teleports"] == 0 ? "PRO" : "TP",
 				date = recordEntry["created_on"],
 				updatedOn = recordEntry["updated_on"],
 				medal = recordEntry["medal"]
 
-            var nameLink = '<a href="local.html?steamid='+steamID + "&teleports="+teleportsBool +'">'+player+'</a>'
-			console.log("LINK: " + nameLink);
+			var nameLink = '<a href="local.html?steamid=' + steamID + "&teleports=" + teleportsBool + '">' + player + '</a>'
 
 
 			var recordTimeText = "";
@@ -234,7 +242,7 @@
 		<ul>
 			<li><a class="active" href="index.html">Global Times</a></li>
 			<li><a href="local.html">Your Times</a></li>
-			<li><a href="maps.html">Map Picker</a></li>
+			<li><a href="maps.html">Maps</a></li>
 			<li><a href="jumpstats.html">Jumpstats</a></li>
 		</ul>
 		<div class="content-wrap">

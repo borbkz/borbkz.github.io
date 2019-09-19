@@ -86,6 +86,9 @@ footer {
 
 .innerSelection {
 	padding: 0px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+
 }
 
 #playername {
@@ -265,6 +268,8 @@ body {
 
 }
 .table-tips{
+	padding: 0px;
+	padding-bottom: 0;
 	font: 14px sans-serif;
 }
 
