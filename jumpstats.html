@@ -59,8 +59,13 @@
 				steamID = localStorage.getItem("jumpstatSteamID");
 				jumptype = localStorage.getItem("jumpstatType");
 				binded = localStorage.getItem("jumpstatBinded");
+				console.log("in")
 
+				console.log("steam valid " + isValidSteamID(steamID));
+				console.log("jump valid " + isValidSteamID(jumptype));
+				console.log("jumpType valid " + isValidSteamID(binded));
 				if (isValidSteamID(steamID) && isValidStat(jumptype) && isValidBind(binded)) {
+				console.log("i2n")
 					$('#steamIDText').val(steamID);
 					$("#expandLocal").click();
 					retrieveStats(getRequestURL(steamID, jumptype, binded), localContainer);
@@ -227,7 +232,7 @@
 										<input type="radio" id="globalDropbhopRadio" name="globalJumpstat"
 											value="dropbhop">Dropbhop
 										<input type="radio" id="globalLadderjumpRadio" name="globalJumpstat"
-											value="ladderjump">Ladder
+											value="ladder">Ladder
 										<input type="radio" id="globalCountjumpRadio" name="globalJumpstat"
 											value="countjump">Countjump
 									</div>
@@ -282,7 +287,7 @@
 											value="weirdjump">Weirdjump
 										<input type="radio" id="dropbhopRadio" name="jumpstat" value="dropbhop">Dropbhop
 										<input type="radio" id="ladderjumpRadio" name="jumpstat"
-											value="ladderjump">Ladder
+											value="ladder">Ladder
 										<input type="radio" id="countjumpRadio" name="jumpstat"
 											value="countjump">Countjump
 									</div>
