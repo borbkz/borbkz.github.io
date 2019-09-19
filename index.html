@@ -28,7 +28,7 @@
 		var top1RequestURL = globalsRequestURLBase + "&place_top_at_least=1&limit=40";
 		var top20RequestURL = globalsRequestURLBase +
 			"&place_top_at_least=20&limit=40"; //#1 counts as top 20, get 50 just in case
-		var top100RequestURL = globalsRequestURLBase + "&limit=100";
+		var top100RequestURL = globalsRequestURLBase + "&place_top_at_least=100&limit=100";
 
 
 
@@ -206,7 +206,7 @@
 		}
 
 		//input format : YYYY-MM-DDTHH:MM:SS
-		//output format : X Days, Y Hours;
+		//output format : X Days, Y Hours, Z Minutes
 		function getTimeAgo(time) {
 			var mapTime = new Date(time);
 			var curTime = new Date();
