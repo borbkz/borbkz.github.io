@@ -135,7 +135,7 @@
 
 			indentLevel = 0 || indentLevel;
 
-			var player = recordEntry["player_name"].substring(0, 20),
+			var player = sanitizeName(recordEntry["player_name"]),
 				place = parseInt(recordEntry["top_100"]),
 				map = recordEntry["map_name"],
 				time = getTimeFromSeconds(recordEntry["time"]),

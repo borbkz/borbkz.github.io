@@ -83,7 +83,7 @@
 					}
 					var maps = [];
 
-					var playerName = data[0]["player_name"].substring(0, 20);
+					var playerName = sanitizeName(data[0]["player_name"]);
 					var ispro = $('input[name=isprorun-radio]:checked').val();
 					var runtype = "Pro Times";
 					if (ispro !== "proradio")

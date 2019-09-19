@@ -79,7 +79,7 @@
 					}
 					var jumpstats = [];
 					var servers = {};
-					var playerName = data[0]["player_name"];
+					var playerName = sanitizeName(data[0]["player_name"]);
 					var isbinded = $('input[name=bind]:checked').val();
 					var jumpstatType = jumpstatsKey[data[0]["jump_type"]];
 					if (isbinded === "both")
@@ -97,7 +97,7 @@
 							servers[serverID] = server.substring(0, 25);
 
 						}
-						var statRow = [field["player_name"], jumpstatType,
+						var statRow = [sanitizeName(field["player_name"]), jumpstatType,
 							field["distance"], field[
 								"strafe_count"],
 							field["is_crouch_bind"] ? "Yes" : "No", field[

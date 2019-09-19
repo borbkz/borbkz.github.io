@@ -177,7 +177,9 @@ function getTimeFromSeconds(seconds) {
 
 	return hours + ":" + min + ":" + seconds;
 }
-
+function sanitizeName(name) {
+  return name.replace(/<\/?[^>]+(>|$)/g, ""); 
+}
 
 function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 
