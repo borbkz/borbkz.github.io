@@ -2,6 +2,8 @@
 var jumpLimit = 10,
 	jumpMin = 100;
 
+var imagepath = "img/";
+
 var jumpBinds = ["bind", "nobind", "both"]
 var jumpstatsKey = {
 	1: "longjump",
@@ -52,13 +54,12 @@ function getMapArray() {
 			maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
 		});
 
-		console.log("inside " + maps[0])
 	}); //end json
 	return maps;
 
 }
 function getDifficultyArray() {
-	difficultyArray = {};
+	var difficultyArray = {};
 	var mapKeys = {
 		"Map": 0,
 		"Tier": 1,
@@ -137,8 +138,7 @@ function isValidStat(stat) {
 	return false;
 }
 
-function isValidBind(bind){
-	console.log("bind in jumpbinds? " + jumpBinds.includes(bind))
+function isValidBind(bind) {
 	return jumpBinds.includes(bind);
 }
 /*
@@ -288,7 +288,10 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 	
 		*/
 
-	$("#table-tips").text("Click on any column to sort. Right click to hide. You can filter maps by typing in the filter bar.")
+	$(".table-tips").each(function (i, table) {
+
+		$(table).text("Tip: Click on any column to sort. Right click to hide. See unfinished maps by filtering for '/' and finished maps by filtering for ':'.")
+	});
 	first = false;
 	return mapTable;
 

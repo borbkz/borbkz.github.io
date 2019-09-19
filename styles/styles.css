@@ -27,7 +27,7 @@ li a {
 	padding: 14px 16px;
 	text-decoration: none;
 
-	font: 16px sans-serif;
+	font: 20px sans-serif;
 }
 
 .page-container {
@@ -170,6 +170,54 @@ input {
 	margin: 10px;
 }
 
+.medal-icon{
+	max-height: 32px;
+	max-width: 32px;
+
+}
+.player-name-container{
+	color:white;
+	font-weight: bold;
+}
+.record-text-container{
+	padding: 0;
+	padding-left: 20px;
+	margin: 0 auto;
+	text-align:left;
+	color: lightgrey;
+	font: 18px sans-serif;
+}
+.time-container{
+	color:gold;
+
+}
+.pro-run-container{
+
+	color:lightcoral;
+	text-align:center;
+}
+.tp-run-container{
+	color:lightseagreen;
+	text-align:center;
+
+}
+.map-name-container{
+	color: white;
+	text-align:center;
+	font-weight:bold;
+}
+.gold-place-container{
+	color: gold;
+	text-align:center;
+}
+.silver-place-container{
+	color: lightsteelblue;
+	text-align:center;
+}
+.bronze-place-container{
+	color: #cd7f32; 
+	text-align:center;
+}
 html,
 body {
 	margin: 0 auto;
@@ -183,6 +231,7 @@ body {
 
 .card-header {
 	background-color: #455762;
+	padding: 0;
 }
 
 .card {
@@ -203,6 +252,9 @@ body {
 #global-accordion-body {
 	padding: 0 !important;
 
+}
+.table-tips{
+	font: 14px sans-serif;
 }
 
 

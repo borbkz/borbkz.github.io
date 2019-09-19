@@ -9,27 +9,27 @@
 		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="styles/style.css">
+	<link rel="stylesheet" type="text/css" href="styles/styles.css">
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js">
 	</script>
-	<script type="text/javascript" src="utils/utils.js"></script>
+	<script type="text/javascript" src="utils/util.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 	</script>
 
 	<script>
 		var globalTable;
+		var difficultyArray = getDifficultyArray();
+		var URI = getURIVars();
 		$(document).ready(function () {
-			var header = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
+			var globalHeader = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
 				"Server"
 			];
 			var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
 
-			finishedArray =
-				URI = getURIVars();
-			steamID = "";
+			var steamID = "";
 			if (typeof URI["steamid"] !== 'undefined' && URI["teleports"] !== 'undefined') {
 				steamID = URI["steamid"];
 				teleports = URI["teleports"]
@@ -37,42 +37,60 @@
 					$("#expandGlobal").click(); //autoexpand if url linked by steamid
 
 					$('#steamIDText').val(steamID);
+					var teleportsBool = "true" === teleports;
 
-					if (teleports === "true") {
-						retrieveStats(steamID, true);
+					retrieveStats(steamID, teleportsBool);
+					if (teleportsBool) {
 						$('#tpradio').click();
-					} else if (teleports === "false") {
-						retrieveStats(steamID, false);
-						$('#proradio').click();
+					} else {
+						$('#tpradio').click();
 					}
 
 
-
 				}
+			} else {
+				var steamID = localStorage.getItem("globalMapsSteamID");
+				var teleportsBool = "true" === localStorage.getItem(
+				"globalMapsTeleports"); //convert string to boolean
+				if (isValidSteamID(steamID)) {
+					$('#steamIDText').val(steamID);
+					if (teleportsBool) {
+						$('#tpradio').click();
+					} else {
+						$('#tpradio').click();
+					}
+
+					$("#expandGlobal").click(); //autoexpand if url linked by steamid
+					retrieveStats(steamID, teleportsBool);
+				}
+
 			}
 
 			function retrieveStats(steamID, teleports) {
-				$.getJSON("", function (data) {});
-				var difficultyArray = getDifficultyArray();
-				console.log(difficultyArray)
 				//temp max limit based on ~440 maps, eventually should change to indexdb storage 
 				//so you dont fetch every map all the time, and just fetch the latest runs
+
+				var finishedGlobals = jQuery.extend(true, {}, difficultyArray);//deep copy
 				var tempLimit = 500;
 				requestURL = "https://kztimerglobal.com/api/v1.0/records/top?steam_id=" + steamID +
 					"&tickrate=128&stage=0&has_teleports=" + teleports + "&limit=" + tempLimit +
 					"&modes_list_string=kz_timer";
 
 				$.getJSON(requestURL, function (data) {
+					if (data.length == 0) {
+						alert("No Times Found for " + steamID);
+						return true;
+					}
 					var maps = [];
 
-					var playerName = data[0]["player_name"];
+					var playerName = data[0]["player_name"].substring(0, 20);
 					var ispro = $('input[name=isprorun-radio]:checked').val();
 					var runtype = "Pro Times";
 					if (ispro !== "proradio")
 						runtype = "TP Times";
 
 
-					$("#player-title").text(playerName + "'s " + runtype +
+					$("#global-player-name").text(playerName + "'s " + runtype +
 						" Across All Servers");
 					$.each(data, function (i, field) {
 
@@ -86,11 +104,10 @@
 							points = "N/A",
 							date = "N/A",
 							server = "N/A";
-						if (map in difficultyArray) {
-							console.log("finished")
+						if (map in finishedGlobals) {
 
 							//flag to see if map is finished, most of the new death maps have not been added to global api
-							difficultyArray[map].push("finished");
+							finishedGlobals[map].push("finished");
 
 							tptier = difficultyArray[field["map_name"]][0];
 							protier = difficultyArray[field["map_name"]][1];
@@ -129,14 +146,13 @@
 					];
 					var spreadsheetContainer = $("#spreadsheet-global")[0];
 
-					console.log(difficultyArray)
-					for (map in difficultyArray) {
-						if (difficultyArray[map].length < 4) {
-							unfinished = Array(header.length).fill("N/A");
+					for (map in finishedGlobals) {
+						if (finishedGlobals[map].length < 4) {
+							unfinished = Array(globalHeader.length).fill("N/A");
 							unfinished[0] = map;
-							unfinished[1] = difficultyArray[map][0]; //tp tier
-							unfinished[2] = difficultyArray[map][1]; //pro tier
-							unfinished[3] = difficultyArray[map][2]; //length
+							unfinished[1] = finishedGlobals[map][0]; //tp tier
+							unfinished[2] = finishedGlobals[map][1]; //pro tier
+							unfinished[3] = finishedGlobals[map][2]; //length
 							maps.push(unfinished);
 						}
 
@@ -144,13 +160,14 @@
 					if (globalTable)
 						globalTable.destroy();
 
-					globalTable = genTable(spreadsheetContainer, maps, header, [0, 8], cols);
+					globalTable = genTable(spreadsheetContainer, maps, globalHeader, [0,4, 8], cols);
 				}); //end json
 			}
 
 			$("#getGlobalMapsButton").click(function () {
 
 				var steamID = $('#steamIDText').val();
+
 
 				if (!isValidSteamID(steamID)) {
 					alert("invalid Steam ID!");
@@ -164,6 +181,8 @@
 				if (ispro === "proradio")
 					teleports = false;
 
+				localStorage.setItem("globalMapsSteamID", steamID);
+				localStorage.setItem("globalMapsTeleports", teleports);
 
 				//set url to steamid and teleports for future use
 				window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&teleports=" +
@@ -176,18 +195,21 @@
 	</script>
 
 	<script>
-		var difficultyArray = {};
-		var headerArray = ["Map", "Tier", "Pro Tier", "Length", "TP Time", "Teleports", "TP Rank", "Pro Time",
+		/*
+		* yeah I pretty much just copy paste the global code, will refactor later
+		* deal with it
+		*/
+		var localHeader = ["Map", "Tier", "Pro Tier", "Length", "TP Time", "Teleports", "TP Rank", "Pro Time",
 			"Pro Teleports", "Pro Rank"
 		];
 		var plugin;
 		var localTable;
+		var finishedLocals;
 		$(document).ready(function () {
-			difficultyArray = getDifficultyArray();
 			var beginOffset = 2;
 
 			$("#downloadButton").click(function () {
-				var csvText = headerArray.join(",") + "\r\n";
+				var csvText = localHeader.join(",") + "\r\n";
 				if (typeof outputBuffer !== 'undefined') {
 					for (i = 0; i < outputBuffer.length; i++)
 						csvText += outputBuffer[i];
@@ -197,6 +219,7 @@
 			$("#convertButton").click(function () {
 				var textIn = $("#inputMapsTextArea");
 				//var textOut = $("#outputMapsTextArea");
+					finishedLocals = jQuery.extend(true, {}, difficultyArray);//deep copy
 
 				$.each(textIn.val().split("\n"), function (i, line) {
 					if (!(/.+,.+,.+,.+$/.test(line))) {
@@ -208,12 +231,12 @@
 						0);
 					mapName = mapInfo[0];
 
-					if (mapName in difficultyArray) {
-						writeToArray(mapInfo, difficultyArray[mapName], offset);
+					if (mapName in finishedLocals) {
+						writeToArray(mapInfo, finishedLocals[mapName], offset);
 					} else {
-						temp = [difficultyArray[mapName]];
+						temp = [finishedLocals[mapName]];
 						writeToArray(mapInfo, temp, offset);
-						difficultyArray[mapName] = temp;
+						finishedLocals[mapName] = temp;
 					}
 
 
@@ -227,40 +250,25 @@
 				}
 				printAllMaps();
 
-				function test2() {
-
-				}
 
 				function printAllMaps() {
-					//clear area first
-					//textOut[0].value = "";
 
 					var outputBuffer = [""];
 					var tableBuffer = [];
+					for (var map in finishedLocals) {
 
-					//finishedStatus = $('input[name=finishedStatus]:checked').val();
-					//unfinishedStatus = $('input[name=unfinishedStatus]:checked').val();
-					for (var map in difficultyArray) {
+						line = map + ", " + finishedLocals[map];
+						outputBuffer.push(map + ", " + finishedLocals[map] + "\n");
 
-						line = map + ", " + difficultyArray[map];
-						outputBuffer.push(map + ", " + difficultyArray[map] + "\n");
-
-						length = difficultyArray[map].length;
+						length = finishedLocals[map].length;
 						row = line.split(",");
 
-						for (i = length; i < (headerArray.length - 1); i++) {
+						for (i = length; i < (localHeader.length - 1); i++) {
 							row.push("");
 						}
 						tableBuffer.push(row);
 
 					}
-					/*
-					textOut[0].value += headerArray+"\n";
-
-					for(i = 0; i < outputBuffer.length; i++){
-						textOut[0].value += outputBuffer[i];
-						textOut[0].value +=difficultyArray[map].length + " | " + map + ", " + difficultyArray[map] + "\n";
-					}*/
 					var spreadsheetContainer = $("#spreadsheet-local")[0];
 
 					var cols = [{}, //map name
@@ -286,7 +294,7 @@
 						localTable.destroy();
 					}
 
-					localTable = genTable(spreadsheetContainer, tableBuffer, headerArray, [0], cols);
+					localTable = genTable(spreadsheetContainer, tableBuffer, localHeader, [0], cols);
 
 					plugin = localTable.getPlugin('hiddenColumns');
 
@@ -323,7 +331,7 @@
 						<h5 class="mb-0">
 							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
 								aria-expanded="true" aria-controls="collapseOne" id="expandGlobal">
-								<h4>Your Times Across All Servers</h4>
+								<h4 id="global-player-name">Your Times Across All Servers</h4>
 							</button>
 						</h5>
 					</div>
@@ -351,7 +359,7 @@
 
 
 								<div id="table-container">
-									<div id="table-tips"></div>
+									<div class="table-tips"></div>
 									<div class="handsontable" id="spreadsheet-global"> </div>
 								</div>
 
@@ -401,7 +409,7 @@ kz_spacemario_h, Time: 09:59.99 (PRO), Teleports: 4, Rank: 99/100
 									</div>
 
 									<div id="table-container">
-										<div id="table-tips"></div>
+										<div class="table-tips"></div>
 										<div class="handsontable" id="spreadsheet-local"> </div>
 									</div>
 								</div>

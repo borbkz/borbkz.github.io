@@ -4,53 +4,199 @@
 	<title>Borb's KZ</title>
 
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
 	<link rel="stylesheet" type="text/css"
 		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="styles/style.css">
+	<link rel="stylesheet" type="text/css" href="styles/styles.css">
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js">
 	</script>
-	<script type="text/javascript" src="utils/utils.js"></script>
+	<script type="text/javascript" src="utils/util.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
 	</script>
 
 	<script>
+		var imagepath = "img/";
+		var globalsRequestURL =
+			"https://kztimerglobal.com/api/v1.0/records/top/recent?stage=0&tickrate=128&modes_list_string=kz_timer&limit=150"
+
+		var top1Times = [],
+			top20Times = [],
+			top100Times = [];
+
+		$.getJSON(globalsRequestURL, function (data) {
+			var maps = [];
+
+			var golds = 0,
+				silvers = 0,
+				bronzes = 0;
+
+			var playerMax = 10;
+			var recordEntries = [];
+			$.each(data, function (i, field) {
+
+				var player = field["player_name"],
+					place = parseInt(field["top_100"]),
+					map = field["map_name"],
+					time = field["time"];
+
+				if (place == 1) {
+					field["medal"] = "gold";
+					if (golds < playerMax)
+						top1Times.push(field);
+					golds++;
+
+				} else if (place > 1 && place <= 20) {
+					field["medal"] = "silver";
+
+					if (silvers < playerMax)
+						top20Times.push(field);
+					silvers++;
+				} else if (place > 20 && place <= 100) {
+					field["medal"] = "bronze";
+					if (bronzes < playerMax)
+						top100Times.push(field);
+					bronzes++;
+				}
+
+
+			}); //.each
+
+			publishTimes($("#top-1-container")[0], top1Times);
+			publishTimes($("#top-20-container")[0], top20Times);
+			publishTimes($("#top-100-container")[0], top100Times);
+
+
+		});
+
+		function publishTimes(recordContainer, recordEntries) {
+
+			for (i = 0; i < recordEntries.length; i++) {
+				var player = recordEntries[i]["player_name"].substring(0, 20),
+					place = parseInt(recordEntries[i]["top_100"]),
+					map = recordEntries[i]["map_name"],
+					time = getTimeFromSeconds(recordEntries[i]["time"]),
+					teleports = recordEntries[i]["teleports"],
+					runtype = recordEntries[i]["teleports"] == 0 ? "PRO" : "TP",
+					date = recordEntries[i]["created_on"],
+					medal = recordEntries[i]["medal"]
+
+				var timeText = '<span class="' + runtype.toLowerCase() + '-run-container">' + time + " (" + runtype + ')</span>';
+				var placeText = '<span class="' + medal + '-place-container">#'+ place + '</span>';
+				var playerText = '<span class="player-name-container">' + player +"</span>";
+				var mapText = '<span class="map-name-container">' + map + "</span>"
+
+				var medalURL = imagepath + medal + "-medal.png";
+				var medalTag = '<img class="medal-icon" src="' + medalURL + '">' +  placeText + " </img>";
+
+				var recordText = playerText + " placed " + medalTag + " "  + " on " + mapText + " " +  " with a time of " + timeText + " on " + date;
+				//var recordText = playerText + " placed ";
+
+				var recordHTML = '<div class="record-text-container"><div>' +  recordText +
+				'<br><div>';
+
+				$(recordContainer).append(recordHTML);
+
+
+
+			}
+		}
 	</script>
 
 
 </head>
 
 <body>
+
 	<div class="page-container">
+
 
 		<ul>
 			<li><a class="active" href="index.html">Global Times</a></li>
 			<li><a href="local.html">Your Times</a></li>
 			<li><a href="maps.html">Map Picker</a></li>
 			<li><a href="jumpstats.html">Jumpstats</a></li>
-
 		</ul>
 		<div class="content-wrap">
 
-			<div id="titleDiv">
-				<div id="innerTitleDiv">
-					<h2 id="player-title">Recent Global Times</h2>
+
+
+			<div class="accordion" id="accordion-times">
+				<div class="card">
+					<div class="card-header" id="headingGlobal">
+						<h5 class="mb-0">
+							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+								aria-expanded="true" aria-controls="collapseOne" id="expandTop1">
+								<h4 id="global-player-name">Recent Global World Records</h4>
+							</button>
+						</h5>
+					</div>
+
+					<div id="collapseOne" class="show" aria-labelledby="headingGlobal" data-parent="#accordion-times">
+						<div class="card-body">
+
+							<div class="content-wrap" id="top-1-container" style="text-align: left">
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header" id="headingTop20">
+						<h5 class="mb-0">
+							<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+								data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+								id="expandTop20">
+								<h4>Recent Global Top 20 Times</h4>
+							</button>
+						</h5>
+					</div>
+					<div id="collapseTwo" class="collapse" aria-labelledby="headingLocal"
+						data-parent="#accordion-times">
+						<div class="card-body">
+
+							<div class="content-wrap" id="top-20-container" style="text-align:left">
+
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header" id="headingTop100">
+						<h5 class="mb-0">
+							<button class="btn btn-link" type="button" data-toggle="collapse"
+								data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"
+								id="expandTop100">
+								<h4 id="global-player-name">Recent Global Top 100 Times</h4>
+							</button>
+						</h5>
+					</div>
+
+					<div id="collapseThree" class="collapse" aria-labelledby="headingGlobal"
+						data-parent="#accordion-times">
+						<div class="card-body">
+
+							<div class="content-wrap" id="top-100-container" style="text-align:left">
+
+
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-
-
-
-
-			<div id="table-container">
-				<div id="table-tips"></div>
-				<div class="handsontable" id="spreadsheet"> </div>
-			</div>
-
 		</div>
+
+
+
 
 		<footer class="container">
 			<hr>
@@ -63,9 +209,12 @@
 			</div>
 
 		</footer>
+
+
+
+
+
 	</div>
-
-
 </body>
 
 </html>
