@@ -290,7 +290,7 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 
 	$(".table-tips").each(function (i, table) {
 
-		$(table).text("Tip: Click on any column to sort. Right click to hide. See unfinished maps by filtering for '/' and finished maps by filtering for ':'.")
+		$(table).text("Tip: Click on any column to sort. Right click to hide. Type ':'  or '/' in the Time filter bar to see only finished or unfinished maps.")
 	});
 	first = false;
 	return mapTable;
