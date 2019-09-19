@@ -21,8 +21,8 @@
 
 	<script>
 		var imagepath = "img/";
-		var timesLimit = 150;
-		var playerMax =100;
+		var timesLimit = 150
+		var playerMax =20;//20 players, not 20 records, each player may have a bunch of incremental times
 		var globalsRequestURL =
 			"https://kztimerglobal.com/api/v1.0/records/top/recent?stage=0&tickrate=128&modes_list_string=kz_timer&limit=" +
 			timesLimit;
@@ -37,10 +37,6 @@
 		$.getJSON(globalsRequestURL, function (data) {
 			var maps = [];
 
-			var golds = 0,
-				silvers = 0,
-				bronzes = 0;
-
 			var recordEntries = [];
 			$.each(data, function (i, field) {
 
@@ -51,24 +47,21 @@
 
 				if (place == 1) {
 					field["medal"] = "gold";
-					if (golds < playerMax) {
+					if (Object.keys(top1Players).length< playerMax) {
 						pushPlayer(top1Players, field);
 					}
-					golds++;
 
 				} else if (place > 1 && place <= 20) {
 					field["medal"] = "silver";
 
-					if (silvers < playerMax) {
+					if (Object.keys(top20Players).length < playerMax) {
 						pushPlayer(top20Players, field);
 					}
-					silvers++;
 				} else if (place > 20 && place <= 100) {
 					field["medal"] = "bronze";
-					if (bronzes < playerMax) {
+					if (Object.keys(top100Players).length < playerMax) {
 						pushPlayer(top100Players, field);
 					}
-					bronzes++;
 				}
 
 				/*format
