@@ -187,22 +187,27 @@ input {
 	color: lightgrey;
 	font: 18px sans-serif;
 }
-.time-container{
-	color:gold;
+.date-run-container:{
+	color:white;
+	text-align:center;
 
 }
 .pro-run-container{
 
 	color:lightcoral;
-	text-align:center;
 }
 .tp-run-container{
+	color:lightskyblue;
+	text-align:center;
+
+}
+.record-minus-time{
 	color:lightseagreen;
 	text-align:center;
 
 }
 .map-name-container{
-	color: white;
+	color: lightgoldenrodyellow;
 	text-align:center;
 	font-weight:bold;
 }

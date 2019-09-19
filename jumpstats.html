@@ -55,14 +55,14 @@
 					retrieveStats(getRequestURL(steamID, jumptype, "both"), localContainer);
 				}
 
-			}else{
+			} else {
 				steamID = localStorage.getItem("jumpstatSteamID");
 				jumptype = localStorage.getItem("jumpstatType");
 				binded = localStorage.getItem("jumpstatBinded");
 
-				if(isValidSteamID(steamID) && isValidStat(jumptype) && isValidBind(binded)){
+				if (isValidSteamID(steamID) && isValidStat(jumptype) && isValidBind(binded)) {
 					$('#steamIDText').val(steamID);
-					$("#expandLocal").click(); 
+					$("#expandLocal").click();
 					retrieveStats(getRequestURL(steamID, jumptype, binded), localContainer);
 
 				}
@@ -73,10 +73,10 @@
 
 				$.getJSON(requestURL, function (data) {
 
-				if(data.length == 0){
-					alert("No Times Found for " + steamID);
-					return true;
-				}
+					if (data.length == 0) {
+						alert("No Times Found for " + steamID);
+						return true;
+					}
 					var jumpstats = [];
 					var servers = {};
 					var playerName = data[0]["player_name"];
@@ -209,18 +209,23 @@
 
 									<div class="innerSelection">
 										<input type="radio" id="globalBindRadio" name="globalBind" value="binded">Binded
-										<input type="radio" id="globalNobindRadio" name="globalBind" value="unbinded">No Bind
-										<input type="radio" id="globalBothRadio" name="globalBind" value="both" checked>Both
+										<input type="radio" id="globalNobindRadio" name="globalBind" value="unbinded">No
+										Bind
+										<input type="radio" id="globalBothRadio" name="globalBind" value="both"
+											checked>Both
 									</div>
 
 									<div class="innerSelection">
-										<input type="radio" id="globalLongjumpRadio" name="globalJumpstat" value="longjump"
-											checked>Longjump
-										<input type="radio" id="globalBhopRadio" name="globalJumpstat" value="bhop">Bunnyhop
-										<input type="radio" id="globalMultihopRadio" name="globalJumpstat" value="multihop">Multihop
+										<input type="radio" id="globalLongjumpRadio" name="globalJumpstat"
+											value="longjump" checked>Longjump
+										<input type="radio" id="globalBhopRadio" name="globalJumpstat"
+											value="bhop">Bunnyhop
+										<input type="radio" id="globalMultihopRadio" name="globalJumpstat"
+											value="multihop">Multihop
 										<input type="radio" id="globalWeirdjumpRadio" name="globalJumpstat"
 											value="weirdjump">Weirdjump
-										<input type="radio" id="globalDropbhopRadio" name="globalJumpstat" value="dropbhop">Dropbhop
+										<input type="radio" id="globalDropbhopRadio" name="globalJumpstat"
+											value="dropbhop">Dropbhop
 										<input type="radio" id="globalLadderjumpRadio" name="globalJumpstat"
 											value="ladderjump">Ladder
 										<input type="radio" id="globalCountjumpRadio" name="globalJumpstat"

@@ -146,7 +146,7 @@
 					];
 					var spreadsheetContainer = $("#spreadsheet-global")[0];
 
-					for (map in finishedGlobals) {
+					for (var map in finishedGlobals) {
 						if (finishedGlobals[map].length < 4) {
 							unfinished = Array(globalHeader.length).fill("N/A");
 							unfinished[0] = map;
@@ -211,7 +211,7 @@
 			$("#downloadButton").click(function () {
 				var csvText = localHeader.join(",") + "\r\n";
 				if (typeof outputBuffer !== 'undefined') {
-					for (i = 0; i < outputBuffer.length; i++)
+					for (var i = 0; i < outputBuffer.length; i++)
 						csvText += outputBuffer[i];
 				}
 				this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(csvText);
@@ -243,7 +243,7 @@
 				});
 
 				function writeToArray(arrIn, arrOut, offset) {
-					for (i = 1; i < 4; i++) {
+					for (var i = 1; i < 4; i++) {
 						arrOut[i + offset] = arrIn[i].replace(/Time: /g, '').replace(/Teleports: /g, '')
 							.replace(/Rank: /g, '');
 					}
@@ -263,7 +263,7 @@
 						length = finishedLocals[map].length;
 						row = line.split(",");
 
-						for (i = length; i < (localHeader.length - 1); i++) {
+						for (var i = length; i < (localHeader.length - 1); i++) {
 							row.push("");
 						}
 						tableBuffer.push(row);

@@ -23,11 +23,14 @@
 		var imagepath = "img/";
 		var timesLimit = 150;
 		var globalsRequestURL =
-			"https://kztimerglobal.com/api/v1.0/records/top/recent?stage=0&tickrate=128&modes_list_string=kz_timer&limit=" + timesLimit;
+			"https://kztimerglobal.com/api/v1.0/records/top/recent?stage=0&tickrate=128&modes_list_string=kz_timer&limit=" +
+			timesLimit;
 
-		var top1Times = [],
-			top20Times = [],
-			top100Times = [];
+
+		//using player_name+map_name+teleports as hash
+		var top1Players = {};
+		var top20Players = {};
+		var top100Players = {};
 
 
 		$.getJSON(globalsRequestURL, function (data) {
@@ -37,7 +40,7 @@
 				silvers = 0,
 				bronzes = 0;
 
-			var playerMax = 30;//don't limit for now
+			var playerMax = timesLimit;
 			var recordEntries = [];
 			$.each(data, function (i, field) {
 
@@ -48,65 +51,166 @@
 
 				if (place == 1) {
 					field["medal"] = "gold";
-					if (golds < playerMax)
-						top1Times.push(field);
+					if (golds < playerMax) {
+						pushPlayer(top1Players, field);
+					}
 					golds++;
 
 				} else if (place > 1 && place <= 20) {
 					field["medal"] = "silver";
 
-					if (silvers < playerMax)
-						top20Times.push(field);
+					if (silvers < playerMax) {
+						pushPlayer(top20Players, field);
+					}
 					silvers++;
 				} else if (place > 20 && place <= 100) {
 					field["medal"] = "bronze";
-					if (bronzes < playerMax)
-						top100Times.push(field);
+					if (bronzes < playerMax) {
+						pushPlayer(top100Players, field);
+					}
 					bronzes++;
 				}
 
+				/*format
+		
+		{
+			player: [
+				{map: "kz_foo", time: "00:00:00", place: "100"},
+				{map: "kz_bar", time: "00:00:00", place: "100"},
+				...
+			],
+			player2: [],
+			player3: [] 
+		}
+	*/
+				function pushPlayer(playerList, playerRecord) {
+					playerKey = playerRecord["player_name"] + "+" +
+						playerRecord["map_name"] + "+" + playerRecord["teleports"];
+					if (playerKey in playerList) {
+						playerList[playerKey].push(field);
+					} else {
+						playerList[playerKey] = [field];
+					}
+
+				}
 
 			}); //.each
 
-			publishTimes($("#top-1-container")[0], top1Times);
-			publishTimes($("#top-20-container")[0], top20Times);
-			publishTimes($("#top-100-container")[0], top100Times);
 
+			publishPlayerTimes($("#top-1-container")[0], top1Players);
+			publishPlayerTimes($("#top-20-container")[0], top20Players);
+			publishPlayerTimes($("#top-100-container")[0], top100Players);
 
 		});
 
-		function publishTimes(recordContainer, recordEntries) {
+		function publishPlayerTimes(recordContainer, playerEntries) {
 
-			for (i = 0; i < recordEntries.length; i++) {
-				var player = recordEntries[i]["player_name"].substring(0, 20),
-					place = parseInt(recordEntries[i]["top_100"]),
-					map = recordEntries[i]["map_name"],
-					time = getTimeFromSeconds(recordEntries[i]["time"]),
-					teleports = recordEntries[i]["teleports"],
-					runtype = recordEntries[i]["teleports"] == 0 ? "PRO" : "TP",
-					date = recordEntries[i]["created_on"],
-					medal = recordEntries[i]["medal"]
+			for (var playerKey in playerEntries) {
+				//player:[record1, record2, record3]
 
-				var timeText = '<span class="' + runtype.toLowerCase() + '-run-container">' + time + " (" + runtype + ')</span>';
-				var placeText = '<span class="' + medal + '-place-container">#'+ place + '</span>';
-				var playerText = '<span class="player-name-container">' + player +"</span>";
-				var mapText = '<span class="map-name-container">' + map + "</span>"
-
-				var medalURL = imagepath + medal + "-medal.png";
-				var medalTag = '<img class="medal-icon" src="' + medalURL + '">' +  placeText + " </img>";
-
-				var recordText = playerText + " placed " + medalTag + " "  + " on " + mapText + " " +  " with a time of " + timeText + " on " + date;
-				//var recordText = playerText + " placed ";
-
-				var recordHTML = '<div class="record-text-container"><div>' +  recordText +
-				'<br><div>';
-
-				$(recordContainer).append(recordHTML);
+				var bestTime = parseFloat(playerEntries[playerKey][0]["time"]);
+				var prevTime = bestTime;
 
 
+				for (var i = 0; i < playerEntries[playerKey].length; i++) {
+					var recordTimeText = "";
+					var indent = i == 0 ? 0 : 10 + 4 * i;
 
+					var timeDiff = "";
+					if (i < playerEntries[playerKey].length - 1) {
+
+						prevTime = parseFloat(playerEntries[playerKey][i + 1]["time"]);
+						timeDiff = Math.abs(bestTime - prevTime);
+						bestTime = prevTime;
+					}
+
+
+					publishEntry(recordContainer, playerEntries[playerKey][i], indent, timeDiff);
+
+				}
 			}
 		}
+
+		function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeconds) {
+
+			indentLevel = 0 || indentLevel;
+
+			var player = recordEntry["player_name"].substring(0, 12),
+				place = parseInt(recordEntry["top_100"]),
+				map = recordEntry["map_name"],
+				time = getTimeFromSeconds(recordEntry["time"]),
+				teleports = recordEntry["teleports"],
+				runtype = recordEntry["teleports"] == 0 ? "PRO" : "TP",
+				date = recordEntry["created_on"],
+				updatedOn = recordEntry["updated_on"],
+				medal = recordEntry["medal"]
+
+
+
+			var recordTimeText = "";
+
+			if (timeMinusInSeconds != 0)
+				recordTimeText = ', improving their best time by <span class="record-minus-time">' + getTimeFromSeconds(
+					timeMinusInSeconds) + '</span';
+
+
+
+			var timeText = '<span class="' + runtype.toLowerCase() + '-run-container">' + time + " (" + runtype +
+				')</span>';
+			var placeText = '<span class="' + medal + '-place-container">#' + place + '</span>';
+			var playerText = '<span class="player-name-container">' + player + "</span>";
+			var mapText = '<span class="map-name-container">' + map + "</span>"
+			var dateText = '<span class="date-run-container"> ' + getTimeAgo(date) + " ago </span>";
+
+			var medalURL = imagepath + medal + "-medal.png";
+			var medalTag = '<img class="medal-icon" src="' + medalURL + '">' + placeText + " </img>";
+
+			var recordText = playerText + " placed " + medalTag + " " + " on " + mapText + " " + " with a time of " +
+				timeText + dateText;
+			//var recordText = playerText + " placed ";
+
+			var recordDivClass = "record-text-container";
+
+
+			var indentText = "";
+			for (var i = 0; i < indentLevel; i++) {
+				indentText += "&nbsp";
+			}
+			var indentHTML = '<span class="record-indent">' + indentText + '</span>';
+			var recordHTML = '<div class="' + recordDivClass + '">' + indentHTML + recordText + recordTimeText +
+				'<br></div>';
+
+			$(recordContainer).append(recordHTML);
+
+
+
+		}
+
+		//input format : YYYY-MM-DDTHH:MM:SS
+		//output format : X Days, Y Hours;
+		function getTimeAgo(time) {
+			var mapTime = new Date(time);
+			var curTime = new Date();
+
+
+			curTime.setHours(curTime.getHours() + 7);
+
+			//what fucking timee zone is this
+			var remainingTime = Math.abs(curTime - mapTime);
+
+			console.log(remainingTime)
+			var days = Math.floor(remainingTime /( 24 * 60 * 60 * 1000.0));
+			remainingTime-=days * (24*60*60*1000);
+			var hours = Math.floor(remainingTime/(60 * 60 * 1000.0));
+			remainingTime -= hours * ( 60 * 60 * 1000);
+			var minutes = Math.floor(remainingTime/(60*1000.0));
+
+			var daysText = days>0? days+" days ": "";
+			var hoursText = hours>0? hours+" hours ": "";
+			var minutesText = minutes>0? minutes+" minutes ": "";
+
+			return daysText + hoursText + minutesText;
+		};
 	</script>
 
 
