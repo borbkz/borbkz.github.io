@@ -28,7 +28,7 @@
 		var top1RequestURL = globalsRequestURLBase + "&place_top_at_least=1&limit=40";
 		var top20RequestURL = globalsRequestURLBase +
 			"&place_top_at_least=20&limit=40"; //#1 counts as top 20, get 50 just in case
-		var top100RequestURL = globalsRequestURLBase + "&place_top_at_least=100&limit=100";
+		var top100RequestURL = globalsRequestURLBase + "&limit=100";
 
 
 
@@ -116,6 +116,7 @@
 		function publishPlayerTimes(recordContainer, playerEntries) {
 
 			for (var playerKey in playerEntries) {
+
 				//player:[record1, record2, record3]
 
 				var bestTime = parseFloat(playerEntries[playerKey][0]["time"]);
@@ -180,10 +181,11 @@
 
 			var recordText = playerText + " placed " + medalTag + " " + runtypeText + " on " + mapText + " " +
 				" with a time " + " of " +
-				timeText + recordTimeText + dateText;
+				timeText + recordTimeText + ", " + dateText;
 
+				//indented previous times under the same player and map, no font decorations
 			if (indentLevel != 0) {
-				recordText = player + " finished with " + timeText + recordTimeText + dateText;
+				recordText = player + " placed #" + place + " " + runtype + " with " + time + recordTimeText + ", " + dateText;
 
 			}
 			//var recordText = playerText + " placed ";
@@ -224,8 +226,8 @@
 			var minutes = Math.floor(remainingTime / (60 * 1000.0));
 
 			var daysText = days > 0 ? days + " days " : "";
-			var hoursText = hours > 0 ? hours + " hours " : "";
-			var minutesText = minutes > 0 ? minutes + " minutes " : "";
+			var hoursText = hours > 0 ? hours + " hr " : "";
+			var minutesText = minutes > 0 ? minutes + " min " : "";
 
 			return daysText + hoursText + minutesText;
 		};
