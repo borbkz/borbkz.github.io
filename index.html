@@ -22,6 +22,7 @@
 	<script>
 		var imagepath = "img/";
 		var timesLimit = 150;
+		var playerMax =100;
 		var globalsRequestURL =
 			"https://kztimerglobal.com/api/v1.0/records/top/recent?stage=0&tickrate=128&modes_list_string=kz_timer&limit=" +
 			timesLimit;
@@ -40,7 +41,6 @@
 				silvers = 0,
 				bronzes = 0;
 
-			var playerMax = timesLimit;
 			var recordEntries = [];
 			$.each(data, function (i, field) {
 
@@ -84,8 +84,15 @@
 		}
 	*/
 				function pushPlayer(playerList, playerRecord) {
+					var teleports = parseInt(playerRecord["teleports"]);
+					var isPro="TP";
+					if(teleports === 0)
+					isPro = "PRO";
+
+
 					playerKey = playerRecord["player_name"] + "+" +
-						playerRecord["map_name"] + "+" + playerRecord["teleports"];
+						playerRecord["map_name"] + "+" + isPro;
+
 					if (playerKey in playerList) {
 						playerList[playerKey].push(field);
 					} else {
@@ -149,6 +156,7 @@
 
 			var recordTimeText = "";
 
+			var timeFinished = getTimeAgo(date);
 			if (timeMinusInSeconds != 0)
 				recordTimeText = ', improving their best time by <span class="record-minus-time">' + getTimeFromSeconds(
 					timeMinusInSeconds) + '</span';
@@ -160,13 +168,18 @@
 			var placeText = '<span class="' + medal + '-place-container">#' + place + '</span>';
 			var playerText = '<span class="player-name-container">' + player + "</span>";
 			var mapText = '<span class="map-name-container">' + map + "</span>"
-			var dateText = '<span class="date-run-container"> ' + getTimeAgo(date) + " ago </span>";
+			var dateText = '<span class="date-run-container"> ' + timeFinished + " ago </span>";
 
 			var medalURL = imagepath + medal + "-medal.png";
 			var medalTag = '<img class="medal-icon" src="' + medalURL + '">' + placeText + " </img>";
 
 			var recordText = playerText + " placed " + medalTag + " " + " on " + mapText + " " + " with a time of " +
 				timeText + dateText;
+
+				if(indentLevel != 0){
+					recordText = player +" finished with " + timeText + dateText;
+
+				}
 			//var recordText = playerText + " placed ";
 
 			var recordDivClass = "record-text-container";
@@ -198,7 +211,6 @@
 			//what fucking timee zone is this
 			var remainingTime = Math.abs(curTime - mapTime);
 
-			console.log(remainingTime)
 			var days = Math.floor(remainingTime /( 24 * 60 * 60 * 1000.0));
 			remainingTime-=days * (24*60*60*1000);
 			var hours = Math.floor(remainingTime/(60 * 60 * 1000.0));

@@ -188,8 +188,8 @@ input {
 	font: 18px sans-serif;
 }
 .date-run-container:{
+	
 	color:white;
-	text-align:center;
 
 }
 .pro-run-container{
@@ -198,30 +198,24 @@ input {
 }
 .tp-run-container{
 	color:lightskyblue;
-	text-align:center;
 
 }
 .record-minus-time{
 	color:lightseagreen;
-	text-align:center;
 
 }
 .map-name-container{
 	color: lightgoldenrodyellow;
-	text-align:center;
 	font-weight:bold;
 }
 .gold-place-container{
 	color: gold;
-	text-align:center;
 }
 .silver-place-container{
 	color: lightsteelblue;
-	text-align:center;
 }
 .bronze-place-container{
 	color: #cd7f32; 
-	text-align:center;
 }
 html,
 body {
