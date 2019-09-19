@@ -34,6 +34,7 @@
 				steamID = URI["steamid"];
 				teleports = URI["teleports"]
 				if (isValidSteamID(steamID)) {
+					console.log("RECEIVED " +  steamID + " TELEPORTS " + teleports);
 					$("#expandGlobal").click(); //autoexpand if url linked by steamid
 
 					$('#steamIDText').val(steamID);

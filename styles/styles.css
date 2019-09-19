@@ -189,23 +189,35 @@ input {
 }
 .date-run-container{
 	
-	color:white;
+	color:inherit;
 
 }
 .pro-run-container{
-
-	color:lightcoral;
+	font-weight: bold;
+	color:white;
 }
 .tp-run-container{
+	font-weight: bold;
+	color:white;
+
+}
+.pro-type-container{
+
+	font-weight:normal;
+	color:lightcoral;
+}
+.tp-type-container{
+	font-weight:normal;
 	color:lightskyblue;
 
 }
 .record-minus-time{
-	color:lightseagreen;
+	color:lightgreen;
 
 }
 .map-name-container{
-	color: lightgoldenrodyellow;
+	/*color: lightgoldenrodyellow;*/;
+	color:white;
 	font-weight:bold;
 }
 .gold-place-container{

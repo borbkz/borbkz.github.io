@@ -21,11 +21,15 @@
 
 	<script>
 		var imagepath = "img/";
-		var timesLimit = 200;
-		var playerMax =20;//20 players, not 20 records, each player may have a bunch of incremental times
-		var globalsRequestURL =
-			"https://kztimerglobal.com/api/v1.0/records/top/recent?stage=0&tickrate=128&modes_list_string=kz_timer&limit=" +
-			timesLimit;
+		var playerMax = 20; //20 players, not 20 records, each player may have a bunch of incremental times
+		var globalsRequestURLBase =
+			"https://kztimerglobal.com/api/v1.0/records/top/recent?stage=0&tickrate=128&modes_list_string=kz_timer";
+
+		var top1RequestURL = globalsRequestURLBase + "&place_top_at_least=1&limit=40";
+		var top20RequestURL = globalsRequestURLBase +
+			"&place_top_at_least=20&limit=40"; //#1 counts as top 20, get 50 just in case
+		var top100RequestURL = globalsRequestURLBase + "&limit=100";
+
 
 
 		//using player_name+map_name+teleports as hash
@@ -33,75 +37,72 @@
 		var top20Players = {};
 		var top100Players = {};
 
-
-		$.getJSON(globalsRequestURL, function (data) {
-			var maps = [];
-
-			var recordEntries = [];
-			$.each(data, function (i, field) {
-
-				var player = field["player_name"],
-					place = parseInt(field["top_100"]),
-					map = field["map_name"],
-					time = field["time"];
-
-				if (place == 1) {
-					field["medal"] = "gold";
-					if (Object.keys(top1Players).length< playerMax) {
-						pushPlayer(top1Players, field);
-					}
-
-				} else if (place > 1 && place <= 20) {
-					field["medal"] = "silver";
-
-					if (Object.keys(top20Players).length < playerMax) {
-						pushPlayer(top20Players, field);
-					}
-				} else if (place > 20 && place <= 100) {
-					field["medal"] = "bronze";
-					if (Object.keys(top100Players).length < playerMax) {
-						pushPlayer(top100Players, field);
-					}
-				}
-
-				/*format
-		
-		{
-			player: [
-				{map: "kz_foo", time: "00:00:00", place: "100"},
-				{map: "kz_bar", time: "00:00:00", place: "100"},
-				...
-			],
-			player2: [],
-			player3: [] 
+		var globalURLs = {
+			"gold": top1RequestURL,
+			"silver": top20RequestURL,
+			"bronze": top100RequestURL,
 		}
-	*/
-				function pushPlayer(playerList, playerRecord) {
-					var teleports = parseInt(playerRecord["teleports"]);
-					var isPro="TP";
-					if(teleports === 0)
-					isPro = "PRO";
 
 
-					playerKey = playerRecord["player_name"] + "+" +
-						playerRecord["map_name"] + "+" + isPro;
+		for (var ranking in globalURLs) {
 
-					if (playerKey in playerList) {
-						playerList[playerKey].push(field);
-					} else {
-						playerList[playerKey] = [field];
+
+
+			$.getJSON(globalURLs[ranking], (function (ranking) {
+				return function (data) {
+
+					var maps = [];
+					var recordEntries = [];
+					var playerArr = top1Players;
+					var playerContainer = $('#top-1-container')[0];
+
+
+					if (ranking == "silver") {
+						playerContainer = $('#top-20-container')[0];
+						playerArr = top20Players;
+					} else if (ranking == "bronze") {
+						playerContainer = $('#top-100-container')[0];
+						playerArr = top100Players;
 					}
 
+					$.each(data, function (i, field) {
+
+						var player = field["player_name"],
+							place = parseInt(field["top_100"]),
+							map = field["map_name"],
+							time = field["time"];
+
+						field["medal"] = ranking;
+
+
+						if (Object.keys(playerArr).length < playerMax) {
+							pushPlayer(playerArr, field);
+						}
+
+					}); //.each
+					publishPlayerTimes(playerContainer, playerArr);
 				}
+			})(ranking));
 
-			}); //.each
+		}
+
+		function pushPlayer(playerList, playerRecord) {
+			var teleports = parseInt(playerRecord["teleports"]);
+			var isPro = "TP";
+			if (teleports === 0)
+				isPro = "PRO";
 
 
-			publishPlayerTimes($("#top-1-container")[0], top1Players);
-			publishPlayerTimes($("#top-20-container")[0], top20Players);
-			publishPlayerTimes($("#top-100-container")[0], top100Players);
+			playerKey = playerRecord["player_name"] + "+" +
+				playerRecord["map_name"] + "+" + isPro;
 
-		});
+			if (playerKey in playerList) {
+				playerList[playerKey].push(playerRecord);
+			} else {
+				playerList[playerKey] = [playerRecord];
+			}
+
+		}
 
 		function publishPlayerTimes(recordContainer, playerEntries) {
 
@@ -134,45 +135,49 @@
 		function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeconds) {
 
 			indentLevel = 0 || indentLevel;
-
-			var player = sanitizeName(recordEntry["player_name"]),
+			var preName = sanitizeName(recordEntry["player_name"]);
+			var player = preName.substring(0, 20) + (preName.length > 20 ? " ..." : ""),
+				steamID = recordEntry["steam_id"],
 				place = parseInt(recordEntry["top_100"]),
 				map = recordEntry["map_name"],
 				time = getTimeFromSeconds(recordEntry["time"]),
 				teleports = recordEntry["teleports"],
+				teleportsBool = parseInt(teleports)>0,
 				runtype = recordEntry["teleports"] == 0 ? "PRO" : "TP",
 				date = recordEntry["created_on"],
 				updatedOn = recordEntry["updated_on"],
 				medal = recordEntry["medal"]
 
+            var nameLink = '<a href="local.html?steamid='+steamID + "&teleports="+teleportsBool +'">'+player+'</a>'
+			console.log("LINK: " + nameLink);
 
 
 			var recordTimeText = "";
 
 			var timeFinished = getTimeAgo(date);
 			if (timeMinusInSeconds != 0)
-				recordTimeText = ', improving their best time by <span class="record-minus-time">' + getTimeFromSeconds(
-					timeMinusInSeconds) + '</span';
+				recordTimeText = '<span class="record-minus-time"> ( -' + getTimeFromSeconds(timeMinusInSeconds) + ')</span>';
 
 
-
-			var timeText = '<span class="' + runtype.toLowerCase() + '-run-container">' + time + " (" + runtype +
-				')</span>';
+			var runtypeText = '<span class="' + runtype.toLowerCase() + '-type-container">' + runtype + '</span>';
+			var timeText = '<span class="' + runtype.toLowerCase() + '-run-container">' + time + '</span>';
 			var placeText = '<span class="' + medal + '-place-container">#' + place + '</span>';
-			var playerText = '<span class="player-name-container">' + player + "</span>";
+			var playerText = '<span class="player-name-container">' + nameLink + "</span>";
 			var mapText = '<span class="map-name-container">' + map + "</span>"
-			var dateText = '<span class="date-run-container"> ' + timeFinished + " ago</span>";
+			var dateText = '<span class="date-run-container"> ' + timeFinished + (timeFinished === "" ? "" : " ago") +
+				"</span>";
 
 			var medalURL = imagepath + medal + "-medal.png";
 			var medalTag = '<img class="medal-icon" src="' + medalURL + '">' + placeText + " </img>";
 
-			var recordText = playerText + " placed " + medalTag + " " + " on " + mapText + " " + " with a time of " +
-				timeText + dateText;
+			var recordText = playerText + " placed " + medalTag + " " + runtypeText + " on " + mapText + " " +
+				" with a time " + " of " +
+				timeText + recordTimeText + dateText;
 
-				if(indentLevel != 0){
-					recordText = player +" finished with " + timeText + dateText;
+			if (indentLevel != 0) {
+				recordText = player + " finished with " + timeText + recordTimeText + dateText;
 
-				}
+			}
 			//var recordText = playerText + " placed ";
 
 			var recordDivClass = "record-text-container";
@@ -183,7 +188,7 @@
 				indentText += "&nbsp";
 			}
 			var indentHTML = '<span class="record-indent">' + indentText + '</span>';
-			var recordHTML = '<div class="' + recordDivClass + '">' + indentHTML + recordText + recordTimeText +
+			var recordHTML = '<div class="' + recordDivClass + '">' + indentHTML + recordText +
 				'<br></div>';
 
 			$(recordContainer).append(recordHTML);
@@ -204,15 +209,15 @@
 			//what fucking timee zone is this
 			var remainingTime = Math.abs(curTime - mapTime);
 
-			var days = Math.floor(remainingTime /( 24 * 60 * 60 * 1000.0));
-			remainingTime-=days * (24*60*60*1000);
-			var hours = Math.floor(remainingTime/(60 * 60 * 1000.0));
-			remainingTime -= hours * ( 60 * 60 * 1000);
-			var minutes = Math.floor(remainingTime/(60*1000.0));
+			var days = Math.floor(remainingTime / (24 * 60 * 60 * 1000.0));
+			remainingTime -= days * (24 * 60 * 60 * 1000);
+			var hours = Math.floor(remainingTime / (60 * 60 * 1000.0));
+			remainingTime -= hours * (60 * 60 * 1000);
+			var minutes = Math.floor(remainingTime / (60 * 1000.0));
 
-			var daysText = days>0? days+" days ": "";
-			var hoursText = hours>0? hours+" hours ": "";
-			var minutesText = minutes>0? minutes+" minutes ": "";
+			var daysText = days > 0 ? days + " days " : "";
+			var hoursText = hours > 0 ? hours + " hours " : "";
+			var minutesText = minutes > 0 ? minutes + " minutes " : "";
 
 			return daysText + hoursText + minutesText;
 		};
