@@ -2,8 +2,8 @@
 title: kz.gl
 layout: default
 ---
-<script type="text/javascript" src="assets/js/allservers.js"></script>
-<script type="text/javascript" src="assets/js/local.js"></script>
+<script type="text/javascript" src="assets/js/allservers.js?{{site.time | date: '%s%N'}}"></script>
+<script type="text/javascript" src="assets/js/local.js?{{site.time | date: '%s%N'}}"></script>
 <div class="content-wrap">
 	<div class="accordion" id="accordion-times">
 		{% capture server-times %}
