@@ -2,9 +2,10 @@
 var jumpLimit = 10,
 	jumpMin = 100;
 
-var imagepath = "img/";
+var difficultyJSON = "assets/json/maps.json";
+var headerJSON = "assets/json/header.json";
 
-var jumpBinds = ["bind", "nobind", "both"]
+var jumpBinds = ["bind", "nobind", "both"];
 var jumpstatsKey = {
 	1: "longjump",
 	2: "bhop",
@@ -19,7 +20,7 @@ var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 
 function getHeaderArray() {
 	//var header = {};
-	$.getJSON("header.json", function (data) {
+	$.getJSON(headerJSON, function (data) {
 		//header = data;
 	}); //end json
 	//return header;
@@ -39,7 +40,7 @@ function getMapArray() {
 		"Surf": 7,
 		"Tech": 8,
 	}
-	$.getJSON("maps.json", function (data) {
+	$.getJSON(difficultyJSON, function (data) {
 
 		$.each(data, function (i, field) {
 			map = field[mapKeys["Map"]];
@@ -66,7 +67,7 @@ function getDifficultyArray() {
 		"Pro Tier": 2,
 		"Length": 3,
 	}
-	$.getJSON("maps.json", function (data) {
+	$.getJSON(difficultyJSON, function (data) {
 
 		$.each(data, function (i, field) {
 			//if (i == 0) return true;

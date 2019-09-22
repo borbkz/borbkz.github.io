@@ -1,6 +1,7 @@
 var globalTable;
 var difficultyArray = getDifficultyArray();
 var URI = getURIVars();
+var expandGlobaId = "#expand-allservers";
 $(document).ready(function () {
     var globalHeader = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
         "Server"
@@ -13,7 +14,7 @@ $(document).ready(function () {
         teleports = URI["teleports"]
         if (isValidSteamID(steamID)) {
             console.log("RECEIVED " + steamID + " TELEPORTS " + teleports);
-            $("#expandGlobal").click(); //autoexpand if url linked by steamid
+            //$(expandGlobalId).click(); //autoexpand if url linked by steamid
 
             $('#steamIDText').val(steamID);
             var teleportsBool = "true" === teleports;

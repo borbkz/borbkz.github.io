@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>kz.gl</title>
     
-	<link href="/assets/css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css"
 		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -33,7 +33,48 @@
   </ul>
 </nav>
 
-      
+      <div class="content-wrap">
+    <script>
+        $(document).ready(function () {
+            var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
+            cols = Array(header.length).fill({});
+            var spreadsheetContainer = $("#spreadsheet")[0];
+
+            $.getJSON(); //??
+
+            myMaps = getMapArray();
+            genTable(spreadsheetContainer, myMaps, header, [0], cols);
+        });
+    </script>
+
+    <div class="accordion" id="accordion-times">
+        
+        <div class="card">
+	<div class="card-header" id="map-info-header">
+		<h5 class="mb-0">
+			<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#map-info-body"
+				aria-expanded="true" aria-controls="map-info-body" id="expand-map-info">
+				<h4>Choose Your Next Map (Under Construction)</h4>
+			</button>
+		</h5>
+	</div>
+	<div id="map-info-body" class="show"
+		aria-labelledby="map-info-header" data-parent="#accordion-times">
+		<div class="card-body">
+				
+        <div class="content-wrap">
+            <div id="table-container">
+                <div class="table-tips"></div>
+                <div class="handsontable" id="spreadsheet"> </div>
+            </div>
+        </div>
+        
+		</div>
+	</div>
+</div>
+    </div>
+</div>
+
       <footer class="container">
 	<hr>
 	<div class="text-center center-block">

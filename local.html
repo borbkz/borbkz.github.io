@@ -1,47 +1,53 @@
 ---
 title: kz.gl
 layout: default
-sections: global, local
 ---
 <script type="text/javascript" src="assets/js/allservers.js"></script>
 <script type="text/javascript" src="assets/js/local.js"></script>
-
 <div class="content-wrap">
 
-    <div class="accordion" id="accordion-times">
-        {% capture server-times %}
+	<div class="accordion" id="accordion-times">
+		{% capture server-times %}
+		<div class="content-wrap">
+			<div class="innerSelection">
+				<a href="https://steamid.io/lookup/">Steam ID Lookup</a>
+				<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
+				<input type="button" id="getGlobalMapsButton" value="Fetch Times" />
+			</div>
+			<div class="inputSelection">
+				<div class="innerSelection">
+					<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
+					<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
+				</div>
 
-							<div class="content-wrap">
-								<div class="innerSelection">
-									<a href="https://steamid.io/lookup/">Steam ID Lookup</a>
-									<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
-									<input type="button" id="getGlobalMapsButton" value="Fetch Times" />
-								</div>
+			</div>
+			<div id="table-container">
+				<div class="table-tips"></div>
+				<div class="handsontable" id="spreadsheet-global"> </div>
+			</div>
+		</div>
+		{% endcapture %}
 
-								<div class="inputSelection">
-									<div class="innerSelection">
-										<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio"
-											checked>TP Runs
-										<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro
-										Runs
-									</div>
+		{% capture local-times %}
+		<div class="content-wrap">
+			<div class="textDiv">
+				<textarea rows="7" cols="100" id="inputMapsTextArea">{% include tips.html %}</textarea>
+				<div class="inputSelection">
+					<div class="innerSelection">
+						<button id="convertButton">Fetch Times</button>
+						<a id="downloadButton" href="" download="kzmaps.csv"><button>Download</button></a>
 
-								</div>
+					</div>
+				</div>
+				<div id="table-container">
+					<div class="table-tips"></div>
+					<div class="handsontable" id="spreadsheet-local"> </div>
+				</div>
+			</div>
+		</div>
+		{% endcapture %}
 
-
-								<div id="table-container">
-									<div class="table-tips"></div>
-									<div class="handsontable" id="spreadsheet-global"> </div>
-								</div>
-
-							</div>
-        {% endcapture %}
-
-        {% capture local-times %}
-
-        {% endcapture %}
-
-        {% include collapse.html parent-id="accordion-times" id="allservers" title="Your Times Across All Servers" content=server-times %}
-        {% include collapse.html parent-id="accordion-times" id="local" title="Your Local Server Times" %}
-    </div>
+		{% include collapse.html parent-id="accordion-times" id="allservers" title="Your Times Across All Servers" content=server-times status="show" %}
+		{% include collapse.html parent-id="accordion-times" id="local" title="Your Local Server Times" content=local-times %}
+	</div>
 </div>

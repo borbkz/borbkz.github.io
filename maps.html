@@ -2,4 +2,29 @@
 title: kz.gl
 layout: default
 ---
+<div class="content-wrap">
+    <script>
+        $(document).ready(function () {
+            var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
+            cols = Array(header.length).fill({});
+            var spreadsheetContainer = $("#spreadsheet")[0];
 
+            $.getJSON(); //??
+
+            myMaps = getMapArray();
+            genTable(spreadsheetContainer, myMaps, header, [0], cols);
+        });
+    </script>
+
+    <div class="accordion" id="accordion-times">
+        {% capture inner %}
+        <div class="content-wrap">
+            <div id="table-container">
+                <div class="table-tips"></div>
+                <div class="handsontable" id="spreadsheet"> </div>
+            </div>
+        </div>
+        {% endcapture %}
+        {% include collapse.html parent-id="accordion-times" id="map-info" title="Choose Your Next Map (Under Construction)" status="show" content=inner%}
+    </div>
+</div>

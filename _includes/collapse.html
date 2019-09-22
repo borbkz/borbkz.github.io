@@ -10,9 +10,7 @@
 	<div id="{{ include.id }}-body" class="{% if include.status == 'show' %}show{% else %}collapse{% endif %}"
 		aria-labelledby="{{ include.id }}-header" data-parent="#{{ include.parent-id }}">
 		<div class="card-body">
-			<div class="content-wrap" id="{{ include.id }}-container" style="text-align: left">
-				{{ include.server-times }}
-			</div>
+				{{ include.content }}
 		</div>
 	</div>
 </div>

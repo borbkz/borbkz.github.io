@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>kz.gl</title>
     
-	<link href="/assets/css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css"
 		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -35,15 +35,14 @@
 
       <script type="text/javascript" src="assets/js/allservers.js"></script>
 <script type="text/javascript" src="assets/js/local.js"></script>
-
 <div class="content-wrap">
 
-    <div class="accordion" id="accordion-times">
-        
+	<div class="accordion" id="accordion-times">
+		
 
-        
+		
 
-        <div class="card">
+		<div class="card">
 	<div class="card-header" id="allservers-header">
 		<h5 class="mb-0">
 			<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#allservers-body"
@@ -52,16 +51,33 @@
 			</button>
 		</h5>
 	</div>
-	<div id="allservers-body" class="collapse"
+	<div id="allservers-body" class="show"
 		aria-labelledby="allservers-header" data-parent="#accordion-times">
 		<div class="card-body">
-			<div class="content-wrap" id="allservers-container" style="text-align: left">
 				
+		<div class="content-wrap">
+			<div class="innerSelection">
+				<a href="https://steamid.io/lookup/">Steam ID Lookup</a>
+				<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
+				<input type="button" id="getGlobalMapsButton" value="Fetch Times" />
 			</div>
+			<div class="inputSelection">
+				<div class="innerSelection">
+					<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
+					<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
+				</div>
+
+			</div>
+			<div id="table-container">
+				<div class="table-tips"></div>
+				<div class="handsontable" id="spreadsheet-global"> </div>
+			</div>
+		</div>
+		
 		</div>
 	</div>
 </div>
-        <div class="card">
+		<div class="card">
 	<div class="card-header" id="local-header">
 		<h5 class="mb-0">
 			<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#local-body"
@@ -73,13 +89,34 @@
 	<div id="local-body" class="collapse"
 		aria-labelledby="local-header" data-parent="#accordion-times">
 		<div class="card-body">
-			<div class="content-wrap" id="local-container" style="text-align: left">
 				
+		<div class="content-wrap">
+			<div class="textDiv">
+				<textarea rows="7" cols="100" id="inputMapsTextArea">On any KZTimer enabled server, type !profile in the chat and select "finished maps".
+Copy and paste your times from the console here.
+
+Example:
+kz_beginnerblock_go, Time: 00:59.59 (TP), Teleports: 3, Rank: 1/2
+kz_beginnerblock_go, Time: 01:59.59 (PRO), Teleports: 0, Rank: 1/2
+kz_spacemario_h, Time: 09:59.99 (PRO), Teleports: 0, Rank: 99/100</textarea>
+				<div class="inputSelection">
+					<div class="innerSelection">
+						<button id="convertButton">Fetch Times</button>
+						<a id="downloadButton" href="" download="kzmaps.csv"><button>Download</button></a>
+
+					</div>
+				</div>
+				<div id="table-container">
+					<div class="table-tips"></div>
+					<div class="handsontable" id="spreadsheet-local"> </div>
+				</div>
 			</div>
+		</div>
+		
 		</div>
 	</div>
 </div>
-    </div>
+	</div>
 </div>
 
       <footer class="container">

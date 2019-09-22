@@ -1,15 +1,24 @@
 ---
 title: kz.gl
 layout: default
-sections: global, local
 ---
 <script type="text/javascript" src="assets/js/global.js"></script>
-
 <div class="content-wrap">
 
     <div class="accordion" id="accordion-times">
-        {% include collapse.html parent-id="accordion-times" id="top-1" title="Recent Global World Records" status="show" %}
-        {% include collapse.html parent-id="accordion-times" id="top-20" title="Recent Top 20 World Records" %}
-        {% include collapse.html parent-id="accordion-times" id="top-100" title="Recent Top 100 World Records" %}
+        {% capture inner %}
+            <div class="content-wrap" id="top-1-container" style="text-align: left"></div>
+        {% endcapture %}
+        {% include collapse.html parent-id="accordion-times" id="top-1" title="Recent Global World Records" status="show" content=inner%}
+
+        {% capture inner %}
+            <div class="content-wrap" id="top-20-container" style="text-align: left"></div>
+        {% endcapture %}
+        {% include collapse.html parent-id="accordion-times" id="top-20" title="Recent Top 20 World Records" content=inner%}
+
+        {% capture inner %}
+            <div class="content-wrap" id="top-100-container" style="text-align: left"></div>
+        {% endcapture %}
+        {% include collapse.html parent-id="accordion-times" id="top-100" title="Recent Top 100 World Records" content=inner%}
     </div>
 </div>

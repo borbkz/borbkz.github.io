@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>kz.gl</title>
     
-	<link href="/assets/css/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css"
 		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -33,7 +33,122 @@
   </ul>
 </nav>
 
-      
+      <script type="text/javascript" src="assets/js/global.js"></script>
+<div class="content-wrap">
+    <script type="text/javascript" src="assets/js/jumpstats.js"></script>
+    <div class="accordion" id="accordion-times">
+        
+        <div class="card">
+	<div class="card-header" id="global-jumpstats-header">
+		<h5 class="mb-0">
+			<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#global-jumpstats-body"
+				aria-expanded="true" aria-controls="global-jumpstats-body" id="expand-global-jumpstats">
+				<h4>Global Top 10 Jumpstats</h4>
+			</button>
+		</h5>
+	</div>
+	<div id="global-jumpstats-body" class="collapse"
+		aria-labelledby="global-jumpstats-header" data-parent="#accordion-times">
+		<div class="card-body">
+				
+        <div class="content-wrap">
+
+
+            <div class="inputSelection">
+
+                <div class="innerSelection">
+                    <input type="radio" id="globalBindRadio" name="globalBind" value="binded">Binded
+                    <input type="radio" id="globalNobindRadio" name="globalBind" value="unbinded">No
+                    Bind
+                    <input type="radio" id="globalBothRadio" name="globalBind" value="both" checked>Both
+                </div>
+
+                <div class="innerSelection">
+                    <input type="radio" id="globalLongjumpRadio" name="globalJumpstat" value="longjump" checked>Longjump
+                    <input type="radio" id="globalBhopRadio" name="globalJumpstat" value="bhop">Bunnyhop
+                    <input type="radio" id="globalMultihopRadio" name="globalJumpstat" value="multihop">Multihop
+                    <input type="radio" id="globalWeirdjumpRadio" name="globalJumpstat" value="weirdjump">Weirdjump
+                    <input type="radio" id="globalDropbhopRadio" name="globalJumpstat" value="dropbhop">Dropbhop
+                    <input type="radio" id="globalLadderjumpRadio" name="globalJumpstat" value="ladder">Ladder
+                    <input type="radio" id="globalCountjumpRadio" name="globalJumpstat" value="countjump">Countjump
+                </div>
+
+                <div class="innerSelection">
+                    <input type="button" id="globalJumpstatsButton" value="Fetch Jumpstat" />
+                </div>
+
+
+                <div id="globalJumpstatsContainer">
+                    <table class="global-table" id="jumpstatTable"></table>
+                </div>
+            </div>
+
+
+        </div>
+        
+		</div>
+	</div>
+</div>
+
+        
+        <div class="card">
+	<div class="card-header" id="personal-jumpstats-header">
+		<h5 class="mb-0">
+			<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#personal-jumpstats-body"
+				aria-expanded="true" aria-controls="personal-jumpstats-body" id="expand-personal-jumpstats">
+				<h4>Your Top 10 Jumpstats</h4>
+			</button>
+		</h5>
+	</div>
+	<div id="personal-jumpstats-body" class="show"
+		aria-labelledby="personal-jumpstats-header" data-parent="#accordion-times">
+		<div class="card-body">
+				
+        <div class="content-wrap">
+
+
+            <div class="inputSelection">
+
+                <div class="innerSelection">
+                    <input type="radio" id="bindRadio" name="bind" value="binded">Binded
+                    <input type="radio" id="nobindRadio" name="bind" value="unbinded">No Bind
+                    <input type="radio" id="bothRadio" name="bind" value="both" checked>Both
+                </div>
+
+                <div class="innerSelection">
+                    <input type="radio" id="longjumpRadio" name="jumpstat" value="longjump" checked>Longjump
+                    <input type="radio" id="bhopRadio" name="jumpstat" value="bhop">Bunnyhop
+                    <input type="radio" id="multihopRadio" name="jumpstat" value="multihop">Multihop
+                    <input type="radio" id="weirdjumpRadio" name="jumpstat" value="weirdjump">Weirdjump
+                    <input type="radio" id="dropbhopRadio" name="jumpstat" value="dropbhop">Dropbhop
+                    <input type="radio" id="ladderjumpRadio" name="jumpstat" value="ladder">Ladder
+                    <input type="radio" id="countjumpRadio" name="jumpstat" value="countjump">Countjump
+                </div>
+
+                <div class="innerSelection">
+
+                    <a href="https://steamid.io/lookup/">Steam ID Lookup</a>
+                    <input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
+
+                    <input type="button" id="localJumpstatsButton" value="Fetch Jumpstat" />
+                </div>
+
+
+                <div id="localJumpstatsContainer">
+                    <table class="local-table" id="jumpstatTable"></table>
+                </div>
+            </div>
+
+
+        </div>
+        
+		</div>
+	</div>
+</div>
+
+    </div>
+</div>
+
       <footer class="container">
 	<hr>
 	<div class="text-center center-block">
