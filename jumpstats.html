@@ -2,7 +2,6 @@
 title: kz.gl
 layout: default
 ---
-<script type="text/javascript" src="assets/js/global.js"></script>
 <div class="content-wrap">
     <script type="text/javascript" src="assets/js/jumpstats.js"></script>
     <div class="accordion" id="accordion-times">
@@ -34,7 +33,6 @@ layout: default
         </div>
         {% endcapture %}
         {% include collapse.html parent-id="accordion-times" id="global-jumpstats" title="Global Top 10 Jumpstats" content=inner%}
-
         {% capture inner %}
         <div class="content-wrap">
             <div class="inputSelection">
@@ -52,12 +50,7 @@ layout: default
                     <input type="radio" id="ladderjumpRadio" name="jumpstat" value="ladder">Ladder
                     <input type="radio" id="countjumpRadio" name="jumpstat" value="countjump">Countjump
                 </div>
-                <div class="innerSelection">
-                    <a href="https://steamid.io/lookup/">Steam ID Lookup</a>
-                    <input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
-                    <input type="button" id="localJumpstatsButton" value="Fetch Jumpstat" />
-                </div>
-
+                {% include steamid.html searchtip="Enter your SteamID" %}
                 <div id="localJumpstatsContainer">
                     <table class="local-table" id="jumpstatTable"></table>
                 </div>

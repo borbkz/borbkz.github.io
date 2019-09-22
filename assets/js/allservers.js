@@ -2,6 +2,7 @@ var globalTable;
 var difficultyArray = getDifficultyArray();
 var URI = getURIVars();
 var expandGlobaId = "#expand-allservers";
+var inputTip = "Enter your name or SteamID";
 $(document).ready(function () {
     var globalHeader = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
         "Server"
@@ -13,7 +14,6 @@ $(document).ready(function () {
         steamID = URI["steamid"];
         teleports = URI["teleports"]
         if (isValidSteamID(steamID)) {
-            console.log("RECEIVED " + steamID + " TELEPORTS " + teleports);
             //$(expandGlobalId).click(); //autoexpand if url linked by steamid
 
             $('#steamIDText').val(steamID);
@@ -52,7 +52,16 @@ $(document).ready(function () {
 
         var finishedGlobals = jQuery.extend(true, {}, difficultyArray); //deep copy
         var tempLimit = 500;
-        requestURL = "https://kztimerglobal.com/api/v1.0/records/top?steam_id=" + steamID +
+
+
+        var steamIDText = "";
+        if (isValidSteamID(steamID)) {
+            steamIDText = "steam_id=" + steamID;
+        } else if (steamID !== "" && steamID !== inputTip) {
+            //assume name was entered
+            steamIDText = "player_name=" + steamID;
+        }
+        requestURL = "https://kztimerglobal.com/api/v1.0/records/top?" + steamIDText +
             "&tickrate=128&stage=0&has_teleports=" + teleports + "&limit=" + tempLimit +
             "&modes_list_string=kz_timer";
 
@@ -63,15 +72,26 @@ $(document).ready(function () {
             }
             var maps = [];
 
+
+            //remember logic is flipped, has teleports = true means TP
+
             var playerName = sanitizeName(data[0]["player_name"]);
+            var steam_id = data[0]["steam_id"];
             var ispro = $('input[name=isprorun-radio]:checked').val();
             var runtype = "Pro Times";
-            if (ispro !== "proradio")
+            if (ispro !== "proradio") {
                 runtype = "TP Times";
+            }
 
 
-            $("#global-player-name").text(playerName + "'s " + runtype +
-                " Across All Servers");
+            localStorage.setItem("globalMapsSteamID", steam_id);
+            localStorage.setItem("globalMapsTeleports", teleports);
+
+            //set url to steamid and teleports for future use
+            window.history.pushState("object or string", "Title", "?steamid=" + steam_id + "&teleports=" +
+                teleports);;
+
+            $("#allservers-title").text(playerName + "'s " + runtype + " Across All Servers");
             $.each(data, function (i, field) {
 
                 var map = field["map_name"]
@@ -112,17 +132,17 @@ $(document).ready(function () {
 
 
             cols = [{}, //map name
-                {}, //tier
-                {}, //pro tier
-                {}, //length
-                {
-                    type: "time",
-                    timeFormat: "h:mm:ss"
-                },
-                {}, //tp
-                {}, //pts
-                {},
-                {} //server
+            {}, //tier
+            {}, //pro tier
+            {}, //length
+            {
+                type: "time",
+                timeFormat: "h:mm:ss"
+            },
+            {}, //tp
+            {}, //pts
+            {},
+            {} //server
             ];
             var spreadsheetContainer = $("#spreadsheet-global")[0];
 
@@ -144,29 +164,18 @@ $(document).ready(function () {
         }); //end json
     }
 
-    $("#getGlobalMapsButton").click(function () {
+    $("#steamButton").click(function () {
 
         var steamID = $('#steamIDText').val();
 
 
-        if (!isValidSteamID(steamID)) {
-            alert("invalid Steam ID!");
-            return;
-        }
 
-
-        //remember logic is flipped, has teleports = true means TP
-        ispro = $('input[name=isprorun-radio]:checked').val();
-        teleports = true;
+        var ispro = $('input[name=isprorun-radio]:checked').val();
+        var teleports = true;
         if (ispro === "proradio")
             teleports = false;
 
-        localStorage.setItem("globalMapsSteamID", steamID);
-        localStorage.setItem("globalMapsTeleports", teleports);
 
-        //set url to steamid and teleports for future use
-        window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&teleports=" +
-            teleports);;
         retrieveStats(steamID, teleports);
     });
 

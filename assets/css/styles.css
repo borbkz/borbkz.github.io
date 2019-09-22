@@ -45,7 +45,8 @@
      color: white;
      font-size: 16px;
      margin: 0px 10px;
-     min-width: 20px;
+     min-width: auto;
+     width: 240px;
      outline: none;
      padding: 4px 8px;
      text-align: center;
