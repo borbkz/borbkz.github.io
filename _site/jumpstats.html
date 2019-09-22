@@ -29,6 +29,7 @@
     <li><a href="/maps.html" >Maps</a></li>
     <li><a href="/jumpstats.html" class="active"
         >Jumpstats</a></li>
+    <li><a href="/world.html" >Record Distribution</a></li>
     
   </ul>
 </nav>
@@ -52,17 +53,13 @@
 		<div class="card-body">
 				
         <div class="content-wrap">
-
-
             <div class="inputSelection">
-
                 <div class="innerSelection">
                     <input type="radio" id="globalBindRadio" name="globalBind" value="binded">Binded
                     <input type="radio" id="globalNobindRadio" name="globalBind" value="unbinded">No
                     Bind
                     <input type="radio" id="globalBothRadio" name="globalBind" value="both" checked>Both
                 </div>
-
                 <div class="innerSelection">
                     <input type="radio" id="globalLongjumpRadio" name="globalJumpstat" value="longjump" checked>Longjump
                     <input type="radio" id="globalBhopRadio" name="globalJumpstat" value="bhop">Bunnyhop
@@ -72,18 +69,13 @@
                     <input type="radio" id="globalLadderjumpRadio" name="globalJumpstat" value="ladder">Ladder
                     <input type="radio" id="globalCountjumpRadio" name="globalJumpstat" value="countjump">Countjump
                 </div>
-
                 <div class="innerSelection">
                     <input type="button" id="globalJumpstatsButton" value="Fetch Jumpstat" />
                 </div>
-
-
                 <div id="globalJumpstatsContainer">
                     <table class="global-table" id="jumpstatTable"></table>
                 </div>
             </div>
-
-
         </div>
         
 		</div>
@@ -105,16 +97,12 @@
 		<div class="card-body">
 				
         <div class="content-wrap">
-
-
             <div class="inputSelection">
-
                 <div class="innerSelection">
                     <input type="radio" id="bindRadio" name="bind" value="binded">Binded
                     <input type="radio" id="nobindRadio" name="bind" value="unbinded">No Bind
                     <input type="radio" id="bothRadio" name="bind" value="both" checked>Both
                 </div>
-
                 <div class="innerSelection">
                     <input type="radio" id="longjumpRadio" name="jumpstat" value="longjump" checked>Longjump
                     <input type="radio" id="bhopRadio" name="jumpstat" value="bhop">Bunnyhop
@@ -124,28 +112,21 @@
                     <input type="radio" id="ladderjumpRadio" name="jumpstat" value="ladder">Ladder
                     <input type="radio" id="countjumpRadio" name="jumpstat" value="countjump">Countjump
                 </div>
-
                 <div class="innerSelection">
-
                     <a href="https://steamid.io/lookup/">Steam ID Lookup</a>
                     <input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
-
                     <input type="button" id="localJumpstatsButton" value="Fetch Jumpstat" />
                 </div>
-
 
                 <div id="localJumpstatsContainer">
                     <table class="local-table" id="jumpstatTable"></table>
                 </div>
             </div>
-
-
         </div>
         
 		</div>
 	</div>
 </div>
-
     </div>
 </div>
 

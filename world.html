@@ -1,0 +1,17 @@
+---
+title: world
+layout: default
+---
+{% capture worldrecords %}
+<div class="content-wrap">
+    <span>This is an experimental map based on outdated WR data from kzstats.com. <br> An updated version based on server location is in construction.</span>
+    <div id="svgContainer"></div>
+</div>
+{% endcapture %}
+		{% include collapse.html parent-id="accordion-times" id="worldmap" title="World Record Distribution by Country" content=worldrecords status="show" %}
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/queue.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<script src="assets/js/d3-tip.js"></script>
+<script src="assets/js/world.js"> </script>

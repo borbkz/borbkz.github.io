@@ -1,0 +1,186 @@
+{
+  "tp": [
+    {
+      "count": 101,
+      "playercountry": "The United States",
+      "playercountrycode": "USA",
+      "tick": 128
+    },
+    {
+      "count": 83,
+      "playercountry": "Germany",
+      "playercountrycode": "DEU",
+      "tick": 128
+    },
+    {
+      "count": 48,
+      "playercountry": "Australia",
+      "playercountrycode": "AUS",
+      "tick": 128
+    },
+    {
+      "count": 46,
+      "playercountry": "China",
+      "playercountrycode": "CHN",
+      "tick": 128
+    },
+    {
+      "count": 43,
+      "playercountry": "Sweden",
+      "playercountrycode": "SWE",
+      "tick": 128
+    },
+    {
+      "count": 35,
+      "playercountry": "Canada",
+      "playercountrycode": "CAN",
+      "tick": 128
+    },
+    {
+      "count": 29,
+      "playercountry": "Argentina",
+      "playercountrycode": "ARG",
+      "tick": 128
+    },
+    {
+      "count": 27,
+      "playercountry": "Norway",
+      "playercountrycode": "NOR",
+      "tick": 128
+    },
+    {
+      "count": 26,
+      "playercountry": "Finland",
+      "playercountrycode": "FIN",
+      "tick": 128
+    },
+    {
+      "count": 23,
+      "playercountry": "New Zealand",
+      "playercountrycode": "NZL",
+      "tick": 128
+    },
+    {
+      "count": 11,
+      "playercountry": "Spain",
+      "playercountrycode": "ESP",
+      "tick": 128
+    },
+    {
+      "count": 11,
+      "playercountry": "Estonia",
+      "playercountrycode": "EST",
+      "tick": 128
+    },
+    {
+      "count": 11,
+      "playercountry": "The Russian Federation",
+      "playercountrycode": "RUS",
+      "tick": 128
+    },
+    {
+      "count": 11,
+      "playercountry": "The United Kingdom",
+      "playercountrycode": "GBR",
+      "tick": 128
+    },
+    {
+      "count": 6,
+      "playercountry": "Belarus",
+      "playercountrycode": "BLR",
+      "tick": 128
+    }
+  ],
+  "pro": [
+    {
+      "count": 138,
+      "playercountry": "Sweden",
+      "playercountrycode": "SWE",
+      "tick": 128
+    },
+    {
+      "count": 80,
+      "playercountry": "The United States",
+      "playercountrycode": "USA",
+      "tick": 128
+    },
+    {
+      "count": 59,
+      "playercountry": "Australia",
+      "playercountrycode": "AUS",
+      "tick": 128
+    },
+    {
+      "count": 53,
+      "playercountry": "Finland",
+      "playercountrycode": "FIN",
+      "tick": 128
+    },
+    {
+      "count": 50,
+      "playercountry": "Germany",
+      "playercountrycode": "DEU",
+      "tick": 128
+    },
+    {
+      "count": 39,
+      "playercountry": "Canada",
+      "playercountrycode": "CAN",
+      "tick": 128
+    },
+    {
+      "count": 15,
+      "playercountry": "Norway",
+      "playercountrycode": "NOR",
+      "tick": 128
+    },
+    {
+      "count": 15,
+      "playercountry": "New Zealand",
+      "playercountrycode": "NZL",
+      "tick": 128
+    },
+    {
+      "count": 11,
+      "playercountry": "Argentina",
+      "playercountrycode": "ARG",
+      "tick": 128
+    },
+    {
+      "count": 11,
+      "playercountry": "The United Kingdom",
+      "playercountrycode": "GBR",
+      "tick": 128
+    },
+    {
+      "count": 8,
+      "playercountry": "Spain",
+      "playercountrycode": "ESP",
+      "tick": 128
+    },
+    {
+      "count": 7,
+      "playercountry": "The Russian Federation",
+      "playercountrycode": "RUS",
+      "tick": 128
+    },
+    {
+      "count": 6,
+      "playercountry": "Estonia",
+      "playercountrycode": "EST",
+      "tick": 128
+    },
+    {
+      "count": 5,
+      "playercountry": "Hungary",
+      "playercountrycode": "HUN",
+      "tick": 128
+    },
+    {
+      "count": 5,
+      "playercountry": "China",
+      "playercountrycode": "CHN",
+      "tick": 128
+    }
+  ]
+}

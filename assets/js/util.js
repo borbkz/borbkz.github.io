@@ -2,8 +2,10 @@
 var jumpLimit = 10,
 	jumpMin = 100;
 
-var difficultyJSON = "assets/json/maps.json";
-var headerJSON = "assets/json/header.json";
+const jsonPath = "assets/json/"
+const jsPath = "assets/js/"
+const difficultyJSON = jsonPath +"maps.json";
+const headerJSON = jsonPath + "header.json";
 
 var jumpBinds = ["bind", "nobind", "both"];
 var jumpstatsKey = {
