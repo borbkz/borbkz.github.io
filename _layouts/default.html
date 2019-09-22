@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+    {% include header.html %}
+  </head>
+  <body>
+    {% for item in site.section %}
+    <h1> item </h1>
+    {% endfor %}
+    <div class="page-container">
+      {% include navbar.html %}
+      {{ content }}
+      {% include footer.html %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+<div class="card">
+	<div class="card-header" id="{{ include.id }}-header">
+		<h5 class="mb-0">
+			<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#{{ include.id }}-body"
+				aria-expanded="true" aria-controls="{{ include.id }}-body" id="expand-{{ include.id }}">
+				<h4>{{ include.title }}</h4>
+			</button>
+		</h5>
+	</div>
+	<div id="{{ include.id }}-body" class="{% if include.status == 'show' %}show{% else %}collapse{% endif %}"
+		aria-labelledby="{{ include.id }}-header" data-parent="#{{ include.parent-id }}">
+		<div class="card-body">
+			<div class="content-wrap" id="{{ include.id }}-container" style="text-align: left">
+				{{ include.server-times }}
+			</div>
+		</div>
+	</div>
+</div>

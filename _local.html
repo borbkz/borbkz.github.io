@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<head>
+	<title>Borb's KZ</title>
+
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css"
+		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="styles/styles.css?v=2">
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js">
+	</script>
+	<script type="text/javascript" src="utils/util.js?v=2"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+	</script>
+
+	<script>
+		var globalTable;
+		var difficultyArray = getDifficultyArray();
+		var URI = getURIVars();
+		$(document).ready(function () {
+			var globalHeader = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
+				"Server"
+			];
+			var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
+
+			var steamID = "";
+			if (typeof URI["steamid"] !== 'undefined' && URI["teleports"] !== 'undefined') {
+				steamID = URI["steamid"];
+				teleports = URI["teleports"]
+				if (isValidSteamID(steamID)) {
+					console.log("RECEIVED " +  steamID + " TELEPORTS " + teleports);
+					$("#expandGlobal").click(); //autoexpand if url linked by steamid
+
+					$('#steamIDText').val(steamID);
+					var teleportsBool = "true" === teleports;
+
+					retrieveStats(steamID, teleportsBool);
+					if (teleportsBool) {
+						$('#tpradio').click();
+					} else {
+						$('#tpradio').click();
+					}
+
+
+				}
+			} else {
+				var steamID = localStorage.getItem("globalMapsSteamID");
+				var teleportsBool = "true" === localStorage.getItem(
+				"globalMapsTeleports"); //convert string to boolean
+				if (isValidSteamID(steamID)) {
+					$('#steamIDText').val(steamID);
+					if (teleportsBool) {
+						$('#tpradio').click();
+					} else {
+						$('#tpradio').click();
+					}
+
+					$("#expandGlobal").click(); //autoexpand if url linked by steamid
+					retrieveStats(steamID, teleportsBool);
+				}
+
+			}
+
+			function retrieveStats(steamID, teleports) {
+				//temp max limit based on ~440 maps, eventually should change to indexdb storage 
+				//so you dont fetch every map all the time, and just fetch the latest runs
+
+				var finishedGlobals = jQuery.extend(true, {}, difficultyArray);//deep copy
+				var tempLimit = 500;
+				requestURL = "https://kztimerglobal.com/api/v1.0/records/top?steam_id=" + steamID +
+					"&tickrate=128&stage=0&has_teleports=" + teleports + "&limit=" + tempLimit +
+					"&modes_list_string=kz_timer";
+
+				$.getJSON(requestURL, function (data) {
+					if (data.length == 0) {
+						alert("No Times Found for " + steamID);
+						return true;
+					}
+					var maps = [];
+
+					var playerName = sanitizeName(data[0]["player_name"]);
+					var ispro = $('input[name=isprorun-radio]:checked').val();
+					var runtype = "Pro Times";
+					if (ispro !== "proradio")
+						runtype = "TP Times";
+
+
+					$("#global-player-name").text(playerName + "'s " + runtype +
+						" Across All Servers");
+					$.each(data, function (i, field) {
+
+						var map = field["map_name"]
+						//server is sometimes null, and throws exception
+						var tptier = "N/A",
+							protier = "N/A",
+							length = "N/A",
+							time = "N/A",
+							teleports = "N/A",
+							points = "N/A",
+							date = "N/A",
+							server = "N/A";
+						if (map in finishedGlobals) {
+
+							//flag to see if map is finished, most of the new death maps have not been added to global api
+							finishedGlobals[map].push("finished");
+
+							tptier = difficultyArray[field["map_name"]][0];
+							protier = difficultyArray[field["map_name"]][1];
+							length = difficultyArray[field["map_name"]][2];
+							time = getTimeFromSeconds(field["time"]);
+							teleports = field["teleports"];
+							points = field["points"];
+							date = field["updated_on"];
+							if (typeof field["server_name"] === "string") {
+								server = field["server_name"].substring(0, 35);
+							}
+
+						}
+						var statRow = [map, tptier, protier, length,
+							time, teleports, points, date, server
+						];
+						maps.push(statRow);
+						//createTable(maps, header);
+
+
+					}); //.each
+
+
+					cols = [{}, //map name
+						{}, //tier
+						{}, //pro tier
+						{}, //length
+						{
+							type: "time",
+							timeFormat: "h:mm:ss"
+						},
+						{}, //tp
+						{}, //pts
+						{},
+						{} //server
+					];
+					var spreadsheetContainer = $("#spreadsheet-global")[0];
+
+					for (var map in finishedGlobals) {
+						if (finishedGlobals[map].length < 4) {
+							unfinished = Array(globalHeader.length).fill("N/A");
+							unfinished[0] = map;
+							unfinished[1] = finishedGlobals[map][0]; //tp tier
+							unfinished[2] = finishedGlobals[map][1]; //pro tier
+							unfinished[3] = finishedGlobals[map][2]; //length
+							maps.push(unfinished);
+						}
+
+					}
+					if (globalTable)
+						globalTable.destroy();
+
+					globalTable = genTable(spreadsheetContainer, maps, globalHeader, [0,4, 8], cols);
+				}); //end json
+			}
+
+			$("#getGlobalMapsButton").click(function () {
+
+				var steamID = $('#steamIDText').val();
+
+
+				if (!isValidSteamID(steamID)) {
+					alert("invalid Steam ID!");
+					return;
+				}
+
+
+				//remember logic is flipped, has teleports = true means TP
+				ispro = $('input[name=isprorun-radio]:checked').val();
+				teleports = true;
+				if (ispro === "proradio")
+					teleports = false;
+
+				localStorage.setItem("globalMapsSteamID", steamID);
+				localStorage.setItem("globalMapsTeleports", teleports);
+
+				//set url to steamid and teleports for future use
+				window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&teleports=" +
+					teleports);;
+				retrieveStats(steamID, teleports);
+			});
+
+
+		});
+	</script>
+
+	<script>
+		/*
+		* yeah I pretty much just copy paste the global code, will refactor later
+		* deal with it
+		*/
+		var localHeader = ["Map", "Tier", "Pro Tier", "Length", "TP Time", "Teleports", "TP Rank", "Pro Time",
+			"Pro Teleports", "Pro Rank"
+		];
+		var plugin;
+		var localTable;
+		var finishedLocals;
+		$(document).ready(function () {
+			var beginOffset = 2;
+
+			$("#downloadButton").click(function () {
+				var csvText = localHeader.join(",") + "\r\n";
+				if (typeof outputBuffer !== 'undefined') {
+					for (var i = 0; i < outputBuffer.length; i++)
+						csvText += outputBuffer[i];
+				}
+				this.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(csvText);
+			});
+			$("#convertButton").click(function () {
+				var textIn = $("#inputMapsTextArea");
+				//var textOut = $("#outputMapsTextArea");
+					finishedLocals = jQuery.extend(true, {}, difficultyArray);//deep copy
+
+				$.each(textIn.val().split("\n"), function (i, line) {
+					if (!(/.+,.+,.+,.+$/.test(line))) {
+						return true;
+					}
+					mapInfo = line.split(",");
+					//[mapname][difficulty, TP time, TP Teleports, TP Rank, Pro time, PRO teleports, Pro Rank]		 
+					offset = beginOffset + (mapInfo[1].includes("(PRO)") ? 3 :
+						0);
+					mapName = mapInfo[0];
+
+					if (mapName in finishedLocals) {
+						writeToArray(mapInfo, finishedLocals[mapName], offset);
+					} else {
+						temp = [finishedLocals[mapName]];
+						writeToArray(mapInfo, temp, offset);
+						finishedLocals[mapName] = temp;
+					}
+
+
+				});
+
+				function writeToArray(arrIn, arrOut, offset) {
+					for (var i = 1; i < 4; i++) {
+						arrOut[i + offset] = arrIn[i].replace(/Time: /g, '').replace(/Teleports: /g, '')
+							.replace(/Rank: /g, '');
+					}
+				}
+				printAllMaps();
+
+
+				function printAllMaps() {
+
+					var outputBuffer = [""];
+					var tableBuffer = [];
+					for (var map in finishedLocals) {
+
+						line = map + ", " + finishedLocals[map];
+						outputBuffer.push(map + ", " + finishedLocals[map] + "\n");
+
+						length = finishedLocals[map].length;
+						row = line.split(",");
+
+						for (var i = length; i < (localHeader.length - 1); i++) {
+							row.push("");
+						}
+						tableBuffer.push(row);
+
+					}
+					var spreadsheetContainer = $("#spreadsheet-local")[0];
+
+					var cols = [{}, //map name
+						{}, //tier
+						{}, //pro tier
+						{}, //length
+						{
+							type: "time",
+							timeFormat: "h:mm:ss"
+						},
+						{}, //tp
+						{}, //tp rank
+						{
+							type: "time",
+							timeFormat: "h:mm:ss"
+						},
+						{}, //pro teleports
+						{} //pro rank
+					];
+					//filters for map, tp&pro tiers, length, tp& pro times
+
+					if (localTable) {
+						localTable.destroy();
+					}
+
+					localTable = genTable(spreadsheetContainer, tableBuffer, localHeader, [0], cols);
+
+					plugin = localTable.getPlugin('hiddenColumns');
+
+					//if (typeof mapTable !== "undefined")
+					//mapTable.updateSettings({ data: [] }); //clear table after click
+				}
+
+
+			}); //end click
+		}); //end ready
+	</script>
+
+
+</head>
+
+<body>
+
+	<div class="page-container">
+
+
+		<ul>
+			<li><a href="index.html">Global Times</a></li>
+			<li><a class="active" href="local.html">Your Times</a></li>
+			<li><a href="maps.html">Maps</a></li>
+			<li><a href="jumpstats.html">Jumpstats</a></li>
+		</ul>
+		<div class="content-wrap">
+
+
+
+			<div class="accordion" id="accordion-times">
+				<div class="card">
+					<div class="card-header" id="headingGlobal">
+						<h5 class="mb-0">
+							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+								aria-expanded="true" aria-controls="collapseOne" id="expandGlobal">
+								<h4 id="global-player-name">Your Times Across All Servers</h4>
+							</button>
+						</h5>
+					</div>
+
+					<div id="collapseOne" class="collapse" aria-labelledby="headingGlobal"
+						data-parent="#accordion-times">
+						<div class="card-body">
+
+							<div class="content-wrap">
+								<div class="innerSelection">
+									<a href="https://steamid.io/lookup/">Steam ID Lookup</a>
+									<input type="text" id="steamIDText" name="steamID" Value="Enter your SteamID" />
+									<input type="button" id="getGlobalMapsButton" value="Fetch Times" />
+								</div>
+
+								<div class="inputSelection">
+									<div class="innerSelection">
+										<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio"
+											checked>TP Runs
+										<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro
+										Runs
+									</div>
+
+								</div>
+
+
+								<div id="table-container">
+									<div class="table-tips"></div>
+									<div class="handsontable" id="spreadsheet-global"> </div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header" id="headingLocal">
+						<h5 class="mb-0">
+							<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+								data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+								id="expandLocal">
+								<h4>Your Local Server Times</h4>
+							</button>
+						</h5>
+					</div>
+					<div id="collapseTwo" class="collapse" aria-labelledby="headingLocal"
+						data-parent="#accordion-times">
+						<div class="card-body">
+
+							<div class="content-wrap">
+
+
+
+								<div class="textDiv">
+
+
+									<textarea rows="7" cols="100" id="inputMapsTextArea">
+On any KZTimer enabled server, type !profile in the chat and select "finished maps".
+Copy and paste your times from the console here.
+
+Example:
+kz_beginnerblock_go, Time: 00:59.59 (TP), Teleports: 0, Rank: 1/2
+kz_beginnerblock_go, Time: 01:59.59 (PRO), Teleports: 0, Rank: 1/2
+kz_spacemario_h, Time: 09:59.99 (PRO), Teleports: 4, Rank: 99/100
+</textarea>
+
+									<div class="inputSelection">
+
+										<div class="innerSelection">
+											<button id="convertButton">Fetch Times</button>
+											<a id="downloadButton" href=""
+												download="kzmaps.csv"><button>Download</button></a>
+
+										</div>
+									</div>
+
+									<div id="table-container">
+										<div class="table-tips"></div>
+										<div class="handsontable" id="spreadsheet-local"> </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<footer class="container">
+			<hr>
+			<div class="text-center center-block">
+				<a href="https://github.com/borbkz"><i id="social-github"
+						class="fa fa-github-square fa-3x social"></i></a>
+				<a href="https://steamcommunity.com/id/borbkz"><i id="social-steam"
+						class="fa fa-steam-square fa-3x social"></i></a>
+				<a href="mailto:borbkz@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+			</div>
+
+		</footer>
+
+
+
+
+
+	</div>
+</body>
+
+</html>

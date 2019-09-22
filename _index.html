@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<head>
+	<title>Borb's KZ</title>
+
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css"
+		href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="styles/styles.css?v=2">
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js">
+	</script>
+	<script type="text/javascript" src="utils/util.js?v=2"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+	</script>
+
+
+
+</head>
+
+<body>
+
+	<div class="page-container">
+
+
+		<ul>
+			<li><a class="active" href="index.html">Global Times</a></li>
+			<li><a href="local.html">Your Times</a></li>
+			<li><a href="maps.html">Maps</a></li>
+			<li><a href="jumpstats.html">Jumpstats</a></li>
+		</ul>
+		<div class="content-wrap">
+
+
+
+			<div class="accordion" id="accordion-times">
+				<div class="card">
+					<div class="card-header" id="headingGlobal">
+						<h5 class="mb-0">
+							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+								aria-expanded="true" aria-controls="collapseOne" id="expandTop1">
+								<h4 id="global-player-name">Recent Global World Records</h4>
+							</button>
+						</h5>
+					</div>
+
+					<div id="collapseOne" class="show" aria-labelledby="headingGlobal" data-parent="#accordion-times">
+						<div class="card-body">
+
+							<div class="content-wrap" id="top-1-container" style="text-align: left">
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header" id="headingTop20">
+						<h5 class="mb-0">
+							<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+								data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+								id="expandTop20">
+								<h4>Recent Global Top 20 Times</h4>
+							</button>
+						</h5>
+					</div>
+					<div id="collapseTwo" class="collapse" aria-labelledby="headingLocal"
+						data-parent="#accordion-times">
+						<div class="card-body">
+
+							<div class="content-wrap" id="top-20-container" style="text-align:left">
+
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header" id="headingTop100">
+						<h5 class="mb-0">
+							<button class="btn btn-link" type="button" data-toggle="collapse"
+								data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"
+								id="expandTop100">
+								<h4 id="global-player-name">Recent Global Top 100 Times</h4>
+							</button>
+						</h5>
+					</div>
+
+					<div id="collapseThree" class="collapse" aria-labelledby="headingGlobal"
+						data-parent="#accordion-times">
+						<div class="card-body">
+
+							<div class="content-wrap" id="top-100-container" style="text-align:left">
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<footer class="container">
+			<hr>
+			<div class="text-center center-block">
+				<a href="https://github.com/borbkz"><i id="social-github"
+						class="fa fa-github-square fa-3x social"></i></a>
+				<a href="https://steamcommunity.com/id/borbkz"><i id="social-steam"
+						class="fa fa-steam-square fa-3x social"></i></a>
+				<a href="mailto:borbkz@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+			</div>
+
+		</footer>
+
+
+
+
+
+	</div>
+</body>
+
+</html>

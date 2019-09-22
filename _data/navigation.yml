@@ -1,0 +1,8 @@
+- name: Global Times
+  link: /
+- name: Your Times
+  link: /local.html
+- name: Maps
+  link: /maps.html
+- name: Jumpstats
+  link: /jumpstats.html
