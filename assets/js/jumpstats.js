@@ -96,6 +96,8 @@ $(document).ready(function () {
 			var jumpstatType = jumpstatsKey[data[0]["jump_type"]];
 			if (isbinded === "both")
 				isbinded = "";
+
+			var first = true;
 			$.each(data, function (i, field) {
 
 				var server = "N/A";
@@ -104,6 +106,18 @@ $(document).ready(function () {
 				var steam_id = sanitizeName(field["steam_id"]);
 				var distance = field["distance"];
 
+				//filter out any non-whitelisted WR's
+				if(first){
+
+					if(steam_id in whitelist){
+
+						player = whitelist[steam_id];
+						first = false;
+					}else{
+						return true;
+					}
+
+				}
 
 				if (serverID in servers) {
 					server = servers[serverID];
@@ -126,7 +140,6 @@ $(document).ready(function () {
 					highestStat = distance;
 					jumpstats.push(statRow);
 				} else {
-					console.log("distance " + distance + " highest stat " + highestStat )
 					//if not in whitelist but not WR either...
 					if (distance < highestStat || highestStat == 0) {
 						jumpstats.push(statRow);
