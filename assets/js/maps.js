@@ -8,6 +8,7 @@ var colorArray = {
     "dropdown": "purple",
     "drop": "red",
     "strafeheavy": "red",
+    "bhop": "lightgreen",
     "chain": "orange", //chain has precedence, has to be first
     "ladder": "yellow",
     "surf": "cyan",
@@ -28,6 +29,8 @@ var colorArray = {
     "block": "red",
     "prekeep": "red",
     "crouchjump": "red",
+    "climb": "white",
+    "combo": "white",
     "other": "lightgrey"
 }
 function getMapArray() {
@@ -93,13 +96,15 @@ function getMapArray() {
         var maxLength = 0;
         var minLength = 1000;
         for (tag in tagsArray) {
-            var tagLength = tagsArray[tag].length;
+            //ugly hack will fix later
+
+            var tagLength = Math.min(40, tagsArray[tag].length);
             if (tagLength > maxLength)
                 maxLength = tagLength;
 
             if (tagLength < minLength)
                 minLength = tagLength;
-
+            
             wordArray.push({ text: tag, length: tagLength, maps: tagsArray[tag] });
         }
 
