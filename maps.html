@@ -3,6 +3,9 @@ title: kz.gl
 layout: default
 ---
 <div class="content-wrap">
+    <script type="text/javascript" src="assets/js/maps.js?{{site.time | date: '%s%N'}}"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="assets/js/d3.layout.cloud.js?{{site.time | date: '%s%N'}}"> </script>
     <script>
         $(document).ready(function () {
 
@@ -10,15 +13,11 @@ layout: default
         });
     </script>
 
-    <div class="accordion" id="accordion-times">
-        {% capture inner %}
         <div class="content-wrap">
             <div id="table-container">
                 <div class="table-tips"></div>
                 <div class="handsontable" id="spreadsheet"> </div>
             </div>
         </div>
-        {% endcapture %}
-        {% include collapse.html parent-id="accordion-times" id="map-info" title="Choose Your Next Map (Under Construction)" status="show" content=inner%}
     </div>
 </div>

@@ -1,22 +1,54 @@
 
+//over 20 violates CORS wtf
+var jumpLimit = 20,
+	jumpMin = 100,
+	jumpMax = 290;
 var requestSteamID = "steam_id=";
-var requestJumpType = "&jumptype=";
-var requestLimit = "&limit=" + jumpLimit;
-var requestMinimum = "&greater_than_distance=" + jumpMin;
+var requestJumpType = "jumptype=";
+var requestLimit = "limit=";
+var requestMaximum = "less_than_distance=";
 
-var requestBind = "&is_crouch_bind=";
+var requestBind = "is_crouch_bind=";
+//two different ways of getting top jumpstats, using /jumpstat/jumpstattype/ seems to root out cheated stats
 var jumpstatsPBURLBase = "https://kztimerglobal.com/api/v1.0/jumpstats?";
+var jumpstatsGlobalURLBase = "https://kztimerglobal.com/api/v1.0/jumpstats/";
 var globalTable;
 var personalTable;
 var steamID = "";
 
 var inputTip = "Enter Your SteamID"
+
+var whitelist;
+
+//global jumpstat names are not necessarily the same
+//ex: ladder vs ladderjump
+//translation table 
+//jumpstat: [max limit, global jumpstat name]
+var jumpstatTable = {
+	longjump: [295, "longjump"],
+	bhop: [360, "bhop"],
+	multihop: [370, "multibhop"],
+	dropbhop: [350, "dropbhop"],
+	weirdjump: [310, "weirdjump"],
+	ladder: [215, "ladderjump"],
+	countjump: [315, "countjump"]
+}
+
+var topstats = {};
 $(document).ready(function () {
 	var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
 
 
 	var localContainer = $("#localJumpstatsContainer")[0];
 	var globalContainer = $("#globalJumpstatsContainer")[0];
+
+	$.getJSON(jsonPath + "jumpstats_whitelist.json",
+		function (data) {
+			whitelist = data;
+
+		}
+	);
+
 	URI = getURIVars();
 	if (typeof URI["steamid"] !== 'undefined' && typeof URI["jumptype"] !== 'undefined') {
 		steamID = URI["steamid"];
@@ -53,11 +85,12 @@ $(document).ready(function () {
 		$.getJSON(requestURL, function (data) {
 
 			if (data.length == 0) {
-				alert("No Stats for " + steamID);
+				alert("No Stats Obtained");
 				return true;
 			}
 			var jumpstats = [];
 			var servers = {};
+			var highestStat = 0;
 			var playerName = sanitizeName(data[0]["player_name"]);
 			var isbinded = $('input[name=bind]:checked').val();
 			var jumpstatType = jumpstatsKey[data[0]["jump_type"]];
@@ -65,8 +98,12 @@ $(document).ready(function () {
 				isbinded = "";
 			$.each(data, function (i, field) {
 
-				server = "N/A";
-				serverID = field["server_id"];
+				var server = "N/A";
+				var serverID = field["server_id"];
+				var player = sanitizeName(field["player_name"]);
+				var steam_id = sanitizeName(field["steam_id"]);
+				var distance = field["distance"];
+
 
 				if (serverID in servers) {
 					server = servers[serverID];
@@ -76,19 +113,31 @@ $(document).ready(function () {
 					servers[serverID] = server.substring(0, 25);
 
 				}
-				var statRow = [sanitizeName(field["player_name"]), jumpstatType,
-				field["distance"], field[
-				"strafe_count"],
-				field["is_crouch_bind"] ? "Yes" : "No", field[
-				"created_on"],
+				var statRow = [player, jumpstatType,
+					distance, field[
+					"strafe_count"],
+					field["is_crouch_bind"] ? "Yes" : "No", field[
+					"created_on"],
 					server
 				];
-				jumpstats.push(statRow);
 
-				createTable(jumpstats, header, container)
 
+				if (steam_id in whitelist && distance > highestStat) {
+					highestStat = distance;
+					jumpstats.push(statRow);
+				} else {
+					console.log("distance " + distance + " highest stat " + highestStat )
+					//if not in whitelist but not WR either...
+					if (distance < highestStat || highestStat == 0) {
+						jumpstats.push(statRow);
+					}
+
+				}
 
 			});
+
+
+			createTable(jumpstats, header, container)
 
 		}); //end json
 	}
@@ -97,7 +146,7 @@ $(document).ready(function () {
 
 		var steamID = $('#steamIDText').val().trim();
 
-		if (steamID!==inputTip && !isValidSteamID(steamID)) {
+		if (steamID !== inputTip && !isValidSteamID(steamID)) {
 			alert("Please enter a valid Steam ID or leave empty to fetch global jumpstats!");
 			return;
 		}
@@ -123,30 +172,50 @@ $(document).ready(function () {
 		retrieveStats(getRequestURL("", jumpstatType, isbinded), globalContainer);
 	});
 
-	function getRequestURL(steamID, jumpstatType, binded) {
+	function getRequestURL(steamID, jumpstatType, binded, reqLimit) {
+		if (typeof reqLimit === "undefined")
+			reqLimit = jumpLimit;
 
-		requestBindURI = requestBind;
-		if (binded === "both")
+		var requestBindURI = requestBind + "false";
+		var globalRequestBindURI = "";
+		if (binded === "both") {
 			requestBindURI = "";
-		else if (binded === "binded")
+		} else if (binded === "binded") {
 			requestBindURI = requestBind + "true";
-		else
-			requestBindURI = requestBind + "false";
-
-		steamParam = ""; //empty steamid parameter will fetch top global stats instead
-		if (isValidSteamID(steamID)){
-			steamParam = requestSteamID + steamID;
-		} else if(steamID !== inputTip){
-			//if not valid steamid assume it's a steam name
-			steamParam = "player_name=" + steamID;
-
+			globalRequestBindURI = "is_crouch_boost=true&";
 		}
 
-		var requestURL = jumpstatsPBURLBase +
-			steamParam +
-			requestJumpType + jumpstatType +
-			requestBindURI +
-			requestMinimum + requestLimit;
+		if(jumpstatType === "ladder"){
+			requestBindURI = requestBind + "false";
+			globalRequestBindURI = "is_crouch_boost=false&";
+		}
+
+		steamParam = ""; //empty steamid parameter will fetch top global stats instead
+		if (isValidSteamID(steamID)) {
+			steamParam = requestSteamID + steamID;
+		}
+
+		//URL format for personal stats: "https://kztimerglobal.com/api/v1.0/jumpstats?steam_id=<STEAMID>&jumptype=...
+		var playerRequestURL = jumpstatsPBURLBase +
+			steamParam + '&' +
+			requestJumpType + jumpstatType + '&' +
+			requestBindURI + '&' +
+			requestMaximum + jumpstatTable[jumpstatType][0] + '&' +
+			requestLimit + reqLimit;
+
+		//URL format for top stats: "https://kztimerglobal.com/api/v1.0/jumpstats/jumptype/top?..."
+		//jumpstat type must be converted to right name first
+		var globalRequestURL = jumpstatsGlobalURLBase +
+			jumpstatTable[jumpstatType][1] + "/top?" +
+			globalRequestBindURI +
+			requestMaximum + jumpstatTable[jumpstatType][0] + '&' +
+			requestLimit + reqLimit;
+
+		//if steamid is empty, use global jumpstat request string
+		if (steamID === "")
+			requestURL = globalRequestURL;
+		else
+			requestURL = playerRequestURL;
 
 		return requestURL;
 

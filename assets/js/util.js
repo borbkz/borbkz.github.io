@@ -15,6 +15,7 @@ var jumpstatsKey = {
 	6: "countjump",
 	7: "ladder",
 }
+
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 
 
@@ -27,42 +28,6 @@ function getHeaderArray() {
 
 }
 
-function getMapArray() {
-	var maps = [];
-	var mapKeys = {
-		"Map": 0,
-		"Tier": 1,
-		"Pro Tier": 2,
-		"Length": 3,
-		"Strafe": 4,
-		"Bhop": 5,
-		"Ladder": 6,
-		"Surf": 7,
-		"Tech": 8,
-	}
-	$.getJSON(difficultyJSON, function (data) {
-
-            var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
-            var cols = Array(header.length).fill({});
-            var spreadsheetContainer = $("#spreadsheet")[0];
-
-		$.each(data, function (i, field) {
-			map = field[mapKeys["Map"]];
-			tier = field[mapKeys["Tier"]];
-			protier = field[mapKeys["Pro Tier"]];
-			length = field[mapKeys["Length"]];
-			strafe = field[mapKeys["Strafe"]];
-			bhop = field[mapKeys["Bhop"]];
-			ladder = field[mapKeys["Ladder"]];
-			surf = field[mapKeys["Surf"]];
-			tech = field[mapKeys["Tech"]];
-			maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
-		});
-            genTable(spreadsheetContainer, maps, header, [0], cols);
-
-	}); //end json
-
-}
 function getDifficultyArray() {
 	var difficultyArray = {};
 	var mapKeys = {

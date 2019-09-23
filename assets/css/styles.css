@@ -427,3 +427,10 @@
      width: 800px;
      height: 600px;
  }
+
+
+/*for svg text tags*/
+ text{
+     cursor: pointer;
+
+ }

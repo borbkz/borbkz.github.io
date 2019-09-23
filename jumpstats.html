@@ -26,14 +26,15 @@ layout: default
                 <div class="innerSelection">
                     <input type="button" id="globalJumpstatsButton" value="Fetch Jumpstat" />
                 </div>
+                <span>World Records are whitelisted to filter out cheated or bugged jumpstats. If you have a legit WR and do not see it here, please contact me.</span>
                 <div id="globalJumpstatsContainer">
                     <table class="global-table" id="jumpstatTable"></table>
                 </div>
             </div>
         </div>
         {% endcapture %}
-        {% include collapse.html parent-id="accordion-times" id="global-jumpstats" title="Global Top 10 Jumpstats" content=inner%}
-        {% capture inner %}
+        {% include collapse.html parent-id="accordion-times" id="global-jumpstats" title="Global Top Jumpstats" content=inner%}
+        {% capture inner2 %}
         <div class="content-wrap">
             <div class="inputSelection">
                 <div class="innerSelection">
@@ -57,6 +58,6 @@ layout: default
             </div>
         </div>
         {% endcapture %}
-        {% include collapse.html parent-id="accordion-times" id="personal-jumpstats" title="Your Top 10 Jumpstats" status="show" content=inner%}
+        {% include collapse.html parent-id="accordion-times" id="personal-jumpstats" title="Your Top Jumpstats" status="show" content=inner2 %}
     </div>
 </div>
