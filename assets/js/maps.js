@@ -4,11 +4,11 @@ var tagContainer = $("#svgContainer");
 
 
 var colorArray = {
+    "chain": "orange", //chain has precedence, has to be first
     "180 tech surf": "purple",
     "dropdown": "purple",
     "drop": "red",
     "strafeheavy": "red",
-    "chain": "orange", //chain has precedence, has to be first
     "ladder": "yellow",
     "surf": "cyan",
     "slide": "cyan",
