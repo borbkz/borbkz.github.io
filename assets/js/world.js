@@ -7,8 +7,8 @@ var tip = d3.tip()
     .html(function (d) {
         return "<div style='text-align: left'><strong>Country: </strong><span class='details'>" + d.properties.name + "<br></span>" +
             "<strong>Total WRs: </strong><span class='details'>" + format(d.totalRecords) + "<br></span>"+
-            "<strong>Pro WRs: </strong><span class='details'>" + format(d.proRecords) + "<br></span>"+
-            "<strong>TP WRs: </strong><span class='details'>" + format(d.tpRecords) + "</span></div>";
+            "<strong>Pro: </strong><span class='details'>" + format(d.proRecords) + "&nbsp;&nbsp;</span>"+
+            "<strong>TP: </strong><span class='details'>" + format(d.tpRecords) + "</span></div>";
     })
 
     width = 800;
@@ -16,7 +16,7 @@ var tip = d3.tip()
 
 var color = d3.scaleThreshold()
     .domain([0, 10, 15, 25, 50, 75, 100, 150, 200, 300])
-    .range(["rgb(15,50,90)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)",
+    .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)",
         "rgb(66,146,198)", "rgb(33,113,181)", "rgb(8,81,156)", "rgb(8,48,107)", "rgb(3,19,43)"
     ]);
 

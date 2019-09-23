@@ -89,6 +89,12 @@
       "playercountry": "Belarus",
       "playercountrycode": "BLR",
       "tick": 128
+    },
+	{
+      "count": 10,
+      "playercountry": "BRAZIL",
+      "playercountrycode": "BRA",
+      "tick": 128
     }
   ],
   "pro": [
@@ -180,6 +186,12 @@
       "count": 5,
       "playercountry": "China",
       "playercountrycode": "CHN",
+      "tick": 128
+    },
+	    {
+      "count": 10,
+      "playercountry": "Brazil",
+      "playercountrycode": "BRA",
       "tick": 128
     }
   ]

@@ -4,11 +4,18 @@ layout: default
 ---
 {% capture worldrecords %}
 <div class="content-wrap">
-    <span>This is an experimental map based on outdated WR data from kzstats.com. <br> An updated version based on server location is in construction.</span>
+    <span>This is an experimental map based on outdated WR data from kzstats.com. If your country is not represented do not panic. <br> An updated version based on server location is in construction.</span>
     <div id="svgContainer"></div>
+    <div style="width:250px; text-align:left; margin: 0 auto; ">
+            <div style='display: inline-block; background-color: rgb(4,27,75); height: 20px; width: 20px; margin: 0; margin-right: 5px'></div> KZ World Powers<br>
+            <div style='display: inline-block; background-color: rgb(8,81,156); height: 20px; width: 20px; margin: 0; margin-right: 5px'></div> ≤ 100 records<br>
+            <div style='display: inline-block; background-color: rgb(66,146,198); height: 20px; width: 20px; margin: 0; margin-right: 5px'></div> ≤ 50 records<br>
+            <div style='display: inline-block; background-color: rgb(158,202,225); height: 20px; width: 20px; margin: 0; margin-right: 5px'></div> ≤ 25 records<br>
+            <div style='display: inline-block; background-color: rgb(247,251,255); height: 20px; width: 20px; margin: 0; margin-right: 5px'></div> 0 records 
+    </div>
 </div>
 {% endcapture %}
-		{% include collapse.html parent-id="accordion-times" id="worldmap" title="World Record Distribution by Country" content=worldrecords status="show" %}
+        {% include collapse.html parent-id="accordion-times" id="worldmap" title="World Record Distribution by Country" content=worldrecords status="show" %}
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/queue.v1.min.js"></script>

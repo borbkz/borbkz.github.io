@@ -5,14 +5,8 @@ layout: default
 <div class="content-wrap">
     <script>
         $(document).ready(function () {
-            var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
-            cols = Array(header.length).fill({});
-            var spreadsheetContainer = $("#spreadsheet")[0];
-
-            $.getJSON(); //??
 
             myMaps = getMapArray();
-            genTable(spreadsheetContainer, myMaps, header, [0], cols);
         });
     </script>
 

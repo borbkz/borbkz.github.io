@@ -1,6 +1,4 @@
 
-var jumpLimit = 10,
-	jumpMin = 100;
 
 const jsonPath = "assets/json/"
 const jsPath = "assets/js/"
@@ -44,6 +42,10 @@ function getMapArray() {
 	}
 	$.getJSON(difficultyJSON, function (data) {
 
+            var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
+            var cols = Array(header.length).fill({});
+            var spreadsheetContainer = $("#spreadsheet")[0];
+
 		$.each(data, function (i, field) {
 			map = field[mapKeys["Map"]];
 			tier = field[mapKeys["Tier"]];
@@ -56,9 +58,9 @@ function getMapArray() {
 			tech = field[mapKeys["Tech"]];
 			maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
 		});
+            genTable(spreadsheetContainer, maps, header, [0], cols);
 
 	}); //end json
-	return maps;
 
 }
 function getDifficultyArray() {

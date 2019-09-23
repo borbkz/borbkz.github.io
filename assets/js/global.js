@@ -156,7 +156,7 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
     var placeText = '<span class="' + medal + '-place-container">#' + place + '</span>';
     var playerText = '<span class="player-name-container">' + nameLink + "</span>";
     var mapText = '<span class="map-name-container">' + map + "</span>"
-    var dateText = '<span class="date-run-container"> ' + timeFinished + (timeFinished === "" ? "" : " ago") +
+    var dateText = '<span class="date-run-container"> ' + timeFinished + (timeFinished === "" ? "just now" : " ago") +
         "</span>";
 
     var medalURL = imagepath + medal + "-medal.png";
