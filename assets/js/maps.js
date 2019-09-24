@@ -2,8 +2,14 @@ var tagsArray = {};
 var wordArray = [];
 var tagContainer = $("#svgContainer");
 
+var mapRecordLimit = 20;
+var mapURLBase = "https://kztimerglobal.com/api/v1.0/records/top?modes_list_string=kz_timer&stage=0&limit=" + mapRecordLimit + "&tickrate=128"
+var mapProURLBase = mapURLBase + "&has_teleports=false";
+var mapTPURLBase = mapURLBase + "&has_teleports=true";
+var mapNameURI = "&map_name=";
 
 var tagDataMap = {};
+var mapInfo = {};
 
 $.getJSON(jsonPath + "maptags.json", function (data) {
 
@@ -26,6 +32,18 @@ function getMapArray() {
         "Surf": 7,
         "Tech": 8,
         "Misc": 9
+    }
+
+
+    
+    var tierKey = {
+        "1":["Very Easy","lightgreen"],
+        "2":["Easy", "green"],
+        "3":["Medium","dodgerblue"],
+        "4":["Hard", "orange"],
+        "5":["Very Hard", "red"],
+        "6":["Death", "black"]
+
     }
     $.getJSON(difficultyJSON, function (data) {
 
@@ -59,6 +77,12 @@ function getMapArray() {
 
             }
             currentMaps[map] = true;
+            mapInfo[map] = {};
+            for (var key in mapKeys) {
+
+                mapInfo[map][key] = field[mapKeys[key]];
+
+            }
 
         });
 
@@ -82,12 +106,12 @@ function getMapArray() {
             if (includeFilterKeys.length > 0 || excludeFilterKeys.length > 0) {
                 for (var map in currentMaps) {
                     if (currentMaps[map]) {
-                        filteredMaps += map + ", ";
+                        filteredMaps += '<div class="map-link">' + map + " </div>";
                     }
                 }
 
             }
-            filteredMaps = filteredMaps.replace(/,\s*$/, "");
+            //filteredMaps = filteredMaps.replace(/,\s*$/, "");
 
             $("#include-filter-container").html("<h4>" + includeFilterText + "</h4><br>");
             $("#exclude-filter-container").html("<h4>" + excludeFilterText + "</h4><br>");
@@ -96,8 +120,11 @@ function getMapArray() {
         }
 
 
+
+
         var maxLength = 0;
         var minLength = 1000;
+        var index = 0;
         for (tag in tagsArray) {
             //ugly hack will fix later
 
@@ -108,7 +135,8 @@ function getMapArray() {
             if (tagLength < minLength)
                 minLength = tagLength;
 
-            wordArray.push({ text: tag, length: tagLength, maps: tagsArray[tag], displaySize: Math.min(40, tagLength) });
+
+            wordArray.push({ text: tag, length: tagLength, maps: tagsArray[tag], position: index++ });
         }
 
 
@@ -157,10 +185,11 @@ function getMapArray() {
                 .size([width, height])
                 .words(words)
                 .padding(5)
-                .rotate(function () { return 0 })
+                .rotate(function () { return Math.random() * 0 })
                 .font("Impact")
                 .fontSize(function (d) { return d.size; })
                 .on("end", draw)
+                .random(function (d) { return 0.5 })
                 .start();
 
             function draw(wordArray) {
@@ -198,7 +227,6 @@ function getMapArray() {
                     .text(function (d) { return d.text; })
                     .on("click", function (d, i) {
 
-                        console.log("rendered: " + maxRendered + " out of " + words.length);
                         var $tag = $('#' + d.id);
 
 
@@ -269,6 +297,49 @@ function getMapArray() {
 
                         }
                         displayCurrentMaps();
+                        $(".map-link").on('click', function (event) {
+                            $("#map-info").show();
+                            var mapname = $(event.target).text().toLowerCase().trim();
+                            var proURL = mapProURLBase + mapNameURI + mapname;
+                            var tpURL = mapTPURLBase + mapNameURI + mapname;
+
+                            var tptier = tierKey[+mapInfo[mapname]["Tier"]][0];
+                            var protier =tierKey[+mapInfo[mapname]["Pro Tier"]][0]
+                            var tptierColor= tierKey[+mapInfo[mapname]["Tier"]][1];
+                            var protierColor = tierKey[+mapInfo[mapname]["Pro Tier"]][1];
+                            //var lengthColor = tierKey[+mapInfo[mapname]["Length"]][1];
+                            var length = mapInfo[mapname]["Length"];
+                            var tags = mapInfo[mapname]["Misc"].split("|").join(",").replace(/\s\s+/g, ' ');
+
+                            $("#map-info-name").html(`<h3>Map: ${mapname} </h3>`);
+                            $("#map-info-description").html(`<h5>TP Tier: <span style='font-weight: bold; color:${tptierColor}'>${tptier}</span>, `+
+                            `Pro Tier: <span style='font-weight: bold; color:${protierColor}'>${protier}</span>, Length: ${length}</h5>`);
+                            $("#map-info-tags").html(`<h5>Tags: ${tags}</h5>`);
+                            fetch(proURL).then(response => {
+                                return response.json();
+                            }).then(proRun => {
+                                var record = proRun[0];
+                                var server = record["server_name"];
+                                var player = record["player_name"];
+                                var time = record["time"];
+                                $("#pro-run-wr").html(`<h5>Pro WR: ${player} (${getTimeFromSeconds(time)})</h5>`);
+
+                            });
+
+
+                            fetch(tpURL).then(response => {
+                                return response.json();
+                            }).then(tpRun => {
+                                var record = tpRun[0];
+                                var server = record["server_name"];
+                                var player = record["player_name"];
+                                var time = record["time"];
+                                $("#tp-run-wr").html(`<h5>TP WR: ${player} (${getTimeFromSeconds(time)})</h5>`);
+
+                            });
+
+
+                        });
 
                     }).append("svg:title")
                     .text(function (d) {
