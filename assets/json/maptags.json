@@ -43,17 +43,9 @@
         "type": "tech",
         "description": "Ride up a technical surf ramp while bhopping"
     },
-    "hard surf": {
-        "type": "tech",
-        "description": ""
-    },
     "180 tech surf": {
         "type": "tech",
         "description": "An inclined ramp where the destination block is directly opposing it"
-    },
-    "mini surf": {
-        "type": "tech",
-        "description": "A very abrupt surf ramp"
     },
     "dropdown": {
         "type": "tech",
@@ -122,6 +114,14 @@
     "surf": {
         "type": "surf",
         "description": ""
+    },
+    "hard surf": {
+        "type": "surf",
+        "description": ""
+    },
+    "mini surf": {
+        "type": "surf",
+        "description": "A very abrupt surf ramp"
     },
     "angled surf": {
         "type": "surf",

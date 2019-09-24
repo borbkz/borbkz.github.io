@@ -11,8 +11,10 @@ $.getJSON(jsonPath + "maptags.json", function (data) {
 
 
 });
+var currentMaps = {};
+var includeFilters = {};
+var excludeFilters = {};
 function getMapArray() {
-    var maps = [];
     var mapKeys = {
         "Map": 0,
         "Tier": 1,
@@ -56,8 +58,43 @@ function getMapArray() {
 
 
             }
-            maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
+            currentMaps[map] = true;
+
         });
+
+        function displayCurrentMaps() {
+
+
+            var includeFilterText = "";
+            var excludeFilterText = "";
+
+            var includeFilterKeys = Object.keys(includeFilters);
+            var excludeFilterKeys = Object.keys(excludeFilters);
+            if (includeFilterKeys.length > 0) {
+                includeFilterText = "Include: " + includeFilterKeys.join(", ");
+            }
+            if (excludeFilterKeys.length > 0) {
+                excludeFilterText = "Exclude: " + excludeFilterKeys.join(", ");
+            }
+
+            var filteredMaps = "";
+
+            if (includeFilterKeys.length > 0 || excludeFilterKeys.length > 0) {
+                for (var map in currentMaps) {
+                    if (currentMaps[map]) {
+                        filteredMaps += map + ", ";
+                    }
+                }
+
+            }
+            filteredMaps = filteredMaps.replace(/,\s*$/, "");
+
+            $("#include-filter-container").html("<h4>" + includeFilterText + "</h4><br>");
+            $("#exclude-filter-container").html("<h4>" + excludeFilterText + "</h4><br>");
+            $("#maplist-container").html("<h4>" + filteredMaps + "</h4>");
+
+        }
+
 
         var maxLength = 0;
         var minLength = 1000;
@@ -103,9 +140,9 @@ function getMapArray() {
                     var ismatch = words[i].text.toLowerCase() === tag;
 
                     if (ismatch) {
-                        if(thisTag.type in typeColorMap){
+                        if (thisTag.type in typeColorMap) {
                             words[i].color = typeColorMap[thisTag.type];
-                        }else{
+                        } else {
 
                         }
                         break;
@@ -129,10 +166,6 @@ function getMapArray() {
             function draw(wordArray) {
                 var maxRendered = 0;
 
-                var currentMaps = [];
-                var deletedMaps = [];
-                var filteredOutMaps = [];
-                var currentFilters = {};
                 d3.select("#svgContainer")
                     .append("svg")
                     .attr("width", width)
@@ -153,7 +186,7 @@ function getMapArray() {
                         return d.color;
                     })
                     .attr("text-anchor", "middle")
-                    .attr("value", "false")
+                    .attr("value", "off")
                     .attr("id", function (d) {
                         var id = d.text.replace(/\s+/g, '-') + "-id";
                         d.id = id;
@@ -166,100 +199,76 @@ function getMapArray() {
                     .on("click", function (d, i) {
 
                         console.log("rendered: " + maxRendered + " out of " + words.length);
-                        maxRendered++;
                         var $tag = $('#' + d.id);
 
-                        if ($tag.attr('value') === "false") {
-                            $tag.css("stroke", "white");
-                            $tag.css("stroke-width", "3px");
-                            $tag.css("fill", "black");
-                            $tag.attr('value', 'true');
+
+                        var selectStatus = $tag.attr('value');
+
+
+                        $tag.css("stroke", "white");
+                        $tag.css("stroke-width", "3px");
+                        $tag.css("fill", "black");
+
+                        if (d.size < 2 * minWordSize) {
+                            $tag.css("stroke-width", "1px");
+                        }
+
+                        //any map removed from current pool goes into deleted pool
+                        //any map removed from deleted pool goes into current pool
+
+                        if (selectStatus === "off") {
+                            includeFilters[d.text] = "on";
+                            //add all maps that match include but don't match exclude
+
+                            $tag.attr('value', 'include');
                             $tag.text(d.text + ' \u2714')//checkmark
 
-                            if (d.size < 2 * minWordSize) {
-                                $tag.css("stroke-width", "1px");
-                                //enlarge if too small
-                            }
-                            if (currentMaps.length === 0) {
-                                currentMaps = d.maps.slice();
-                            } else {
-                                currentMaps.push(...d.maps);
+                        } else if (selectStatus === "include") {
+                            excludeFilters[d.text] = "on";
+                            delete includeFilters[d.text];
+                            //remove all current maps that match exclude, move them to deleted maps 
+                            $tag.attr('value', 'exclude');
+                            $tag.text(d.text + ' \u2717')//x mark
 
-
-                            }
-
-                            currentFilters[d.text] = "on";
-                            //iterate backwards to avoid having to recalculate index after deletion
-                            for (var i = currentMaps.length - 1; i >= 0; i--) {
-                                var curMap = currentMaps[i];
-                                var pass = true;
-                                for (filter in currentFilters) {
-
-                                    if (!tagsArray[filter].includes(curMap)) {
-                                        pass = false;
-                                        break;
-
-                                    } else {
-
-                                    }
-                                }
-                                if (!pass) {
-                                    deletedMaps.push(curMap);
-                                    currentMaps.splice(i, 1);
-                                }
-
-                            }
-                            //add to current map pool
                         } else {
-                            //restore to old css
+                            delete includeFilters[d.text]
+                            delete excludeFilters[d.text]
+
                             $tag.css("stroke", "none");
                             $tag.css("stroke-idth", "0px");
                             $tag.css("fill", d.color);
-                            $tag.attr('value', 'false');
+                            $tag.attr('value', 'off');
                             $tag.css('font-size', d.size);
                             $tag.text(d.text) //remove checkmark
+                        }
 
 
-                            delete currentFilters[d.text]
-                            if (Object.keys(currentFilters).length === 0) {
-                                currentMaps = [];
+                        for (var curMap in currentMaps) {
 
-                            } else {
-
-                                for (var i = deletedMaps.length - 1; i >= 0; i--) {
-                                    var curMap = deletedMaps[i];
-                                    var recover = true;
-                                    for (filter in currentFilters) {
-
-                                        if (!tagsArray[filter].includes(curMap)) {
-                                            recover = false;
-                                            break;
-
-                                        } else {
-
-                                        }
-                                    }
-                                    if (recover) {
-                                        currentMaps.push(curMap);
-                                        deletedMaps.splice(i, 1);
-                                    }
-
-
+                            var includeFlag = true;
+                            for (var filter in includeFilters) {
+                                if (!tagsArray[filter].includes(curMap)) {
+                                    includeFlag = false;
+                                    break;
                                 }
                             }
 
-                        }
-                        uniq = [...new Set(currentMaps)];
-                        currentMaps = uniq;
-                        var filterKeys = Object.keys(currentFilters);
+                            var excludeFlag = false;
+                            for (var filter in excludeFilters) {
+                                if (tagsArray[filter].includes(curMap)) {
+                                    excludeFlag = true;
+                                    break;
+                                }
+                            }
 
-                        var filterText = ""
-                        if(filterKeys.length > 0){
-                            filterText = "[" +  filterKeys.join(", ") + "]";
-                        }
-                        $("#filter-container").html("<h4>" +filterText+ "</h4><br>");
+                            if (includeFlag && !excludeFlag) {
+                                currentMaps[curMap] = true;
+                            } else {
+                                currentMaps[curMap] = false;
+                            }
 
-                        $("#maplist-container").html("<h4>" + currentMaps.join(", ") + "</h4>");
+                        }
+                        displayCurrentMaps();
 
                     }).append("svg:title")
                     .text(function (d) {
