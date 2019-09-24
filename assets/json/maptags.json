@@ -2,13 +2,13 @@
     "type-color":{
         "surf": "DodgerBlue",
         "ladder": "yellow",
-        "bhop": "lightgreen",
+        "bhop": "limegreen",
         "tech": "purple",
         "chain": "orange",
         "strafe": "red",
         "easy": "white",
         "booster": "fuchsia",
-        "meta": "sienna",
+        "meta": "aqua",
         "other": "lightgrey"
     },
     "tech surf": {
