@@ -1,0 +1,326 @@
+{
+    "type-color":{
+        "surf": "cyan",
+        "ladder": "yellow",
+        "bhop": "lightgreen",
+        "tech": "purple",
+        "chain": "orange",
+        "strafe": "red",
+        "easy": "white",
+        "booster": "pink",
+        "meta": "blue",
+        "other": "lightgrey"
+    },
+    "tech surf": {
+        "type": "tech",
+        "description": "An inclined ramp where a player must run nearly parallel and jump with minimal mouse movement"
+    },
+    "crouched headbanger": {
+        "type": "tech",
+        "description": "When a player has to jump out from inside a cubby from a crouched position"
+    },
+    "hard tech": {
+        "type": "tech",
+        "description": ""
+    },
+    "wallstrafe": {
+        "type": "tech",
+        "description": "Gaining speed by holding a or d against the wall while moving parallel to it"
+    },
+    "headbanger": {
+        "type": "tech",
+        "description": "When a player has to strafe out and duck at the right type to clear a low ceiling or obstacle"
+    },
+    "boxtech": {
+        "type": "tech",
+        "description": "When a player has to make abrupt 90 degree turns in the air"
+    },
+    "gap jump": {
+        "type": "tech",
+        "description": "When a player has to jump through a small gap that's only slightly wider than the player model"
+    },
+    "bhop to tech surf": {
+        "type": "tech",
+        "description": "Ride up a technical surf ramp while bhopping"
+    },
+    "hard surf": {
+        "type": "tech",
+        "description": ""
+    },
+    "180 tech surf": {
+        "type": "tech",
+        "description": "An inclined ramp where the destination block is directly opposing it"
+    },
+    "mini surf": {
+        "type": "tech",
+        "description": "A very abrupt surf ramp"
+    },
+    "dropdown": {
+        "type": "tech",
+        "description": "Strafe around obstacles or into small openings while falling"
+    },
+    "drop": {
+        "type": "strafe",
+        "description": "Jump from a higher platform to a much lower one, often strafe heavy"
+    },
+    "weirdjump": {
+        "type": "strafe",
+        "description": "Map forces a player to bhop after falling from a higher surface without jumping off first"
+    },
+    "strafeheavy": {
+        "type": "strafe",
+        "description": ""
+    },
+    "ladder": {
+        "type": "ladder",
+        "description": ""
+    },
+    "ladder headbanger": {
+        "type": "ladder",
+        "description": "Player must launch from a ladder and crouch at the right time to clear a lower ceiling"
+    },
+    "timed ladder": {
+        "type": "ladder",
+        "description": "A player can only remain on the ladder for a fixed amount of time. No checkpoints allowed"
+    },
+    "cubby ladder": {
+        "type": "ladder",
+        "description": "Player must ladder strafe out of a very constrained space with protruding sides"
+    },
+    "mini ladder": {
+        "type": "ladder",
+        "description": "A very short ladder"
+    },
+    "rope ladders": {
+        "type": "ladder",
+        "description": ""
+    },
+    "hard ladder": {
+        "type": "ladder",
+        "description": ""
+    },
+    "180 ladder": {
+        "type": "ladder",
+        "description": "A ladder where the destination block is directly behind the player facing the ladder"
+    },
+    "ladder around pillar": {
+        "type": "ladder",
+        "description": "Two ladders on opposite sides of a pillar or wall"
+    },
+    "gap ladder": {
+        "type": "ladder",
+        "description": "Two ladders oriented vertically with a gap inbetween that the player must strafe out and back in to reach. "
+    },
+    "blocked ladder": {
+        "type": "ladder",
+        "description": "Two ladders oriented vertically with a block inbetween that the player must strafe out and back in to reach. "
+    },
+    "laj block": {
+        "type": "ladder",
+        "description": ""
+    },
+    "surf": {
+        "type": "surf",
+        "description": ""
+    },
+    "angled surf": {
+        "type": "surf",
+        "description": "A single surf ramp with 90 degree corners"
+    },
+    "resurf": {
+        "type": "surf",
+        "description": "Surfing a ramp more than once to gain speed"
+    },
+    "water surf": {
+        "type": "surf",
+        "description": "When a player holds jump and strafes on the water surface to gain speed"
+    },
+    "slide": {
+        "type": "surf",
+        "description": "A 1.6 game mode that contained smaller ramps and very technical surfs"
+    },
+    "height surf": {
+        "type": "surf",
+        "description": "A small surf ramp that the player must use to get to a higher block"
+    },
+    "corner surf": {
+        "type": "surf",
+        "description": "A Player must surf around a 90 degree corner on to another surf"
+    },
+    "gap surf": {
+        "type": "surf",
+        "description": "Multiple surf ramps separated by gaps that the player must strafe out of and back in to clear"
+    },
+    "pixel surf": {
+        "type": "surf",
+        "description": "Holding a or d against the wall while running parallel to it"
+    },
+    "surf reuse": {
+        "type": "surf",
+        "description": "Player needs to surf on a previous surf framp but from a higher platform to gain more height"
+    },
+    "kurouch": {
+        "type": "bhop",
+        "description": "A bhop technique where you crouch bhop and turn around when you don't hit a perf"
+    },
+    "crouch bhop": {
+        "type": "bhop",
+        "description": "A player must manually crouch jump to a higher bhop block and immediately continue bhopping"
+    },
+    "bhop": {
+        "type": "bhop",
+        "description": "Player must use the scroll wheel to jump"
+    },
+    "small bhop": {
+        "type": "bhop",
+        "description": "Player must bhop on very small blocks"
+    },
+    "headbanger bhop": {
+        "type": "bhop",
+        "description": "Player must crouch while bhopping and cannot gain speed unless they hit a crouch perf"
+    },
+    "forced perf": {
+        "type": "bhop",
+        "description": "Map contains distances that are nearly impossible to reach with 275 prespeed"
+    },
+    "cubby bhop": {
+        "type": "bhop",
+        "description": "A player must bhop in and out of multiple constrained spaces"
+    },
+    "bhop crouch": {
+        "type": "bhop",
+        "description": "A player must crouch before the peak of his jump to clear an obstacle or to reduce height"
+    },
+    "hard bhop": {
+        "type": "bhop",
+        "description": ""
+    },
+    "hard multihop": {
+        "type": "bhop",
+        "description": ""
+    },
+    "hard singlehop": {
+        "type": "bhop",
+        "description": ""
+    },
+    "spikes": {
+        "type": "bhop",
+        "description": ""
+    },
+    "booster": {
+        "type": "booster",
+        "description": "Blocks that provide a huge upward momentum"
+    },
+    "wall booster": {
+        "type": "booster",
+        "description": "Blocks that provide a huge upward momentum"
+    },
+    "256 block": {
+        "type": "strafe",
+        "description": ""
+    },
+    "small block": {
+        "type": "strafe",
+        "description": "Player must strafe out from a small block and gain as much prespeed as possible"
+    },
+    "260 lj block": {
+        "type": "strafe",
+        "description": "Map contains this lj block"
+    },
+    "262 lj block": {
+        "type": "strafe",
+        "description": "Map contains this lj block"
+    },
+    "264 lj block": {
+        "type": "strafe",
+        "description": "Map contains this lj block"
+    },
+    "265 lj block": {
+        "type": "strafe",
+        "description": "Map contains this lj block"
+    },
+    "268 lj block": {
+        "type": "strafe",
+        "description": "Map contains this lj block"
+    },
+    "270 lj block": {
+        "type": "strafe",
+        "description": "Map contains this lj block"
+    },
+    "prekeep": {
+        "type": "strafe",
+        "description": "When a player lands and quickly jumps again before friction has fully reset the prespeed"
+    },
+    "crouchjump": {
+        "type": "strafe",
+        "description": "When a player manually crouches and jumps in quick succession to gain extra height"
+    },
+    "climb": {
+        "type": "easy",
+        "description": "Easy map with a lot of climb"
+    },
+    "combo": {
+        "type": "easy",
+        "description": "Easy maps with good flow. Most blocks can be bhop. "
+    },
+    "ladder-surf-bhop chain": {
+        "type": "chain",
+        "description": "A series of consecutive ladders, surfs, and bhops without any blocks to land on in between"
+    }, 
+    "surf-bhop chain": {
+        "type": "chain",
+        "description": "A series of consecutive surfs and bhops without any blocks to land on in between"
+    }, 
+    "ladder-bhop chain": {
+        "type": "chain",
+        "description": "A series of consecutive ladders and bhops without any blocks to land on in between"
+    }, 
+    "ladder-surf chain": {
+        "type": "chain",
+        "description": "A series of consecutive ladders and surfs without any blocks to land on in between"
+    }, 
+    "ladder chain": {
+        "type": "chain",
+        "description": "A series of consecutive ladders without any blocks to land on in between"
+    }, 
+    "dropdown-bhop chain": {
+        "type": "chain",
+        "description": "A bhop section immediately following a dropdown"
+    }, 
+    "keys": {
+        "type": "meta",
+        "description": "Map where a player needs to obtain an item to move on to the next level. "
+    },
+    "nonlinear": {
+        "type": "meta",
+        "description": "A map that contains multiple routes or objectives that can be finished in any order"
+    },
+    "moving blocks": {
+        "type": "meta",
+        "description": "Map contains blocks that move"
+    },
+    "pro checkpoint zones": {
+        "type": "meta",
+        "description": "Map contains special zones a player must move into to set a pro checkpoint"
+    },
+    "porn room": {
+        "type": "meta",
+        "description": "Map containing NSFW room, usually hidden away"
+    },
+    "skip": {
+        "type": "meta",
+        "description": "Map containing a large skip"
+    },
+    "timer tech skip": {
+        "type": "meta",
+        "description": "Map contains a timer that can be reached from an unintended location"
+    },
+    "gravity": {
+        "type": "meta",
+        "description": "Map manipulates gravity"
+    },
+    "old textures": {
+        "type": "meta",
+        "description": "Map contains 1.6 textures"
+    }
+}

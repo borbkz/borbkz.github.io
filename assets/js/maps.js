@@ -1,38 +1,16 @@
-var tagsArray  = {};
+var tagsArray = {};
 var wordArray = [];
 var tagContainer = $("#svgContainer");
 
 
-var colorArray = {
-    "chain": "orange", //chain has precedence, has to be first
-    "180 tech surf": "purple",
-    "dropdown": "purple",
-    "drop": "red",
-    "strafeheavy": "red",
-    "ladder": "yellow",
-    "surf": "cyan",
-    "slide": "cyan",
-    "bhop": "green",
-    "kurouch": "green",
-    "forced perf": "green",
-    "hard bhop": "green",
-    "hard multihop": "green",
-    "hard singlehop": "green",
-    "spikes": "green",
-    "crouched headbanger": "purple",
-    "hard tech": "purple",
-    "headbanger": "purple",
-    "boxtech": "purple",
-    "gap jump": "purple",
-    "booster": "pink",
-    "block": "red",
-    "prekeep": "red",
-    "crouchjump": "red",
-    "climb": "white",
-    "combo": "white",
-    "other": "lightgrey",
-    "bhop": "green",
-}
+var tagDataMap = {};
+
+$.getJSON(jsonPath + "maptags.json", function (data) {
+
+    tagDataMap = data;
+
+
+});
 function getMapArray() {
     var maps = [];
     var mapKeys = {
@@ -49,9 +27,6 @@ function getMapArray() {
     }
     $.getJSON(difficultyJSON, function (data) {
 
-        var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
-        var cols = Array(header.length).fill({});
-        var spreadsheetContainer = $("#spreadsheet")[0];
 
         $.each(data, function (i, field) {
             map = field[mapKeys["Map"]];
@@ -66,20 +41,11 @@ function getMapArray() {
             misc = field[mapKeys["Misc"]];
 
             var miscArray = misc.split("|");
-            if(map === "kz_grass_hard"){
-                console.log("printing grass hard")
-
-                for(var i = 0; i < miscArray.length; i++){
-
-                    console.log(i + " " + miscArray[i]);
-                }
-            }
 
             for (var i = 0; i < miscArray.length; i++) {
                 var key = miscArray[i].trim();
                 if (key !== "") {
 
-                    //console.log("checking map " + map + " for key " + key);
                     if (key in tagsArray) {
                         tagsArray[key].push(map)
                     } else {
@@ -104,15 +70,15 @@ function getMapArray() {
 
             if (tagLength < minLength)
                 minLength = tagLength;
-            
-            wordArray.push({ text: tag, length: tagLength, maps: tagsArray[tag] });
+
+            wordArray.push({ text: tag, length: tagLength, maps: tagsArray[tag], displaySize: Math.min(40, tagLength) });
         }
 
 
         var minWordSize = 20;
         var maxWordSize = 100;
         (function () {
-            var wordScale=d3.scaleLinear().domain([20,40,50,100]).range([1,20,50,200]).clamp(true);
+            var wordScale = d3.scaleLinear().domain([20, 40, 50, 100]).range([1, 20, 50, 200]).clamp(true);
             //var wordScale=d3.scaleLinear().domain([1,200]).range([50,100]).clamp(true);
 
             var fill = d3.scaleOrdinal(d3.schemeCategory10);
@@ -128,12 +94,20 @@ function getMapArray() {
                 //linear ramp
                 words[i].size = minWordSize + interp * (maxWordSize - minWordSize);
                 //words[i].size = words[i].length;
-                words[i].color = colorArray.other;
-                for (var techtype in colorArray) {
-                    var ismatch = words[i].text.toLowerCase().includes(techtype);
+
+                var typeColorMap = tagDataMap["type-color"];
+                words[i].color = typeColorMap["other"];
+
+                for (var tag in tagDataMap) {
+                    var thisTag = tagDataMap[tag];
+                    var ismatch = words[i].text.toLowerCase() === tag;
 
                     if (ismatch) {
-                        words[i].color = colorArray[techtype];
+                        if(thisTag.type in typeColorMap){
+                            words[i].color = typeColorMap[thisTag.type];
+                        }else{
+
+                        }
                         break;
                     }
 
@@ -153,7 +127,7 @@ function getMapArray() {
                 .start();
 
             function draw(wordArray) {
-                var maxRendered = 1;
+                var maxRendered = 0;
 
                 var currentMaps = [];
                 var deletedMaps = [];
@@ -170,7 +144,6 @@ function getMapArray() {
                     .enter()
                     .append("text")
                     .style("font-size", function (d) {
-                        console.log("rendered: " + maxRendered + " out of " + words.length);
                         maxRendered++;
                         //return wordScale(d.size) + "px";
                         return d.size + "px";
@@ -192,6 +165,8 @@ function getMapArray() {
                     .text(function (d) { return d.text; })
                     .on("click", function (d, i) {
 
+                        console.log("rendered: " + maxRendered + " out of " + words.length);
+                        maxRendered++;
                         var $tag = $('#' + d.id);
 
                         if ($tag.attr('value') === "false") {
@@ -278,6 +253,16 @@ function getMapArray() {
                         currentMaps = uniq;
                         $("#maplist-container").html("<h4>" + currentMaps.join(", ") + "</h4>");
 
+                    }).append("svg:title")
+                    .text(function (d) {
+
+                        var tooltip = "";
+                        if (d.text in tagDataMap)
+                            tooltip = tagDataMap[d.text].description;
+
+                        return tooltip;
+
+
                     });
 
             }
@@ -286,7 +271,6 @@ function getMapArray() {
         })();
 
 
-        genTable(spreadsheetContainer, maps, header, [0], cols);
 
     }); //end json
 
