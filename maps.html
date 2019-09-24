@@ -7,17 +7,53 @@ layout: default
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="assets/js/d3.layout.cloud.js?{{site.time | date: '%s%N'}}"> </script>
     <script>
+        function getMaps() {
+            var maps = [];
+            var mapKeys = {
+                "Map": 0,
+                "Tier": 1,
+                "Pro Tier": 2,
+                "Length": 3,
+                "Strafe": 4,
+                "Bhop": 5,
+                "Ladder": 6,
+                "Surf": 7,
+                "Tech": 8,
+            }
+            $.getJSON(difficultyJSON, function (data) {
+
+                var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
+                var cols = Array(header.length).fill({});
+                var spreadsheetContainer = $("#spreadsheet")[0];
+
+                $.each(data, function (i, field) {
+                    map = field[mapKeys["Map"]];
+                    tier = field[mapKeys["Tier"]];
+                    protier = field[mapKeys["Pro Tier"]];
+                    length = field[mapKeys["Length"]];
+                    strafe = field[mapKeys["Strafe"]];
+                    bhop = field[mapKeys["Bhop"]];
+                    ladder = field[mapKeys["Ladder"]];
+                    surf = field[mapKeys["Surf"]];
+                    tech = field[mapKeys["Tech"]];
+                    maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
+                });
+                genTable(spreadsheetContainer, maps, header, [0], cols);
+
+            }); //end json
+
+        }
         $(document).ready(function () {
 
-            myMaps = getMapArray();
+            myMaps = getMaps();
         });
     </script>
 
-        <div class="content-wrap">
-            <div id="table-container">
-                <div class="table-tips"></div>
-                <div class="handsontable" id="spreadsheet"> </div>
-            </div>
+    <div class="content-wrap">
+        <div id="table-container">
+            <div class="table-tips"></div>
+            <div class="handsontable" id="spreadsheet"> </div>
         </div>
     </div>
+</div>
 </div>
