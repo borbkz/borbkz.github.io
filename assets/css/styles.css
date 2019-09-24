@@ -428,6 +428,10 @@
      height: 600px;
  }
 
+ .map-link{
+     cursor: pointer;
+
+ }
 
 /*for svg text tags*/
  text{

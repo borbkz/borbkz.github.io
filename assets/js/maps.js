@@ -185,11 +185,10 @@ function getMapArray() {
                 .size([width, height])
                 .words(words)
                 .padding(5)
-                .rotate(function () { return Math.random() * 0 })
+                .rotate(function () { return Math.random() * 10 - 5 })
                 .font("Impact")
                 .fontSize(function (d) { return d.size; })
                 .on("end", draw)
-                .random(function (d) { return 0.5 })
                 .start();
 
             function draw(wordArray) {
