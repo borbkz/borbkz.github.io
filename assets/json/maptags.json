@@ -1,14 +1,14 @@
 {
     "type-color":{
-        "surf": "cyan",
+        "surf": "DodgerBlue",
         "ladder": "yellow",
         "bhop": "lightgreen",
         "tech": "purple",
         "chain": "orange",
         "strafe": "red",
         "easy": "white",
-        "booster": "pink",
-        "meta": "blue",
+        "booster": "fuchsia",
+        "meta": "sienna",
         "other": "lightgrey"
     },
     "tech surf": {
@@ -69,7 +69,7 @@
     },
     "strafeheavy": {
         "type": "strafe",
-        "description": ""
+        "description": "Map contains long distances that require good strafes to clear"
     },
     "ladder": {
         "type": "ladder",
