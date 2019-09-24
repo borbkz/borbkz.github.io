@@ -5,7 +5,7 @@ layout: default
 <div class="content-wrap">
     <script type="text/javascript" src="assets/js/maps.js?{{site.time | date: '%s%N'}}"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
- 
+
     <script src="assets/js/d3.layout.cloud.js?{{site.time | date: '%s%N'}}"> </script>
     <script>
         $(document).ready(function () {
@@ -14,14 +14,14 @@ layout: default
         });
     </script>
 
-            <div class="content-wrap">
-            <h3>Choose your tags! (Work in Progress)</h3>
+    <div class="content-wrap">
+        <h3>Choose your tags! (Work in Progress)</h3>
 
-            <div id="svgContainer"></div>
-            </div>
+        <div id="svgContainer"></div>
+    </div>
 
-            <div class="content-wrap">
-                <!--
+    <div class="content-wrap">
+        <!--
                 <div class="innerSelection">
                     Sort By:
                     <input type="radio" id="ordered-radio" name="tag-order" value="unordered" checked>Random
@@ -29,11 +29,16 @@ layout: default
                     <input type="radio" id="type-radio" name="tag-order" value="color">Type
                 </div>-->
 
-            <h3>Filters</h3>
-            <div style='overflow-wrap: break-word; padding: 20px 100px;' id='filter-container' ></div>
+        <div style="width: 50%; height: 50%; float:left;">
             <h3>Maps</h3>
-            <div style='overflow-wrap: break-word; padding: 20px 100px;' id='maplist-container' ></div>
+            <div style='overflow-wrap: break-word; padding: 5px 100px;' id='maplist-container'></div>
+        
+        </div>
+        <div style="width: 50%; height: 50%; float:right;">
+            <h3>Filters</h3>
+            <div style='overflow-wrap: break-word; padding: 5px 100px;' id='filter-container'></div>
+        
+        </div>
 
-
-            </div>
+    </div>
 </div>
