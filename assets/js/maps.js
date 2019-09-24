@@ -251,6 +251,14 @@ function getMapArray() {
                         }
                         uniq = [...new Set(currentMaps)];
                         currentMaps = uniq;
+                        var filterKeys = Object.keys(currentFilters);
+
+                        var filterText = ""
+                        if(filterKeys.length > 0){
+                            filterText = "[" +  filterKeys.join(", ") + "]";
+                        }
+                        $("#filter-container").html("<h4>" +filterText+ "</h4><br>");
+
                         $("#maplist-container").html("<h4>" + currentMaps.join(", ") + "</h4>");
 
                     }).append("svg:title")
