@@ -35,14 +35,15 @@ function getMapArray() {
     }
 
 
-    
+
     var tierKey = {
-        "1":["Very Easy","lightgreen"],
-        "2":["Easy", "green"],
-        "3":["Medium","dodgerblue"],
-        "4":["Hard", "orange"],
-        "5":["Very Hard", "red"],
-        "6":["Death", "black"]
+        "0": ["Not Global", "white"],
+        "1": ["Very Easy", "lightgreen"],
+        "2": ["Easy", "green"],
+        "3": ["Medium", "dodgerblue"],
+        "4": ["Hard", "orange"],
+        "5": ["Very Hard", "red"],
+        "6": ["Death", "black"]
 
     }
     $.getJSON(difficultyJSON, function (data) {
@@ -106,12 +107,12 @@ function getMapArray() {
             if (includeFilterKeys.length > 0 || excludeFilterKeys.length > 0) {
                 for (var map in currentMaps) {
                     if (currentMaps[map]) {
-                        filteredMaps += '<div class="map-link">' + map + " </div>";
+                        filteredMaps += '<span class="map-link">' + map + "</span>, ";
                     }
                 }
 
             }
-            //filteredMaps = filteredMaps.replace(/,\s*$/, "");
+            filteredMaps = filteredMaps.replace(/,\s*$/, "");
 
             $("#include-filter-container").html("<h4>" + includeFilterText + "</h4><br>");
             $("#exclude-filter-container").html("<h4>" + excludeFilterText + "</h4><br>");
@@ -301,18 +302,21 @@ function getMapArray() {
                             var mapname = $(event.target).text().toLowerCase().trim();
                             var proURL = mapProURLBase + mapNameURI + mapname;
                             var tpURL = mapTPURLBase + mapNameURI + mapname;
-
-                            var tptier = tierKey[+mapInfo[mapname]["Tier"]][0];
-                            var protier =tierKey[+mapInfo[mapname]["Pro Tier"]][0]
-                            var tptierColor= tierKey[+mapInfo[mapname]["Tier"]][1];
-                            var protierColor = tierKey[+mapInfo[mapname]["Pro Tier"]][1];
-                            //var lengthColor = tierKey[+mapInfo[mapname]["Length"]][1];
-                            var length = mapInfo[mapname]["Length"];
-                            var tags = mapInfo[mapname]["Misc"].split("|").join(",").replace(/\s\s+/g, ' ');
+                            var tptier = "", protier = "", tptierColor = "", protierColor = "", length = "", tags = "";
+                            try {
+                                tptier = tierKey[+mapInfo[mapname]["Tier"]][0];
+                                protier = tierKey[+mapInfo[mapname]["Pro Tier"]][0]
+                                tptierColor = tierKey[+mapInfo[mapname]["Tier"]][1];
+                                protierColor = tierKey[+mapInfo[mapname]["Pro Tier"]][1];
+                                length = mapInfo[mapname]["Length"];
+                                tags = mapInfo[mapname]["Misc"].split("|").join(",").replace(/\s\s+/g, ' ');
+                            } catch (error) {
+                                console.log(error);
+                            }
 
                             $("#map-info-name").html(`<h3>Map: ${mapname} </h3>`);
-                            $("#map-info-description").html(`<h5>TP Tier: <span style='font-weight: bold; color:${tptierColor}'>${tptier}</span>, `+
-                            `Pro Tier: <span style='font-weight: bold; color:${protierColor}'>${protier}</span>, Length: ${length}</h5>`);
+                            $("#map-info-description").html(`<h5>TP Tier: <span style='font-weight: bold; color:${tptierColor}'>${tptier}</span>, ` +
+                                `Pro Tier: <span style='font-weight: bold; color:${protierColor}'>${protier}</span>, Length: ${length}</h5>`);
                             $("#map-info-tags").html(`<h5>Tags: ${tags}</h5>`);
                             fetch(proURL).then(response => {
                                 return response.json();
@@ -323,8 +327,10 @@ function getMapArray() {
                                 var time = record["time"];
                                 $("#pro-run-wr").html(`<h5>Pro WR: ${player} (${getTimeFromSeconds(time)})</h5>`);
 
+                            }).catch((error) => {
+                                $("#pro-run-wr").html(`<h5>Pro WR: Not Found</h5>`);
+                                console.log(error)
                             });
-
 
                             fetch(tpURL).then(response => {
                                 return response.json();
@@ -335,9 +341,11 @@ function getMapArray() {
                                 var time = record["time"];
                                 $("#tp-run-wr").html(`<h5>TP WR: ${player} (${getTimeFromSeconds(time)})</h5>`);
 
+                            }).catch((error) => {
+
+                                $("#tp-run-wr").html(`<h5>TP WR: Not Found</h5>`);
+                                console.log(error)
                             });
-
-
                         });
 
                     }).append("svg:title")
