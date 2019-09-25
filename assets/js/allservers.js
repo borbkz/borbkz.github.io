@@ -59,6 +59,7 @@ $(document).ready(function () {
 
         playerInfo = {
             "player-name": "",
+            "world-records": 0,
             "run-type": "",
             "runs-possible": 0,
             "runs-total": 0,
@@ -77,6 +78,7 @@ $(document).ready(function () {
         var steamIDText = "";
         if (isValidSteamID(steamID)) {
             steamIDText = "steam_id=" + steamID;
+		    $("#steamButton").attr('value', 'Fetching...');
         } else {
             alert("Please enter valid Steam ID!")
             return;
@@ -132,6 +134,10 @@ $(document).ready(function () {
                     }
                 if (map in finishedGlobals) {
                     tptier = difficultyArray[field["map_name"]][0];
+
+                    if(tptier !== 0 && +points === 1000)
+                        playerInfo["world-records"]++;
+
                     playerInfo["points-total"] += +points;
                     //flag to see if map is finished, most of the new death maps have not been added to global api
                     finishedGlobals[map].push("finished");
@@ -194,7 +200,7 @@ $(document).ready(function () {
             if (globalTable)
                 globalTable.destroy();
 
-		$("#steamButton").attr('value', 'Fetch Times');
+		    $("#steamButton").attr('value', 'Fetch Times');
             globalTable = genTable(spreadsheetContainer, maps, globalHeader, [0, 4, 8], cols);
             printPlayerProfile();
         }); //end json
@@ -206,7 +212,18 @@ $(document).ready(function () {
         var runPercentage = (100 * playerInfo["runs-total"]/playerInfo["runs-possible"] || 0).toFixed(1);
 
         $("#player-info").show();
-        $("#player-name-info").text("Player: " + playerInfo["player-name"]);
+
+        $("#player-info-label").text("Player: ");
+        $("#player-info-text").text(playerInfo["player-name"]);
+
+        $("#wr-info-label").text('World Records: ');
+        var medalIcon = "";
+        
+        if(+playerInfo["world-records"] !== 0)
+            medalIcon = '<img class="medal-icon" src="assets/images/medals/gold-medal.png" style="height: 1em; margin-bottom: .2em">';
+
+        $("#wr-info-text").html(playerInfo["world-records"] + medalIcon);
+
         $("#run-info-text").text(`${playerInfo["runs-total"]}/${playerInfo["runs-possible"]} (${runPercentage}%)`);
         $("#points-info-label").text("Total Points: ")
         $("#points-info-text").text(`${playerInfo["points-total"].toLocaleString("en")} (avg: ${playerInfo["points-average"]})`);
@@ -233,6 +250,8 @@ $(document).ready(function () {
             var tierMax = playerInfo["runs-possible-by-tier"][tier];
             var tierRuns = playerInfo["runs-by-tier"][tier];
             var tierPercentage =  Math.floor(100 * tierRuns/tierMax) || 0;
+            var wrs = playerInfo["world-records"];
+            console.log("WORLD RECORDS " + wrs);
 
 
             var barFontStyle = "";
@@ -261,7 +280,6 @@ $(document).ready(function () {
 
         var steamID = $('#steamIDText').val();
 
-		$(this).attr('value', 'Fetching...');
 
 
         var ispro = $('input[name=isprorun-radio]:checked').val();
