@@ -231,12 +231,13 @@ $(document).ready(function () {
 
             var barFontStyle = "";
             //so you can see against white background
-            if(tierRuns  == 0)
-                barFontStyle = "color: black;";
+            if(tierPercentage  >  5 && tier == 6){
+                    barFontStyle = "color: #DDD;";
+            }
 
             var $progressBar = $(`<div class='progress-bar progress-bar-tier' 
                 role='progressbar' style='width:${tierPercentage}%; background-color: ${tierColor} !important; ${barFontStyle}'aria-valuenow='${tierPercentage}'
-                aria-valuemin='0' aria-valuemax='100'>${tierPercentage}%</div>`);
+                aria-valuemin='0' aria-valuemax='100'>${tierRuns}/${tierMax}</div>`);
             var $progressBarContainer = $('<div class="progress"></div>');
             $progressBarContainer.append($progressBar);
 
