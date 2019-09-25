@@ -168,8 +168,10 @@ $(document).ready(function () {
                 var maptier = finishedGlobals[map][0];
 
 
-                playerInfo["runs-possible"]++;
-                playerInfo["runs-possible-by-tier"][maptier]++;
+                if(!(playerInfo["run-type"] == "tp" && map.startsWith("kzpro"))){
+                    playerInfo["runs-possible"]++;
+                    playerInfo["runs-possible-by-tier"][maptier]++;
+                }
                 if (finishedGlobals[map].length >= 4) {
                     playerInfo["runs-total"]++;
                     playerInfo["runs-by-tier"][maptier]++;
