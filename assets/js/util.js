@@ -110,8 +110,8 @@ function getServerName(serverID) {
 }
 
 function isValidStat(stat) {
-	for (key in jumpstatsKey)
-		if (jumpstatsKey[key] === stat)
+	for (key in JUMPSTATSKEY)
+		if (JUMPSTATSKEY[key] === stat)
 			return true;
 
 	return false;

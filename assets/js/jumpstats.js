@@ -53,7 +53,9 @@ $(document).ready(function () {
 	if (typeof URI["steamid"] !== 'undefined' && typeof URI["jumptype"] !== 'undefined') {
 		steamID = URI["steamid"];
 		jumptype = URI["jumptype"];
+		console.log("hello")
 		if (isValidSteamID(steamID) && isValidStat(jumptype)) {
+		console.log("in 1")
 
 			$('#steamIDText').val(steamID);
 			if (isValidStat(URI["jumptype"]))
@@ -68,6 +70,7 @@ $(document).ready(function () {
 		}
 
 	} else {
+		console.log("in 2")
 		steamID = localStorage.getItem("jumpstatSteamID");
 		jumptype = localStorage.getItem("jumpstatType");
 		binded = localStorage.getItem("jumpstatBinded");
@@ -173,7 +176,7 @@ $(document).ready(function () {
 		isbinded = $('input[name=bind]:checked').val();
 
 
-		//window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&jumptype=" + jumpstatType);;
+		window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&jumptype=" + jumpstatType);;
 
 		//localStorage.setItem("jumpstatSteamID", steamID)
 		//localStorage.setItem("jumpstatType", jumpstatType)
