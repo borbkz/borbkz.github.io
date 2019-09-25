@@ -113,30 +113,31 @@ $(document).ready(function () {
 
                 var map = field["map_name"]
                 //server is sometimes null, and throws exception
-                var tptier = "N/A",
-                    protier = "N/A",
+                var tptier = 0,
+                    protier = 0,
                     length = "N/A",
                     time = "N/A",
                     teleports = "N/A",
                     points = "N/A",
                     date = "N/A",
                     server = "N/A";
-                if (map in finishedGlobals) {
 
-                    //flag to see if map is finished, most of the new death maps have not been added to global api
-                    finishedGlobals[map].push("finished");
-
-                    tptier = difficultyArray[field["map_name"]][0];
-                    protier = difficultyArray[field["map_name"]][1];
-                    length = difficultyArray[field["map_name"]][2];
                     time = getTimeFromSeconds(field["time"]);
+                    
                     teleports = field["teleports"];
                     points = field["points"];
                     date = field["updated_on"];
                     if (typeof field["server_name"] === "string") {
                         server = field["server_name"].substring(0, 35);
                     }
+                if (map in finishedGlobals) {
+                    tptier = difficultyArray[field["map_name"]][0];
                     playerInfo["points-total"] += +points;
+                    //flag to see if map is finished, most of the new death maps have not been added to global api
+                    finishedGlobals[map].push("finished");
+
+                    protier = difficultyArray[field["map_name"]][1];
+                    length = difficultyArray[field["map_name"]][2];
 
                 }
                 var statRow = [map, tptier, protier, length,
@@ -174,7 +175,7 @@ $(document).ready(function () {
                     playerInfo["runs-possible"]++;
                     playerInfo["runs-possible-by-tier"][maptier]++;
                 }
-                if (finishedGlobals[map].length >= 4) {
+                if ( maptier !=0 && finishedGlobals[map].length >= 4) {
                     playerInfo["runs-total"]++;
                     playerInfo["runs-by-tier"][maptier]++;
 
