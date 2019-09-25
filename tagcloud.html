@@ -3,10 +3,9 @@ title: kz.gl
 layout: default
 ---
 <div class="content-wrap">
-    <script type="text/javascript" src="assets/js/maps.js?{{site.time | date: '%s%N'}}"></script>
+    <script type="text/javascript" src="/assets/js/tags.js?{{site.time | date: '%s%N'}}"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-
-    <script src="assets/js/d3.layout.cloud.js?{{site.time | date: '%s%N'}}"> </script>
+    <script src="/assets/js/d3.layout.cloud.js?{{site.time | date: '%s%N'}}"> </script>
     <script>
         $(document).ready(function () {
 
@@ -29,26 +28,21 @@ layout: default
                     <input type="radio" id="type-radio" name="tag-order" value="color">Type
                 </div>-->
 
-        <div id="map-info" style="width: 80%; height: 30%;  clear:both; display:none; margin: 20px auto; padding: 30px">
-                <div id="map-info-name" style="text-align: center"></div>
-                <div id="pro-run-wr" style="font-weight: bold; color: lightcoral; text-align: left"></div>
-                <div id="tp-run-wr" style="font-weight: bold; color: lightskyblue; text-align: left"></div>
-                <div id="map-info-description" style="text-align: left"></div>
-                <div id="map-info-tags" style="text-align: left"></div>
+        <div id="map-info" style="width: 80%; height: 200px;  font: 20px sans-serif; clear:both; display:none; margin: 20px auto; margin-bottom: 5px; padding: 30px">
+                <div id="map-info-name" style="text-align: center; font: 25px sans-serif; font-weight: bold; margin-bottom: inherit"></div>
+                <div id="pro-run-wr" style="font-weight: bold; color: lightcoral; text-align: left; margin-bottom: inherit;"></div>
+                <div id="tp-run-wr" style="font-weight: bold; color: lightskyblue; text-align: left; margin-bottom: inherit;"></div>
+                <div id="map-info-description" style="text-align: left; margin-bottom: inherit"></div>
+                <div id="map-info-tags" style="text-align: left; margin-bottom:inerit"></div>
         </div>
-        <div style="width: 50%; height: 50%; float:left;">
+        <div style="width: 50%; float:left; margin-top: 20px; font: 20px sans-serif">
             <h3>Maps</h3>
-            <div style='overflow-wrap: break-word; padding: 5px 50px' id='maplist-container'></div>
+            <div style='overflow-wrap: break-word; padding: 5px 50px; ' id='maplist-container'></div>
         </div>
-        <div style="width: 50%; height: 50%; float:right;">
+        <div style="width: 50%; float:right; margin-top: 20px; font: 20px  sans-serif">
             <h3>Filters</h3>
             <div style='overflow-wrap: break-word; padding: 5px 50px;' id='include-filter-container'></div>
             <div style='overflow-wrap: break-word; padding: 5px 50px;' id='exclude-filter-container'></div>
 
         </div>
-
-
-
-
-        
     </div>

@@ -4,6 +4,11 @@ var localHeader = ["Map", "Tier", "Pro Tier", "Length", "TP Time", "Teleports", 
 var plugin;
 var localTable;
 var finishedLocals;
+
+var totalProsPossible = 0;
+var totalTPPossible = 0;
+var totalProRuns = 0;
+var totalTPRuns = 0;
 $(document).ready(function () {
     var beginOffset = 2;
 
@@ -103,4 +108,5 @@ $(document).ready(function () {
 
 
     }); //end click
+
 }); //end ready

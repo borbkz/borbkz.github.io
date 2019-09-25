@@ -1,12 +1,12 @@
 
 
-const jsonPath = "assets/json/"
-const jsPath = "assets/js/"
+const jsonPath = "/assets/json/"
+const jsPath = "/assets/js/"
 const difficultyJSON = jsonPath +"maps.json";
 const headerJSON = jsonPath + "header.json";
 
 var jumpBinds = ["bind", "nobind", "both"];
-var jumpstatsKey = {
+const JUMPSTATSKEY = {
 	1: "longjump",
 	2: "bhop",
 	3: "multihop",
@@ -15,7 +15,16 @@ var jumpstatsKey = {
 	6: "countjump",
 	7: "ladder",
 }
+const TIERKEY = {
+	"0": ["Not Global", "white"],
+	"1": ["Very Easy", "lightgreen"],
+	"2": ["Easy", "green"],
+	"3": ["Medium", "dodgerblue"],
+	"4": ["Hard", "orange"],
+	"5": ["Very Hard", "red"],
+	"6": ["Death", "black"]
 
+}
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 
 

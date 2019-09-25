@@ -93,7 +93,7 @@ $(document).ready(function () {
 			var highestStat = 0;
 			var playerName = sanitizeName(data[0]["player_name"]);
 			var isbinded = $('input[name=bind]:checked').val();
-			var jumpstatType = jumpstatsKey[data[0]["jump_type"]];
+			var jumpstatType = JUMPSTATSKEY[data[0]["jump_type"]];
 			if (isbinded === "both")
 				isbinded = "";
 

@@ -1,12 +1,12 @@
 - name: Global Times
   link: /
 - name: Your Times
-  link: /local.html
+  link: /local
 - name: Jumpstats
-  link: /jumpstats.html
+  link: /jumpstats
 - name: Record Distribution 
-  link: /world.html
+  link: /world
 - name: Maps
-  link: /maps.html
+  link: /maps
 - name: Tag Cloud 
-  link: /tagcloud.html
+  link: /tagcloud

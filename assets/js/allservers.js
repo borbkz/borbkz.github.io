@@ -3,11 +3,16 @@ var difficultyArray = getDifficultyArray();
 var URI = getURIVars();
 var expandGlobaId = "#expand-allservers";
 var inputTip = "Enter your name or SteamID";
+var playerInfo = {};
+var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
+var playerInfoRequestBaseURL = "https://kztimerglobal.com/api/v1.0/player_ranks?stages=0mode_ids=200";
+var playerInfoProRequestURL = playerInfoRequestBaseURL + "&has_teleports=false";
+var playerInfoTPRequestURL = playerInfoRequestBaseURL + "&has_teleports=true";
+var playerSteam64URI = "steamid64s=";
+var globalHeader = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
+    "Server"
+];
 $(document).ready(function () {
-    var globalHeader = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
-        "Server"
-    ];
-    var mapRequestBaseURL = "https://kztimerglobal.com/api/v1.0/records/top?"
 
     var steamID = "";
     if (typeof URI["steamid"] !== 'undefined' && URI["teleports"] !== 'undefined') {
@@ -17,13 +22,14 @@ $(document).ready(function () {
             //$(expandGlobalId).click(); //autoexpand if url linked by steamid
 
             $('#steamIDText').val(steamID);
-            var teleportsBool = "true" === teleports;
+            var teleportsBool = ("true" === teleports);
 
+            console.log("1 calling")
             retrieveStats(steamID, teleportsBool);
             if (teleportsBool) {
                 $('#tpradio').click();
             } else {
-                $('#tpradio').click();
+                $('#proradio').click();
             }
 
 
@@ -37,16 +43,28 @@ $(document).ready(function () {
             if (teleportsBool) {
                 $('#tpradio').click();
             } else {
-                $('#tpradio').click();
+                $('#proradio').click();
             }
 
             $("#expandGlobal").click(); //autoexpand if url linked by steamid
+            console.log("2 calling")
             retrieveStats(steamID, teleportsBool);
         }
 
     }
 
     function retrieveStats(steamID, teleports) {
+
+        playerInfo = {
+            "player-name": "",
+            "run-type": "",
+            "runs-possible": 0,
+            "runs-total": 0,
+            "points-total": 0,
+            "points-average": 0,
+            "runs-by-tier": [0, 0, 0, 0, 0, 0, 0],
+            "runs-possible-by-tier": [0, 0, 0, 0, 0, 0, 0]
+        }
         //temp max limit based on ~440 maps, eventually should change to indexdb storage 
         //so you dont fetch every map all the time, and just fetch the latest runs
 
@@ -61,7 +79,7 @@ $(document).ready(function () {
             //assume name was entered
             steamIDText = "player_name=" + steamID;
         }
-        requestURL = "https://kztimerglobal.com/api/v1.0/records/top?" + steamIDText +
+        requestURL = mapRequestBaseURL + steamIDText +
             "&tickrate=128&stage=0&has_teleports=" + teleports + "&limit=" + tempLimit +
             "&modes_list_string=kz_timer";
 
@@ -75,13 +93,11 @@ $(document).ready(function () {
 
             //remember logic is flipped, has teleports = true means TP
 
-            var playerName = sanitizeName(data[0]["player_name"]);
-            var steam_id = data[0]["steam_id"];
-            var ispro = $('input[name=isprorun-radio]:checked').val();
-            var runtype = "Pro Times";
-            if (ispro !== "proradio") {
-                runtype = "TP Times";
-            }
+            var firstEntry = data[0];
+            var steam_id = firstEntry["steam_id"];
+
+            playerInfo["player-name"] = sanitizeName(data[0]["player_name"]);
+            playerInfo["run-type"] = +firstEntry["teleports"] == 0 ? "pro" : "tp";
 
 
             localStorage.setItem("globalMapsSteamID", steam_id);
@@ -91,7 +107,6 @@ $(document).ready(function () {
             window.history.pushState("object or string", "Title", "?steamid=" + steam_id + "&teleports=" +
                 teleports);;
 
-            $("#allservers-title").text(playerName + "'s " + runtype + " Across All Servers");
             $.each(data, function (i, field) {
 
                 var map = field["map_name"]
@@ -119,6 +134,7 @@ $(document).ready(function () {
                     if (typeof field["server_name"] === "string") {
                         server = field["server_name"].substring(0, 35);
                     }
+                    playerInfo["points-total"] += +points;
 
                 }
                 var statRow = [map, tptier, protier, length,
@@ -147,6 +163,16 @@ $(document).ready(function () {
             var spreadsheetContainer = $("#spreadsheet-global")[0];
 
             for (var map in finishedGlobals) {
+                var maptier = finishedGlobals[map][0];
+
+
+                playerInfo["runs-possible"]++;
+                playerInfo["runs-possible-by-tier"][maptier]++;
+                if (finishedGlobals[map].length >= 4) {
+                    playerInfo["runs-total"]++;
+                    playerInfo["runs-by-tier"][maptier]++;
+
+                }
                 if (finishedGlobals[map].length < 4) {
                     unfinished = Array(globalHeader.length).fill("N/A");
                     unfinished[0] = map;
@@ -161,9 +187,66 @@ $(document).ready(function () {
                 globalTable.destroy();
 
             globalTable = genTable(spreadsheetContainer, maps, globalHeader, [0, 4, 8], cols);
+            printPlayerProfile();
         }); //end json
     }
 
+    function printPlayerProfile() {
+
+        playerInfo["points-average"] = (playerInfo["points-total"] / playerInfo["runs-total"]).toFixed(1);
+        var runPercentage = (100 * playerInfo["runs-total"]/playerInfo["runs-possible"] || 0).toFixed(1);
+
+        $("#player-info").show();
+        $("#player-name-info").text("Player: " + playerInfo["player-name"]);
+        $("#run-info-text").text(`${playerInfo["runs-total"]}/${playerInfo["runs-possible"]} (${runPercentage}%)`);
+        $("#points-info-label").text("Total Points: ")
+        $("#points-info-text").text(`${playerInfo["points-total"].toLocaleString("en")} (avg: ${playerInfo["points-average"]})`);
+
+        $("#rank-info-text").text('To be implemented');
+
+        if (playerInfo["run-type"] === "pro") {
+            $("#run-info-label").text("Total Pro Runs: ")
+            $("#rank-info-label").text('PRO Rank: ');
+
+        } else if (playerInfo["run-type"] === "tp") {
+            $("#run-info-label").text("Total TP Runs: ")
+            $("#rank-info-label").text('TP Rank: ');
+
+        }
+        
+        $(".progress-group-container").empty();
+        for (var tier in TIERKEY) {
+            if (tier == 0)
+                continue;
+
+            var tierText = TIERKEY[tier][0];
+            var tierColor = TIERKEY[tier][1];
+            var tierMax = playerInfo["runs-possible-by-tier"][tier];
+            var tierRuns = playerInfo["runs-by-tier"][tier];
+            var tierPercentage =  Math.floor(100 * tierRuns/tierMax) || 0;
+
+
+            var barFontStyle = "";
+            //so you can see against white background
+            if(tierRuns  == 0)
+                barFontStyle = "color: black;";
+
+            var $progressBar = $(`<div class='progress-bar progress-bar-tier' 
+                role='progressbar' style='width:${tierPercentage}%; background-color: ${tierColor} !important; ${barFontStyle}'aria-valuenow='${tierPercentage}'
+                aria-valuemin='0' aria-valuemax='100'>${tierPercentage}%</div>`);
+            var $progressBarContainer = $('<div class="progress"></div>');
+            $progressBarContainer.append($progressBar);
+
+            var $progressLabel = $(`<div class="progress-label">${tierText}</div>`);
+
+            var $progressContainer = $('<div class=progress-container></div>');
+            $progressContainer.append($progressLabel);
+            $progressContainer.append($progressBarContainer);
+            $(".progress-group-container").append($progressContainer);
+
+        }
+
+    }
     $("#steamButton").click(function () {
 
         var steamID = $('#steamIDText').val();

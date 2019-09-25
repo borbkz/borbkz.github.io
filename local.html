@@ -2,12 +2,40 @@
 title: kz.gl
 layout: default
 ---
-<script type="text/javascript" src="assets/js/allservers.js?{{site.time | date: '%s%N'}}"></script>
-<script type="text/javascript" src="assets/js/local.js?{{site.time | date: '%s%N'}}"></script>
+<script type="text/javascript" src="/assets/js/allservers.js?{{site.time | date: '%s%N'}}"></script>
+<script type="text/javascript" src="/assets/js/local.js?{{site.time | date: '%s%N'}}"></script>
 <div class="content-wrap">
 	<div class="accordion" id="accordion-times">
 		{% capture server-times %}
 		<div class="content-wrap">
+
+
+			<div id="player-info" class="player-info-container">
+				<div class="player-info-text">
+					<div id="player-name-info"
+						style=" font: 20px sans-serif;; font-weight: bold; color: white; text-align: left; margin-bottom: inherit">
+					</div>
+					<div class="infoline"><span class="infolabel" id="run-info-label"> </span> <span class="infotext"
+							id="run-info-text"></span></div>
+
+					<div class="infoline"><span class="infolabel" id="points-info-label"> </span> <span class="infotext"
+							id="points-info-text"></span></div>
+
+					<div class="infoline"><span class="infolabel" id="rank-info-label"> </span> <span class="infotext"
+							id="rank-info-text"></span></div>
+				</div>
+
+				<div class="titleDiv">Map Completion By Tier</div>
+				
+
+			<div class="progress-group-container">
+			
+			
+				</div>
+		
+			</div>
+
+
 			<div class="inputSelection">
 				<div class="innerSelection">
 					{% include steamid.html searchtip="Enter your name or SteamID" %}
