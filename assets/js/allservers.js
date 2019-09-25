@@ -142,6 +142,8 @@ $(document).ready(function () {
                 var statRow = [map, tptier, protier, length,
                     time, teleports, points, date, server
                 ];
+
+                if(map !== null && map !== "")
                 maps.push(statRow);
                 //createTable(maps, header);
 
@@ -183,6 +185,7 @@ $(document).ready(function () {
                     unfinished[1] = finishedGlobals[map][0]; //tp tier
                     unfinished[2] = finishedGlobals[map][1]; //pro tier
                     unfinished[3] = finishedGlobals[map][2]; //length
+
                     maps.push(unfinished);
                 }
 
