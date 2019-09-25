@@ -77,9 +77,9 @@ $(document).ready(function () {
         var steamIDText = "";
         if (isValidSteamID(steamID)) {
             steamIDText = "steam_id=" + steamID;
-        } else if (steamID !== "" && steamID !== inputTip) {
-            //assume name was entered
-            steamIDText = "player_name=" + steamID;
+        } else {
+            alert("Please enter valid Steam ID!")
+            return;
         }
         requestURL = mapRequestBaseURL + steamIDText +
             "&tickrate=128&stage=0&has_teleports=" + teleports + "&limit=" + tempLimit +

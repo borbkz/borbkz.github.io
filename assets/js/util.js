@@ -36,7 +36,6 @@ function getHeaderArray() {
 	//return header;
 
 }
-
 function getDifficultyArray() {
 	var difficultyArray = {};
 	var mapKeys = {
