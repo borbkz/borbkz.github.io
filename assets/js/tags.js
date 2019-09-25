@@ -11,12 +11,21 @@ var mapNameURI = "&map_name=";
 var tagDataMap = {};
 var mapInfo = {};
 
-$.getJSON(jsonPath + "maptags.json", function (data) {
 
-    tagDataMap = data;
+function loadTags() {
+    $.when(loadTagData()).done(function (data) {
+        tagDataMap = data;
+        getMapArray();
+    });
 
+}
+function loadTagData() {
+    return $.getJSON(jsonPath + "maptags.json", function (data) {
 
-});
+    });
+
+}
+
 var currentMaps = {};
 var includeFilters = {};
 var excludeFilters = {};
@@ -105,7 +114,7 @@ function getMapArray() {
             }
             filteredMaps = filteredMaps.replace(/,\s*$/, "");
 
-            $("#include-filter-container").html( includeFilterText + "<br>");
+            $("#include-filter-container").html(includeFilterText + "<br>");
             $("#exclude-filter-container").html(excludeFilterText + "<br>");
             $("#maplist-container").html(filteredMaps);
 
