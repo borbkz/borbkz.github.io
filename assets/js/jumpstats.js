@@ -178,9 +178,9 @@ $(document).ready(function () {
 
 		window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&jumptype=" + jumpstatType);;
 
-		//localStorage.setItem("jumpstatSteamID", steamID)
-		//localStorage.setItem("jumpstatType", jumpstatType)
-		//localStorage.setItem("jumpstatBinded", isbinded)
+		localStorage.setItem("jumpstatSteamID", steamID)
+		localStorage.setItem("jumpstatType", jumpstatType)
+		localStorage.setItem("jumpstatBinded", isbinded)
 
 		retrieveStats(getRequestURL(steamID, jumpstatType, isbinded), localContainer, false);
 	});
