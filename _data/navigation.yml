@@ -1,5 +1,7 @@
-- name: Global Times
+- name: Recent Globals
   link: /
+- name: Leaderboard
+  link: /leaderboard
 - name: Your Times
   link: /local
 - name: Jumpstats
