@@ -19,9 +19,22 @@
         "type": "tech",
         "description": "When a player has to jump out from inside a cubby from a crouched position"
     },
+    "running headbanger": {
+        "type": "tech",
+        "description": "Player must run and jump at the right time to clear a low ceiling"
+    },
+    "run and crouch": {
+        "type": "tech",
+        "description": "Player must run forward and crouch at the right time to clear a gap."
+    },
+
     "hard tech": {
         "type": "tech",
         "description": ""
+    },
+    "ramp climb": {
+        "type": "tech",
+        "description": "Player must slowly climb up an inclined surface by holding w"
     },
     "wallstrafe": {
         "type": "tech",
@@ -35,6 +48,10 @@
         "type": "tech",
         "description": "When a player has to make abrupt 90 degree turns in the air"
     },
+    "corridor jump": {
+        "type": "tech",
+        "description": "Similar to boxtech. Player must strafe and turn 90 degrees in a zigzag fashion through a tight corridor."
+    },
     "gap jump": {
         "type": "tech",
         "description": "When a player has to jump through a small gap that's only slightly wider than the player model"
@@ -47,11 +64,15 @@
         "type": "tech",
         "description": "An inclined ramp where the destination block is directly opposing it"
     },
+    "slanted block jump": {
+        "type": "tech",
+        "description": "Player must jump from the high part of a block to a lower part of a slanted block above."
+    },
     "dropdown": {
         "type": "tech",
         "description": "Strafe around obstacles or into small openings while falling"
     },
-    "drop": {
+    "drop strafe": {
         "type": "strafe",
         "description": "Jump from a higher platform to a much lower one, often strafe heavy"
     },
@@ -111,9 +132,21 @@
         "type": "ladder",
         "description": ""
     },
+    "laj": {
+        "type": "ladder",
+        "description": ""
+    },
     "surf": {
         "type": "surf",
+        "description": "Map contains multiple surfs in a row"
+    },
+    "surf chain": {
+        "type": "surf",
         "description": ""
+    },
+    "big surf": {
+        "type": "surf",
+        "description": "Big surf"
     },
     "hard surf": {
         "type": "surf",
@@ -151,9 +184,13 @@
         "type": "surf",
         "description": "Multiple surf ramps separated by gaps that the player must strafe out of and back in to clear"
     },
-    "pixel surf": {
+    "pixel-surf": {
         "type": "surf",
         "description": "Holding a or d against the wall while running parallel to it"
+    },
+    "pixel-surf skip": {
+        "type": "surf",
+        "description": "Unintended skip that uses a pixel surf"
     },
     "surf reuse": {
         "type": "surf",
@@ -215,10 +252,6 @@
         "type": "booster",
         "description": "Blocks that provide a huge upward momentum"
     },
-    "256 block": {
-        "type": "strafe",
-        "description": ""
-    },
     "small block": {
         "type": "strafe",
         "description": "Player must strafe out from a small block and gain as much prespeed as possible"
@@ -226,6 +259,14 @@
     "260 lj block": {
         "type": "strafe",
         "description": "Map contains this lj block"
+    },
+    "256 lj block": {
+        "type": "strafe",
+        "description": ""
+    },
+    "255 lj block": {
+        "type": "strafe",
+        "description": ""
     },
     "262 lj block": {
         "type": "strafe",
@@ -246,6 +287,14 @@
     "270 lj block": {
         "type": "strafe",
         "description": "Map contains this lj block"
+    },
+    "280 block": {
+        "type": "strafe",
+        "description": "A numbered block that must be bhopped."
+    },
+    "300 block": {
+        "type": "strafe",
+        "description": "A numbered block that must be bhopped "
     },
     "prekeep": {
         "type": "strafe",
@@ -311,6 +360,10 @@
         "type": "meta",
         "description": "Map containing a large skip"
     },
+    "surf skip": {
+        "type": "meta",
+        "description": "Map containing an unintended surf skip"
+    },
     "timer tech skip": {
         "type": "meta",
         "description": "Map contains a timer that can be reached from an unintended location"
@@ -322,5 +375,21 @@
     "old textures": {
         "type": "meta",
         "description": "Map contains 1.6 textures"
+    },
+    "no-collision blocks": {
+        "type": "meta",
+        "description": "Block is visibile but can't be stood on."
+    },
+    "invisible blocks": {
+        "type": "meta",
+        "description": "Block has collision but is invisible"
+    },
+    "weeb timer": {
+        "type": "meta",
+        "description": "Timer makes anime girl noises when used"
+    },
+    "ramp climb skip": {
+        "type": "meta",
+        "description": "Unintended skip where the player slowly climbs up an inclined surface"
     }
 }
