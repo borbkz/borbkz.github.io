@@ -12,6 +12,10 @@ var playerSteam64URI = "steamid64s=";
 var globalHeader = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
     "Server"
 ];
+
+var RANKING ={
+
+}
 $(document).ready(function () {
 
     var steamID = "";
@@ -24,7 +28,6 @@ $(document).ready(function () {
             $('#steamIDText').val(steamID);
             var teleportsBool = ("true" === teleports);
 
-            console.log("1 calling")
             retrieveStats(steamID, teleportsBool);
             if (teleportsBool) {
                 $('#tpradio').click();
@@ -47,7 +50,6 @@ $(document).ready(function () {
             }
 
             $("#expandGlobal").click(); //autoexpand if url linked by steamid
-            console.log("2 calling")
             retrieveStats(steamID, teleportsBool);
         }
 
