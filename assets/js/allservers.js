@@ -168,7 +168,7 @@ $(document).ready(function () {
                 var maptier = finishedGlobals[map][0];
 
 
-                if(!(playerInfo["run-type"] == "tp" && map.startsWith("kzpro"))){
+                if(maptier != 0 && !(playerInfo["run-type"] == "tp" && map.startsWith("kzpro"))){
                     playerInfo["runs-possible"]++;
                     playerInfo["runs-possible-by-tier"][maptier]++;
                 }
