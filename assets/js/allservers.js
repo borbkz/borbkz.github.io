@@ -188,6 +188,7 @@ $(document).ready(function () {
             if (globalTable)
                 globalTable.destroy();
 
+		$("#steamButton").attr('value', 'Fetch Times');
             globalTable = genTable(spreadsheetContainer, maps, globalHeader, [0, 4, 8], cols);
             printPlayerProfile();
         }); //end json
@@ -253,6 +254,7 @@ $(document).ready(function () {
 
         var steamID = $('#steamIDText').val();
 
+		$(this).attr('value', 'Fetching...');
 
 
         var ispro = $('input[name=isprorun-radio]:checked').val();

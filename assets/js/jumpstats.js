@@ -53,9 +53,7 @@ $(document).ready(function () {
 	if (typeof URI["steamid"] !== 'undefined' && typeof URI["jumptype"] !== 'undefined') {
 		steamID = URI["steamid"];
 		jumptype = URI["jumptype"];
-		console.log("hello")
 		if (isValidSteamID(steamID) && isValidStat(jumptype)) {
-		console.log("in 1")
 
 			$('#steamIDText').val(steamID);
 			if (isValidStat(URI["jumptype"]))
@@ -70,7 +68,6 @@ $(document).ready(function () {
 		}
 
 	} else {
-		console.log("in 2")
 		steamID = localStorage.getItem("jumpstatSteamID");
 		jumptype = localStorage.getItem("jumpstatType");
 		binded = localStorage.getItem("jumpstatBinded");
@@ -159,6 +156,8 @@ $(document).ready(function () {
 			});
 
 
+			$("#steamButton").attr('value', 'Fetch Stats');
+			$("#globalJumpstatsButton").attr('value', 'Fetch Stats');
 			createTable(jumpstats, header, container)
 
 		}); //end json
@@ -176,6 +175,7 @@ $(document).ready(function () {
 		isbinded = $('input[name=bind]:checked').val();
 
 
+		$(this).attr('value', 'Fetching...');
 		window.history.pushState("object or string", "Title", "?steamid=" + steamID + "&jumptype=" + jumpstatType);;
 
 		localStorage.setItem("jumpstatSteamID", steamID)
@@ -190,6 +190,7 @@ $(document).ready(function () {
 		jumpstatType = $('input[name=globalJumpstat]:checked').val();
 		isbinded = $('input[name=globalBind]:checked').val();
 
+		$(this).attr('value', 'Fetching...');
 
 		retrieveStats(getRequestURL("", jumpstatType, isbinded), globalContainer, true);
 	});
