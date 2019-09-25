@@ -64,7 +64,7 @@ $(document).ready(function () {
 
 
 			//$("#expand-personal-jumpstats").click(); //autoexpand if url linked by steamid
-			retrieveStats(getRequestURL(steamID, jumptype, "both"), localContainer);
+			retrieveStats(getRequestURL(steamID, jumptype, "both"), localContainer, false);
 		}
 
 	} else {
@@ -74,13 +74,13 @@ $(document).ready(function () {
 		if (isValidSteamID(steamID) && isValidStat(jumptype) && isValidBind(binded)) {
 			$('#steamIDText').val(steamID);
 			$("#expandLocal").click();
-			retrieveStats(getRequestURL(steamID, jumptype, binded), localContainer);
+			retrieveStats(getRequestURL(steamID, jumptype, binded), localContainer, false);
 
 		}
 	}
 
 
-	function retrieveStats(requestURL, container) {
+	function retrieveStats(requestURL, container, global) {
 
 		$.getJSON(requestURL, function (data) {
 
@@ -107,13 +107,14 @@ $(document).ready(function () {
 				var distance = field["distance"];
 
 				//filter out any non-whitelisted WR's
-				if(first){
 
-					if(steam_id in whitelist){
+				if (first && global) {
+
+					if (steam_id in whitelist) {
 
 						player = whitelist[steam_id];
 						first = false;
-					}else{
+					} else {
 						return true;
 					}
 
@@ -136,17 +137,22 @@ $(document).ready(function () {
 				];
 
 
-				if (steam_id in whitelist && distance > highestStat) {
-					highestStat = distance;
+				if (!global) {
+					if(jumpstats.length < 10)
 					jumpstats.push(statRow);
-				} else {
-					//if not in whitelist but not WR either...
-					if (distance < highestStat || highestStat == 0) {
+				} else if(jumpstats.length < 10){
+
+					if (steam_id in whitelist && distance > highestStat) {
+						highestStat = distance;
 						jumpstats.push(statRow);
+					} else {
+						//if not in whitelist but not WR either...
+						if (distance < highestStat || highestStat == 0) {
+							jumpstats.push(statRow);
+						}
+
 					}
-
 				}
-
 			});
 
 
@@ -173,7 +179,7 @@ $(document).ready(function () {
 		//localStorage.setItem("jumpstatType", jumpstatType)
 		//localStorage.setItem("jumpstatBinded", isbinded)
 
-		retrieveStats(getRequestURL(steamID, jumpstatType, isbinded), localContainer);
+		retrieveStats(getRequestURL(steamID, jumpstatType, isbinded), localContainer, false);
 	});
 	$("#globalJumpstatsButton").click(function () {
 
@@ -182,7 +188,7 @@ $(document).ready(function () {
 		isbinded = $('input[name=globalBind]:checked').val();
 
 
-		retrieveStats(getRequestURL("", jumpstatType, isbinded), globalContainer);
+		retrieveStats(getRequestURL("", jumpstatType, isbinded), globalContainer, true);
 	});
 
 	function getRequestURL(steamID, jumpstatType, binded, reqLimit) {
@@ -198,7 +204,7 @@ $(document).ready(function () {
 			globalRequestBindURI = "is_crouch_boost=true&";
 		}
 
-		if(jumpstatType === "ladder"){
+		if (jumpstatType === "ladder") {
 			requestBindURI = requestBind + "false";
 			globalRequestBindURI = "is_crouch_boost=false&";
 		}
