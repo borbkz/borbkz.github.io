@@ -132,9 +132,10 @@ function sanitizeName(name) {
   return name.replace(/<\/?[^>]+(>|$)/g, ""); 
 }
 
-function genTable(container, maps, header, filterArray, myColumns, colWidth) {
+function genTable(container, maps, header, filterArray, myColumns, initialSort) {
 
-	colWidth = colWidth || 1000;
+	colWidth =1000;
+	initialSort = initialSort || 0;
 	var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
 		var filtersPlugin = mapTable.getPlugin('filters');
 
@@ -189,6 +190,11 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 	};
 
 
+	sortConfig = initialSort || {
+		column: 0,
+		sortOrder: "asc"	
+	}
+
 	var mapTable = new Handsontable(container, {
 		data: maps,
 		height: 1000,
@@ -196,6 +202,10 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 		colHeaders: header,
 		columns: myColumns,
 		columnSorting: true,
+		columnSorting:{
+
+		initialConfig: sortConfig
+		},
 		filters: true,
 		dropdownMenu: ["filter_by_value", "filter_action_bar"],
 		contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
@@ -208,42 +218,8 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 		beforeOnCellMouseDown: doNotSelectColumn,
 		licenseKey: 'non-commercial-and-evaluation'
 	});
-	//FIX: problem with old table and event listeners not clearing when requesting new times
-	/*
-		var originalColWidths = [];
-		var colWidths = [];
-		var inputs;
-	
-		inputs = document.querySelectorAll('input.toggle');
-	
-		for (var i = 0; i < inputs.length; i++) {
-			(function (input) {
-	
-					input.addEventListener('click', function () {
-						toggleColumnAt(parseInt(input.dataset.column, 10));
-					});
-			}(inputs[i]));
-		}
-	
-		toggleColumnAt = function (column) {
-			if (colWidths[column] === 0.1) {
-				colWidths[column] = originalColWidths[column];
-			} else {
-				colWidths[column] = 0.1;
-			}
-			mapTable.updateSettings({ colWidths: colWidths });
-		};
-	
-		for (var i = 0, l = inputs.length; i < l; i++) {
-			originalColWidths.push(mapTable.getColWidth(i));
-		}
-		colWidths = originalColWidths.slice();
-	
-		*/
 
-	$(".table-tips").each(function (i, table) {
 
-	});
 	first = false;
 	return mapTable;
 

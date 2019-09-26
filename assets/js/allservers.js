@@ -9,9 +9,8 @@ var playerInfoRequestBaseURL = "https://kztimerglobal.com/api/v1.0/player_ranks?
 var playerInfoProRequestURL = playerInfoRequestBaseURL + "&has_teleports=false";
 var playerInfoTPRequestURL = playerInfoRequestBaseURL + "&has_teleports=true";
 var playerSteam64URI = "steamid64s=";
-var globalHeader = ["Map", "Tier", "Pro Tier", "Length", "Time", "TPs", "Pts", "Date",
-    "Server"
-];
+var globalHeader = ["Map", "Pts", "Tier", "Pro Tier", "Length", "Time", "TPs", "Date",
+    "Server" ];
 
 var RANKING ={
 
@@ -120,7 +119,7 @@ $(document).ready(function () {
                     length = "N/A",
                     time = "N/A",
                     teleports = "N/A",
-                    points = "N/A",
+                    points = 0,
                     date = "N/A",
                     server = "N/A";
 
@@ -149,9 +148,20 @@ $(document).ready(function () {
                     length = difficultyArray[field["map_name"]][2];
 
                 }
-                var statRow = [map, tptier, protier, length,
-                    time, teleports, points, date, server
-                ];
+
+                var statRow = new Array(globalHeader.length);
+
+
+                statRow[globalHeader.indexOf("Map")] = map;
+                statRow[globalHeader.indexOf("Pts")] = points;
+                statRow[globalHeader.indexOf("Tier")] = tptier;
+                statRow[globalHeader.indexOf("Pro Tier")] = protier;
+                statRow[globalHeader.indexOf("Length")] = length;
+                statRow[globalHeader.indexOf("Time")] = time;
+                statRow[globalHeader.indexOf("TPs")] = teleports;
+                statRow[globalHeader.indexOf("Date")] = date;
+                statRow[globalHeader.indexOf("Server")] = server;
+
 
                 if(map !== null && map !== "")
                 maps.push(statRow);
@@ -161,22 +171,10 @@ $(document).ready(function () {
             }); //.each
 
 
-            cols = [{
-                className: "htLeft"
+            var cols = new Array(globalHeader.length);
+            cols[globalHeader.indexOf("Map")] = {className: "htLeft"};
+            cols[globalHeader.indexOf("Time")] = {type: "time", timeFormat:  "hh:mm:ss"};
 
-            }, //map name
-            {}, //tier
-            {}, //pro tier
-            {}, //length
-            {
-                type: "time",
-                timeFormat: "h:mm:ss"
-            },
-            {}, //tp
-            {}, //pts
-            {},
-            {} //server
-            ];
             var spreadsheetContainer = $("#spreadsheet-global")[0];
 
             for (var map in finishedGlobals) {
@@ -195,10 +193,13 @@ $(document).ready(function () {
                 }
                 if (finishedGlobals[map].length < 4 && includeKZPro) {
                     unfinished = Array(globalHeader.length).fill("N/A");
-                    unfinished[0] = map;
-                    unfinished[1] = finishedGlobals[map][0]; //tp tier
-                    unfinished[2] = finishedGlobals[map][1]; //pro tier
-                    unfinished[3] = finishedGlobals[map][2]; //length
+                    unfinished[globalHeader.indexOf( "Map" )] = map;
+                    unfinished[globalHeader.indexOf( "Tier" )] = finishedGlobals[map][0]; //tp tier
+                    unfinished[globalHeader.indexOf( "Pro Tier" )] = finishedGlobals[map][1]; //pro tier
+                    unfinished[globalHeader.indexOf( "Length" )] = finishedGlobals[map][2]; //length
+
+                    var ptsIndex = globalHeader.indexOf("Pts");
+                    unfinished[ptsIndex]  = 0;
 
 
                     maps.push(unfinished);
@@ -207,9 +208,9 @@ $(document).ready(function () {
             }
 
             for( var i = 0; i < maps.length; i++){
-                var mypoints = +maps[i][6];
+                var mypoints = +maps[i][globalHeader.indexOf("Pts")];
                 if(mypoints === 1000){
-                    maps[i][6] = TROPHY["gold"];
+                    maps[i][globalHeader.indexOf("Pts")] = TROPHY["gold"];
                 }else if(mypoints >= 950){
                     //to be implemented 
                     //maps[i][0] += TROPHY["silver"];
@@ -226,7 +227,9 @@ $(document).ready(function () {
             $("#steamButton").attr('value', 'Fetch Times');
 
             $("#global-tooltip").show();
-            globalTable = genTable(spreadsheetContainer, maps, globalHeader, [0, 4, 8], cols);
+            globalTable = genTable(spreadsheetContainer, maps, globalHeader, [globalHeader.indexOf("Map"), globalHeader.indexOf("Time"), 
+               globalHeader.indexOf("Server")], cols, {column: globalHeader.indexOf("Pts"), sortOrder: "desc"});
+
             printPlayerProfile();
         }); //end json
     }
