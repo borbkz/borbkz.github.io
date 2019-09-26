@@ -339,7 +339,7 @@ $(document).ready(function () {
             for (let i = 1; i <= 6; i++) {
                 let avgPoints = +playerInfo["points-average-by-tier"][i];
                 let $curProgressBar = $("#progress-bar-"+i);
-                setProgressWdith($("#progress-bar-"+i), getPercentage(avgPoints, 0, 1000), avgPoints);
+                setProgressWdith($("#progress-bar-"+i), getPercentage(avgPoints, 0, 1000), avgPoints || 0);
             } 
         });
 
@@ -349,7 +349,7 @@ $(document).ready(function () {
                 let curVal = +playerInfo["runs-by-tier"][i];
                 let curMax = playerInfo["runs-possible-by-tier"][playerInfo["tier-max-maps"]];
                 let $curProgressBar = $("#progress-bar-"+i);
-                setProgressWdith($("#progress-bar-"+i), getPercentage(curVal, 0, curMax), curVal);
+                setProgressWdith($("#progress-bar-"+i), getPercentage(curVal, 0, curMax), curVal || 0);
             } 
         });
 
