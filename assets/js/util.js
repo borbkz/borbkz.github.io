@@ -227,7 +227,6 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		columnSorting: {
 			initialConfig: sortConfig
 		},
-		manualColumnResize: true,
 		filters: true,
 		hiddenColumns: {
 			indicators: true,
