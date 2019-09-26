@@ -230,6 +230,13 @@ $(document).ready(function () {
             globalTable = genTable(spreadsheetContainer, maps, globalHeader, [globalHeader.indexOf("Map"), globalHeader.indexOf("Time"), 
                globalHeader.indexOf("Server"), globalHeader.indexOf("Tier"), globalHeader.indexOf("Pro Tier"), globalHeader.indexOf("Length")], cols, {column: globalHeader.indexOf("Pts"), sortOrder: "desc"});
 
+            globalTable.updateSettings({
+                hiddenColumns:{
+                        indicators: true,
+                        columns:[]
+                }
+            })
+
             printPlayerProfile();
         }); //end json
     }

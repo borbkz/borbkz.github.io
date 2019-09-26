@@ -2,14 +2,14 @@
 
 const jsonPath = "/assets/json/"
 const jsPath = "/assets/js/"
-const difficultyJSON = jsonPath +"maps.json";
+const difficultyJSON = jsonPath + "maps.json";
 const headerJSON = jsonPath + "header.json";
 
 
 const TROPHY = {
- "gold": '🏆',
- "silver": '🥈',
- "bronze": '🥉'
+	"gold": '🏆',
+	"silver": '🥈',
+	"bronze": '🥉'
 }
 
 var jumpBinds = ["bind", "nobind", "both"];
@@ -129,20 +129,20 @@ function getTimeFromSeconds(seconds) {
 	return hours + ":" + min + ":" + seconds;
 }
 function sanitizeName(name) {
-  return name.replace(/<\/?[^>]+(>|$)/g, ""); 
+	return name.replace(/<\/?[^>]+(>|$)/g, "");
 }
 
 function genTable(container, maps, header, filterArray, myColumns, initialSort) {
 
-	colWidth =1000;
+	colWidth = 1000;
 	initialSort = initialSort || 0;
 	//var narrowHeaders = ["time","tier", "length"];
 	var wideHeaders = ["map", "server", "date"];
 
 
-	function isNarrowHeader(myHeader){
+	function isNarrowHeader(myHeader) {
 		//see if it's a narrow input field
-		return  !(new RegExp(wideHeaders.join("|")).test(myHeader));
+		return !(new RegExp(wideHeaders.join("|")).test(myHeader));
 	}
 
 	var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
@@ -166,7 +166,7 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 
 		var curHeader = header[colIndex].trim().toLowerCase();
 
-		if(isNarrowHeader(curHeader)){
+		if (isNarrowHeader(curHeader)) {
 			$(input).css('width', '4.5em');
 		}
 
@@ -207,8 +207,11 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 
 	sortConfig = initialSort || {
 		column: 0,
-		sortOrder: "asc"	
+		sortOrder: "asc"
 	}
+
+
+	//$(container).parent().prepend($checkboxContainer)
 
 	var mapTable = new Handsontable(container, {
 		data: maps,
@@ -217,13 +220,12 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		colHeaders: header,
 		columns: myColumns,
 		columnSorting: true,
-		columnSorting:{
-
-		initialConfig: sortConfig
+		columnSorting: {
+			initialConfig: sortConfig
 		},
+		manualColumnResize: true,
 		filters: true,
-		contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
-		hiddenColumns: {
+			hiddenColumns: {
 			indicators: true,
 			columns: [] //hide pro teleports by default
 		},
@@ -232,6 +234,36 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		beforeOnCellMouseDown: doNotSelectColumn,
 		licenseKey: 'non-commercial-and-evaluation'
 	});
+	let $checkboxContainer = $('<div class="innerSelection"></div>');
+
+	for (let i = 1; i < header.length; i++) {
+		let curHeader = header[i];
+		let id = curHeader.replace(/\s+/g, '-').toLowerCase() + '-checkbox';
+
+		$checkboxContainer.append(`<div style="display: inline; margin: 0 10px"><input class='${container.id+"-checkbox"}' name="${header[i]}" type="checkbox" id="${id}" checked> <b>${curHeader}</b></div>`);
+		//$(container).parent().prepend(`<input type="checkbox" id="${id}" checked> ${curHeader}`);
+		$(container).parent().prepend($checkboxContainer);
+		$("#" + id).change(function () {
+
+			var hidden = [];
+			$("."+container.id+"-checkbox").each(function(){
+				
+				var curIndex = header.indexOf(this.name);
+
+				if(!this.checked)
+					hidden.push(curIndex);
+				
+			});
+
+			mapTable.updateSettings({
+				hiddenColumns: {
+					indicators: false,
+					columns: hidden
+				}
+			});
+
+		});
+	}
 
 
 	first = false;

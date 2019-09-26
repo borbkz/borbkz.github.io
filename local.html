@@ -45,13 +45,13 @@ layout: default
 					{% include steamid.html searchtip="Enter Your SteamID" buttontext="Fetch Times" %}
 
 					<div style="margin-right: 35px">
-
 					<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
 					<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
 					</div>
 				</div>
+
 			</div>
-			<div id="table-container">
+			<div id="global-table-container">
 					{% include tooltip.html text="default" id="global-tooltip" %}
 
 				<div class="handsontable" id="spreadsheet-global"> </div>
@@ -69,7 +69,7 @@ layout: default
 						<a id="downloadButton" href="" download="kzmaps.csv"><button>Download</button></a>
 					</div>
 				</div>
-				<div id="table-container">
+				<div id="local-table-container">
 					{% include tooltip.html text="default" id="personal-tooltip" %}
 					<div class="handsontable" id="spreadsheet-local"> </div>
 				</div>
