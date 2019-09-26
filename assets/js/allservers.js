@@ -75,6 +75,7 @@ $(document).ready(function () {
             "runs-possible-by-tier":  new Array(7).fill(0),
             "points-total-by-tier":  new Array(7).fill(0),
             "points-average-by-tier":  new Array(7).fill(0),
+            "records-by-tier": new Array(7).fill(0),
             "tier-max-maps": 1
         }
         //temp max limit based on ~440 maps, eventually should change to indexdb storage 
@@ -147,6 +148,7 @@ $(document).ready(function () {
                     if (tptier !== 0 && +points === 1000) {
 
                         playerInfo["world-records"]++;
+                        playerInfo["records-by-tier"][tptier]++;
 
                     }
 
@@ -314,8 +316,11 @@ $(document).ready(function () {
 
             var barFontStyle = "";
             //so you can see against white background
-            if (tierPercentage > 5 && tier == 6) {
+            if (tierPercentage > 2 && tier == 6) {
                 barFontStyle = "color: #DDD;";
+            }
+            if (tierPercentage < 2 && tier == 6) {
+                barFontStyle = "color: black;";
             }
 
             var $progressBar = $(`<div id="progress-bar-${tier}"class='progress-bar progress-bar-tier' 
@@ -331,6 +336,19 @@ $(document).ready(function () {
             $progressContainer.append($progressBarContainer);
             $(".progress-group-container").append($progressContainer);
 
+            resetProgressBar();
+        }
+
+        function resetProgressBar(){
+                $('.progress').css("border-radius", "20px");
+                $('.progress-bar-tier').css("border", "solid 2px lightgrey");
+                $('.progress-bar-tier').css("border-radius", "20px");
+        }
+        function setProgressBar(){
+                $('.progress').css("border-radius", "0");
+                $('.progress-bar-tier').css("border-radius", "0");
+                $('.progress-bar-tier').css("border", "none");
+
         }
 
         $('#tier-percentage-dropdown').click(function(){
@@ -338,7 +356,34 @@ $(document).ready(function () {
                 let curRuns = +playerInfo["runs-by-tier"][i];
                 let curMax = +playerInfo["runs-possible-by-tier"][i];
                 let $curProgressBar = $("#progress-bar-"+i);
-                setProgressWdith($("#progress-bar-"+i), getPercentage(curRuns, 0, curMax), curRuns+"/" +curMax);
+                let curPercentage = getPercentage(curRuns, 0, curMax);
+
+
+                if(curPercentage >= 2 && i == 6){
+                    $curProgressBar.css("color", "#DDD");
+                }
+                if(curPercentage < 2 && i == 6){
+                    $curProgressBar.css("color", "black");
+                }
+                resetProgressBar();
+                setProgressWdith($("#progress-bar-"+i), curPercentage, curRuns+"/" +curMax);
+            } 
+        });
+        $('#tier-records-dropdown').click(function(){
+            for (let i = 1; i <= 6; i++) {
+                let records = +playerInfo["records-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-"+i);
+                let curMax = playerInfo["runs-possible-by-tier"][i];
+                let curPercentage = getPercentage(records, 0, curMax);
+
+                if(curPercentage >= 2 && i == 6){
+                    $curProgressBar.css("color", "#DDD");
+                }
+                if (curPercentage <2  && i == 6) {
+                    $curProgressBar.css("color", "black");
+                }
+                resetProgressBar();
+                setProgressWdith($("#progress-bar-"+i), curPercentage,  records + "/" + curMax);
             } 
         });
 
@@ -346,7 +391,16 @@ $(document).ready(function () {
             for (let i = 1; i <= 6; i++) {
                 let avgPoints = +playerInfo["points-average-by-tier"][i];
                 let $curProgressBar = $("#progress-bar-"+i);
-                setProgressWdith($("#progress-bar-"+i), getPercentage(avgPoints, 0, 1000), avgPoints || 0);
+                let curPercentage = getPercentage(avgPoints, 0, 1000);
+
+                if(curPercentage >= 2 && i == 6){
+                    $curProgressBar.css("color", "#DDD");
+                }
+                if (curPercentage < 2 && i == 6) {
+                    $curProgressBar.css("color", "black");
+                }
+                resetProgressBar();
+                setProgressWdith($("#progress-bar-"+i), curPercentage, avgPoints || 0);
             } 
         });
 
@@ -356,9 +410,20 @@ $(document).ready(function () {
                 let curVal = +playerInfo["runs-by-tier"][i];
                 let curMax = playerInfo["runs-possible-by-tier"][playerInfo["tier-max-maps"]];
                 let $curProgressBar = $("#progress-bar-"+i);
-                setProgressWdith($("#progress-bar-"+i), getPercentage(curVal, 0, curMax), curVal || 0);
+
+                let curPercentage = getPercentage(curVal, 0, curMax);
+
+                if(curPercentage >= 2 && i == 6){
+                    $curProgressBar.css("color", "#DDD");
+                }
+                if (curPercentage <2  && i == 6) {
+                    $curProgressBar.css("color", "black");
+                }
+                setProgressBar();
+                setProgressWdith($("#progress-bar-"+i), curPercentage, curVal);
             } 
         });
+
 
         function setProgressWdith($myProgressBar, percentageWidth, myText){
             $myProgressBar.css("width", percentageWidth+"%");
