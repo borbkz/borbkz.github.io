@@ -507,7 +507,7 @@
  div.progress {
      margin: 0;
      float: right;
-    border-radius: 20px;
+    border-radius: 7px;
  }
  .progress-bar-group-title{
      margin-bottom: 20px;
@@ -520,5 +520,5 @@
     font: 16px sans-serif;
     font-weight: bold;
     border: 2px solid lightgrey;;
-    border-radius: 20px;
+    border-radius: 7px;
  }

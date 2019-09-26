@@ -337,13 +337,12 @@ $(document).ready(function () {
             $(".progress-group-container").append($progressContainer);
 
             $('#tier-percentage-dropdown').click();
-            resetProgressBar();
         }
 
         function resetProgressBar(){
-                $('.progress').css("border-radius", "20px");
+                $('.progress').css("border-radius", "7px");
                 $('.progress-bar-tier').css("border", "solid 2px lightgrey");
-                $('.progress-bar-tier').css("border-radius", "20px");
+                $('.progress-bar-tier').css("border-radius", "7px");
         }
         function setProgressBar(){
                 $('.progress').css("border-radius", "0");
