@@ -159,8 +159,7 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
     var dateText = '<span class="date-run-container"> ' + timeFinished + (timeFinished === "" ? "just now" : " ago") +
         "</span>";
 
-    var medalURL = imagepath + medal + "-medal.png";
-    var medalTag = '<img class="medal-icon" src="' + medalURL + '">' + placeText + " </img>";
+    var medalTag = TROPHY[medal] + placeText;
 
     var recordText = playerText + " placed " + medalTag + " " + runtypeText + " on " + mapText + " " +
         " with a time " + " of " +

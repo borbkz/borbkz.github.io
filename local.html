@@ -2,8 +2,8 @@
 title: kz.gl
 layout: default
 ---
-<script type="text/javascript" src="/assets/js/allservers.js?{{site.time | date: '%s%N'}}"></script>
-<script type="text/javascript" src="/assets/js/local.js?{{site.time | date: '%s%N'}}"></script>
+<script type="text/javascript" src="/assets/js/allservers.js?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
+<script type="text/javascript" src="/assets/js/local.js?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
 <div class="content-wrap">
 	<div class="accordion" id="accordion-times">
 		{% capture server-times %}
@@ -29,7 +29,7 @@ layout: default
 							id="rank-info-text"></span></div>
 				</div>
 
-				<div class="titleDiv">Map Completion By Tier</div>
+				<div class="titleDiv progress-bar-group-title">Map Completion By Tier</div>
 				
 
 			<div class="progress-group-container">

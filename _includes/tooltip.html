@@ -2,11 +2,9 @@
 <div class="table-tips" id="{{ include.id }}" style="display: none !important">
     {% if include.text == "default" %}
 		Tip: Click on any column to sort. Right click to hide. Type <b>:</b>  in the time filter to see only finished maps, or <b>/</b> to see only unfinished maps. <br>
-		Example: To see all of your best times, Type <b>:</b> in the time filter, then sort the "Pts" column in descending order.<br>
     {% else if include.text =="maps-only" %} 
 		Tip: Click on any column to sort. Right click to hide. 
     {% else %}
     {{ include.text }}
     {% endif %}
-
 </div>

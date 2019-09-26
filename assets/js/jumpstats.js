@@ -200,7 +200,7 @@ $(document).ready(function () {
 
 					if (uniq_id in whitelist) {
 
-						player = whitelist[uniq_id];
+						player = TROPHY["gold"] + " " + whitelist[uniq_id] + " " +  TROPHY["gold"];
 						first = false;
 					} else {
 						return true;

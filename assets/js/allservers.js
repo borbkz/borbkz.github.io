@@ -113,7 +113,7 @@ $(document).ready(function () {
 
             $.each(data, function (i, field) {
 
-                var map = field["map_name"]
+                var map = field["map_name"];
                 //server is sometimes null, and throws exception
                 var tptier = 0,
                     protier = 0,
@@ -135,8 +135,11 @@ $(document).ready(function () {
                 if (map in finishedGlobals) {
                     tptier = difficultyArray[field["map_name"]][0];
 
-                    if(tptier !== 0 && +points === 1000)
+                    if(tptier !== 0 && +points === 1000){
+
                         playerInfo["world-records"]++;
+
+                    }
 
                     playerInfo["points-total"] += +points;
                     //flag to see if map is finished, most of the new death maps have not been added to global api
@@ -158,7 +161,10 @@ $(document).ready(function () {
             }); //.each
 
 
-            cols = [{}, //map name
+            cols = [{
+                className: "htLeft"
+
+            }, //map name
             {}, //tier
             {}, //pro tier
             {}, //length
@@ -194,7 +200,23 @@ $(document).ready(function () {
                     unfinished[2] = finishedGlobals[map][1]; //pro tier
                     unfinished[3] = finishedGlobals[map][2]; //length
 
+
                     maps.push(unfinished);
+                }
+
+            }
+
+            for( var i = 0; i < maps.length; i++){
+                var mypoints = +maps[i][6];
+                if(mypoints === 1000){
+                    maps[i][6] = TROPHY["gold"];
+                }else if(mypoints >= 950){
+                    //to be implemented 
+                    //maps[i][0] += TROPHY["silver"];
+
+                }else if(mypoints>= 850){
+                    //maps[i][0] += TROPHY["bronze"];
+
                 }
 
             }
@@ -220,12 +242,12 @@ $(document).ready(function () {
         $("#player-info-text").text(playerInfo["player-name"]);
 
         $("#wr-info-label").text('World Records: ');
-        var medalIcon = "";
+        var medalType = "";
         
         if(+playerInfo["world-records"] !== 0)
-            medalIcon = '<img class="medal-icon" src="assets/images/medals/gold-medal.png" style="height: 1em; margin-bottom: .2em">';
+            medalType = TROPHY["gold"];
 
-        $("#wr-info-text").html(playerInfo["world-records"] + medalIcon);
+        $("#wr-info-text").html(playerInfo["world-records"] + medalType);
 
         $("#run-info-text").text(`${playerInfo["runs-total"]}/${playerInfo["runs-possible"]} (${runPercentage}%)`);
         $("#points-info-label").text("Total Points: ")

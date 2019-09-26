@@ -504,6 +504,9 @@
      float: right;
     border-radius: 20px;
  }
+ .progress-bar-group-title{
+     margin-bottom: 20px;
+ }
 
  .progress-bar-tier{
     color: #333; 

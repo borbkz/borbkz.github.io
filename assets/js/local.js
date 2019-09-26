@@ -75,7 +75,9 @@ $(document).ready(function () {
             }
             var spreadsheetContainer = $("#spreadsheet-local")[0];
 
-            var cols = [{}, //map name
+            var cols = [{
+                className: "htLeft"
+            }, //map name
                 {}, //tier
                 {}, //pro tier
                 {}, //length

@@ -5,6 +5,13 @@ const jsPath = "/assets/js/"
 const difficultyJSON = jsonPath +"maps.json";
 const headerJSON = jsonPath + "header.json";
 
+
+const TROPHY = {
+ "gold": '🏆',
+ "silver": '🥈',
+ "bronze": '🥉'
+}
+
 var jumpBinds = ["bind", "nobind", "both"];
 const JUMPSTATSKEY = {
 	1: "longjump",
@@ -236,8 +243,6 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 
 	$(".table-tips").each(function (i, table) {
 
-		//$(table).html(`Tip: Click on any column to sort. Right click to hide. Type <b>:</b>  in the time filter to see only finished maps, or <b>/</b> to see only unfinished maps. <br>`+
-		//`Example: To see all of your world records, Type <b>:</b> in the time filter, then sort the "Pts" column in descending order.<br>`)
 	});
 	first = false;
 	return mapTable;
