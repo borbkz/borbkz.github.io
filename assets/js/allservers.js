@@ -336,6 +336,7 @@ $(document).ready(function () {
             $progressContainer.append($progressBarContainer);
             $(".progress-group-container").append($progressContainer);
 
+            $('#tier-percentage-dropdown').click();
             resetProgressBar();
         }
 
