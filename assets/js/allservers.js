@@ -176,8 +176,9 @@ $(document).ready(function () {
             for (var map in finishedGlobals) {
                 var maptier = finishedGlobals[map][0];
 
+                var includeKZPro =  !(playerInfo["run-type"] == "tp" && map.startsWith("kzpro"));
 
-                if(maptier != 0 && !(playerInfo["run-type"] == "tp" && map.startsWith("kzpro"))){
+                if(maptier != 0 && includeKZPro){
                     playerInfo["runs-possible"]++;
                     playerInfo["runs-possible-by-tier"][maptier]++;
                 }
@@ -186,7 +187,7 @@ $(document).ready(function () {
                     playerInfo["runs-by-tier"][maptier]++;
 
                 }
-                if (finishedGlobals[map].length < 4) {
+                if (finishedGlobals[map].length < 4 && includeKZPro) {
                     unfinished = Array(globalHeader.length).fill("N/A");
                     unfinished[0] = map;
                     unfinished[1] = finishedGlobals[map][0]; //tp tier
