@@ -279,3 +279,15 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 	return mapTable;
 
 }
+
+(function(){
+	let a = Math.floor(Math.random() * 8); 
+	console.log(a);
+
+	if(a == 1)
+		new BugController({ 'minBugs': 3, 'maxBugs': 6});
+	else if (a==2)
+		new SpiderController({ 'minBugs': 1, 'maxBugs': 2});
+
+
+})();
