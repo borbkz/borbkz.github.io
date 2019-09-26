@@ -89,10 +89,12 @@
 
 
  .innerSelection {
+
      padding: 0px;
      padding-bottom: 5px;
      padding-top: 5px;
      margin: 20px;
+     margin-top: 30px;
 
  }
 
@@ -432,7 +434,9 @@
 
  .map-link {
      cursor: pointer;
-
+ }
+ .dropdown-item{
+     cursor: pointer;
  }
 
  /*for svg text tags*/
@@ -444,12 +448,12 @@
 
 
  .player-info-container {
-     width: 90%;
+     width: 80%;
      height: 400px;
      clear: both;
      display: none;
-     margin: 10px auto;
-     padding: 20px;
+     margin: 20px auto;
+     padding: 30px;
      margin-bottom: 5px
  }
 
@@ -474,9 +478,10 @@
 
  .progress-label {
      margin: 0;
-     width: 150px;
+     width: 120px;
      float: left;
      font: 1.2em sans-serif;
+     text-align: left;
  }
 
  .progress-container {
@@ -496,7 +501,7 @@
      vertical-align: middle;
 
      height: 1.5em;
-     width: 85%;
+     width: 90%;
      float: right;
  }
  div.progress {
@@ -508,6 +513,8 @@
      margin-bottom: 20px;
  }
 
+ .progress-group-container{
+ }
  .progress-bar-tier{
     color: #333; 
     font: 16px sans-serif;

@@ -10,9 +10,9 @@ var playerInfoProRequestURL = playerInfoRequestBaseURL + "&has_teleports=false";
 var playerInfoTPRequestURL = playerInfoRequestBaseURL + "&has_teleports=true";
 var playerSteam64URI = "steamid64s=";
 var globalHeader = ["Map", "Pts", "Time", "TPs", "Tier", "Pro Tier", "Length", "Date",
-    "Server" ];
+    "Server"];
 
-var RANKING ={
+var RANKING = {
 
 }
 $(document).ready(function () {
@@ -64,8 +64,11 @@ $(document).ready(function () {
             "runs-total": 0,
             "points-total": 0,
             "points-average": 0,
-            "runs-by-tier": [0, 0, 0, 0, 0, 0, 0],
-            "runs-possible-by-tier": [0, 0, 0, 0, 0, 0, 0]
+            "runs-by-tier": new Array(7).fill(0),
+            "runs-possible-by-tier":  new Array(7).fill(0),
+            "points-total-by-tier":  new Array(7).fill(0),
+            "points-average-by-tier":  new Array(7).fill(0),
+            "tier-max-maps": 1
         }
         //temp max limit based on ~440 maps, eventually should change to indexdb storage 
         //so you dont fetch every map all the time, and just fetch the latest runs
@@ -77,7 +80,7 @@ $(document).ready(function () {
         var steamIDText = "";
         if (isValidSteamID(steamID)) {
             steamIDText = "steam_id=" + steamID;
-		    $("#steamButton").attr('value', 'Fetching...');
+            $("#steamButton").attr('value', 'Fetching...');
         } else {
             alert("Please enter valid Steam ID!")
             return;
@@ -123,21 +126,25 @@ $(document).ready(function () {
                     date = "N/A",
                     server = "N/A";
 
-                    time = getTimeFromSeconds(field["time"]);
-                    
-                    teleports = field["teleports"];
-                    points = field["points"];
-                    date = field["updated_on"];
-                    if (typeof field["server_name"] === "string") {
-                        server = field["server_name"].substring(0, 35);
-                    }
+                time = getTimeFromSeconds(field["time"]);
+
+                teleports = field["teleports"];
+                points = field["points"];
+                date = field["updated_on"];
+                if (typeof field["server_name"] === "string") {
+                    server = field["server_name"].substring(0, 35);
+                }
                 if (map in finishedGlobals) {
                     tptier = difficultyArray[field["map_name"]][0];
 
-                    if(tptier !== 0 && +points === 1000){
+                    if (tptier !== 0 && +points === 1000) {
 
                         playerInfo["world-records"]++;
 
+                    }
+
+                    if(tptier !==0){
+                        playerInfo["points-total-by-tier"][tptier] += points;
                     }
 
                     playerInfo["points-total"] += +points;
@@ -163,8 +170,8 @@ $(document).ready(function () {
                 statRow[globalHeader.indexOf("Server")] = server;
 
 
-                if(map !== null && map !== "")
-                maps.push(statRow);
+                if (map !== null && map !== "")
+                    maps.push(statRow);
                 //createTable(maps, header);
 
 
@@ -172,34 +179,34 @@ $(document).ready(function () {
 
 
             var cols = new Array(globalHeader.length);
-            cols[globalHeader.indexOf("Map")] = {className: "htLeft"};
-            cols[globalHeader.indexOf("Time")] = {type: "time", timeFormat:  "hh:mm:ss"};
+            cols[globalHeader.indexOf("Map")] = { className: "htLeft" };
+            cols[globalHeader.indexOf("Time")] = { type: "time", timeFormat: "hh:mm:ss" };
 
             var spreadsheetContainer = $("#spreadsheet-global")[0];
 
             for (var map in finishedGlobals) {
                 var maptier = finishedGlobals[map][0];
 
-                var includeKZPro =  !(playerInfo["run-type"] == "tp" && map.startsWith("kzpro"));
+                var includeKZPro = !(playerInfo["run-type"] == "tp" && map.startsWith("kzpro"));
 
-                if(maptier != 0 && includeKZPro){
+                if (maptier != 0 && includeKZPro) {
                     playerInfo["runs-possible"]++;
                     playerInfo["runs-possible-by-tier"][maptier]++;
                 }
-                if ( maptier !=0 && finishedGlobals[map].length >= 4) {
+                if (maptier != 0 && finishedGlobals[map].length >= 4) {
                     playerInfo["runs-total"]++;
                     playerInfo["runs-by-tier"][maptier]++;
 
                 }
                 if (finishedGlobals[map].length < 4 && includeKZPro) {
                     unfinished = Array(globalHeader.length).fill("N/A");
-                    unfinished[globalHeader.indexOf( "Map" )] = map;
-                    unfinished[globalHeader.indexOf( "Tier" )] = finishedGlobals[map][0]; //tp tier
-                    unfinished[globalHeader.indexOf( "Pro Tier" )] = finishedGlobals[map][1]; //pro tier
-                    unfinished[globalHeader.indexOf( "Length" )] = finishedGlobals[map][2]; //length
+                    unfinished[globalHeader.indexOf("Map")] = map;
+                    unfinished[globalHeader.indexOf("Tier")] = finishedGlobals[map][0]; //tp tier
+                    unfinished[globalHeader.indexOf("Pro Tier")] = finishedGlobals[map][1]; //pro tier
+                    unfinished[globalHeader.indexOf("Length")] = finishedGlobals[map][2]; //length
 
                     var ptsIndex = globalHeader.indexOf("Pts");
-                    unfinished[ptsIndex]  = 0;
+                    unfinished[ptsIndex] = 0;
 
 
                     maps.push(unfinished);
@@ -207,15 +214,15 @@ $(document).ready(function () {
 
             }
 
-            for( var i = 0; i < maps.length; i++){
+            for (var i = 0; i < maps.length; i++) {
                 var mypoints = +maps[i][globalHeader.indexOf("Pts")];
-                if(mypoints === 1000){
+                if (mypoints === 1000) {
                     maps[i][globalHeader.indexOf("Pts")] = TROPHY["gold"];
-                }else if(mypoints >= 950){
+                } else if (mypoints >= 950) {
                     //to be implemented 
                     //maps[i][0] += TROPHY["silver"];
 
-                }else if(mypoints>= 850){
+                } else if (mypoints >= 850) {
                     //maps[i][0] += TROPHY["bronze"];
 
                 }
@@ -227,13 +234,13 @@ $(document).ready(function () {
             $("#steamButton").attr('value', 'Fetch Times');
 
             $("#global-tooltip").show();
-            globalTable = genTable(spreadsheetContainer, maps, globalHeader, [globalHeader.indexOf("Map"), globalHeader.indexOf("Time"), 
-               globalHeader.indexOf("Server"), globalHeader.indexOf("Tier"), globalHeader.indexOf("Pro Tier"), globalHeader.indexOf("Length")], cols, {column: globalHeader.indexOf("Pts"), sortOrder: "desc"});
+            globalTable = genTable(spreadsheetContainer, maps, globalHeader, [globalHeader.indexOf("Map"), globalHeader.indexOf("Time"),
+            globalHeader.indexOf("Server"), globalHeader.indexOf("Tier"), globalHeader.indexOf("Pro Tier"), globalHeader.indexOf("Length")], cols, { column: globalHeader.indexOf("Pts"), sortOrder: "desc" });
 
             globalTable.updateSettings({
-                hiddenColumns:{
-                        indicators: true,
-                        columns:[]
+                hiddenColumns: {
+                    indicators: true,
+                    columns: []
                 }
             })
 
@@ -244,7 +251,7 @@ $(document).ready(function () {
     function printPlayerProfile() {
 
         playerInfo["points-average"] = (playerInfo["points-total"] / playerInfo["runs-total"]).toFixed(1);
-        var runPercentage = (100 * playerInfo["runs-total"]/playerInfo["runs-possible"] || 0).toFixed(1);
+        var runPercentage = (100 * playerInfo["runs-total"] / playerInfo["runs-possible"] || 0).toFixed(1);
 
         $("#player-info").show();
 
@@ -253,8 +260,8 @@ $(document).ready(function () {
 
         $("#wr-info-label").text('World Records: ');
         var medalType = "";
-        
-        if(+playerInfo["world-records"] !== 0)
+
+        if (+playerInfo["world-records"] !== 0)
             medalType = TROPHY["gold"];
 
         $("#wr-info-text").html(playerInfo["world-records"] + medalType);
@@ -274,27 +281,37 @@ $(document).ready(function () {
             $("#rank-info-label").text('TP Rank: ');
 
         }
-        
+
         $(".progress-group-container").empty();
         for (var tier in TIERKEY) {
             if (tier == 0)
                 continue;
 
+
             var tierText = TIERKEY[tier][0];
             var tierColor = TIERKEY[tier][1];
             var tierMax = playerInfo["runs-possible-by-tier"][tier];
             var tierRuns = playerInfo["runs-by-tier"][tier];
-            var tierPercentage =  Math.floor(100 * tierRuns/tierMax) || 0;
+            var tierPercentage = Math.floor(100 * tierRuns / tierMax) || 0;
             var wrs = playerInfo["world-records"];
 
+            var tierAveragePoints = playerInfo["points-total-by-tier"][tier]/tierMax;
+
+
+            if(tierMax > playerInfo["runs-possible-by-tier"][playerInfo["tier-max-maps"]]){
+                playerInfo["tier-max-maps"] = tier;
+
+            }
+
+            playerInfo["points-average-by-tier"][tier] = tierAveragePoints.toFixed(1);
 
             var barFontStyle = "";
             //so you can see against white background
-            if(tierPercentage  >  5 && tier == 6){
-                    barFontStyle = "color: #DDD;";
+            if (tierPercentage > 5 && tier == 6) {
+                barFontStyle = "color: #DDD;";
             }
 
-            var $progressBar = $(`<div class='progress-bar progress-bar-tier' 
+            var $progressBar = $(`<div id="progress-bar-${tier}"class='progress-bar progress-bar-tier' 
                 role='progressbar' style='width:${tierPercentage}%; background-color: ${tierColor} !important; ${barFontStyle}'aria-valuenow='${tierPercentage}'
                 aria-valuemin='0' aria-valuemax='100'>${tierRuns}/${tierMax}</div>`);
             var $progressBarContainer = $('<div class="progress"></div>');
@@ -309,7 +326,46 @@ $(document).ready(function () {
 
         }
 
+        $('#tier-percentage-dropdown').click(function(){
+            for (let i = 1; i <= 6; i++) {
+                let curRuns = +playerInfo["runs-by-tier"][i];
+                let curMax = +playerInfo["runs-possible-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-"+i);
+                setProgressWdith($("#progress-bar-"+i), getPercentage(curRuns, 0, curMax), "(" + curRuns+"/" +curMax+")");
+            } 
+        });
+
+        $('#tier-average-dropdown').click(function(){
+            for (let i = 1; i <= 6; i++) {
+                let avgPoints = +playerInfo["points-average-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-"+i);
+                setProgressWdith($("#progress-bar-"+i), getPercentage(avgPoints, 0, 1000), avgPoints);
+            } 
+        });
+
+
+        $('#tier-total-dropdown').click(function(){
+            for (let i = 1; i <= 6; i++) {
+                let curVal = +playerInfo["runs-by-tier"][i];
+                let curMax = playerInfo["runs-possible-by-tier"][playerInfo["tier-max-maps"]];
+                let $curProgressBar = $("#progress-bar-"+i);
+                setProgressWdith($("#progress-bar-"+i), getPercentage(curVal, 0, curMax), curVal);
+            } 
+        });
+
+        function setProgressWdith($myProgressBar, percentageWidth, myText){
+            $myProgressBar.css("width", percentageWidth+"%");
+            $myProgressBar.text(myText);
+        }
+        function getPercentage(value, min, max){
+            // OR with 0 in case of NaN
+            return Math.floor(100 *  value/max) || 0;
+
+        }
+
+
     }
+
     $("#steamButton").click(function () {
 
         var steamID = $('#steamIDText').val();

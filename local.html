@@ -29,14 +29,32 @@ layout: default
 							id="rank-info-text"></span></div>
 				</div>
 
-				<div class="titleDiv progress-bar-group-title">Map Completion By Tier</div>
-				
+				<div class="titleDiv progress-bar-group-title">
 
-			<div class="progress-group-container">
-			
-			
+				<div class="dropdown">
+					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 250px; font: 20px sans-serif !important">
+						Completion Percentage
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" id="tier-percentage-dropdown">Completion Percentage</a>
+						<a class="dropdown-item" id="tier-total-dropdown">Completion Total</a>
+						<a class="dropdown-item" id="tier-average-dropdown">Average Points</a>
+					</div>
 				</div>
-		
+			</div>
+			<script>
+				$('.dropdown-menu a').click(function(){
+				$('#dropdownMenuButton').text($(this).text());
+					
+				});
+			</script>
+
+				<div class="progress-group-container">
+
+
+				</div>
+
 			</div>
 
 
@@ -45,14 +63,14 @@ layout: default
 					{% include steamid.html searchtip="Enter Your SteamID" buttontext="Fetch Times" %}
 
 					<div style="margin-right: 35px">
-					<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
-					<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
+						<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
+						<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
 					</div>
 				</div>
 
 			</div>
 			<div id="global-table-container">
-					{% include tooltip.html text="default" id="global-tooltip" %}
+				{% include tooltip.html text="default" id="global-tooltip" %}
 
 				<div class="handsontable" id="spreadsheet-global"> </div>
 			</div>
