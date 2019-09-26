@@ -306,6 +306,8 @@ $(document).ready(function () {
 		} else if (binded === "binded") {
 			requestBindURI = requestBind + "true";
 			globalRequestBindURI = "is_crouch_boost=true&";
+		}else{
+			globalRequestBindURI = "is_crouch_boost=false&";
 		}
 
 		if (jumpstatType === "ladder") {
