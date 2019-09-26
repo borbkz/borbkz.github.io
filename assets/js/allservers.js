@@ -1,5 +1,12 @@
 var globalTable;
-var difficultyArray = getDifficultyArray();
+
+
+
+var difficultyArray = {};
+
+
+getDifficultyArray(difficultyArray);
+
 var URI = getURIVars();
 var expandGlobaId = "#expand-allservers";
 var inputTip = "Enter your name or SteamID";

@@ -43,27 +43,34 @@ function getHeaderArray() {
 	//return header;
 
 }
-function getDifficultyArray() {
-	var difficultyArray = {};
-	var mapKeys = {
-		"Map": 0,
-		"Tier": 1,
-		"Pro Tier": 2,
-		"Length": 3,
-	}
-	$.getJSON(difficultyJSON, function (data) {
+function getDifficultyArray(difficultyArray) {
+
+	$.ajax({
+		url: difficultyJSON,
+		dataType: 'json',
+		async: false,
+		data: difficultyArray,
+		success: function (data) {
+			var mapKeys = {
+				"Map": 0,
+				"Tier": 1,
+				"Pro Tier": 2,
+				"Length": 3,
+			}
 
 		$.each(data, function (i, field) {
 			//if (i == 0) return true;
 			tier = field[mapKeys["Tier"]];
 			protier = field[mapKeys["Pro Tier"]];
 			length = field[mapKeys["Length"]];
+			console.log(tier + " " + length)
 			difficultyArray[field[mapKeys["Map"]]] = [tier, protier, length];
 		});
 
-	}); //end json
+		}
+	});
 
-	return difficultyArray;
+
 }
 
 
