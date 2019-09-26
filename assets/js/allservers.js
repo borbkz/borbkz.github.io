@@ -201,7 +201,9 @@ $(document).ready(function () {
             if (globalTable)
                 globalTable.destroy();
 
-		    $("#steamButton").attr('value', 'Fetch Times');
+            $("#steamButton").attr('value', 'Fetch Times');
+
+            $("#global-tooltip").show();
             globalTable = genTable(spreadsheetContainer, maps, globalHeader, [0, 4, 8], cols);
             printPlayerProfile();
         }); //end json
@@ -252,7 +254,6 @@ $(document).ready(function () {
             var tierRuns = playerInfo["runs-by-tier"][tier];
             var tierPercentage =  Math.floor(100 * tierRuns/tierMax) || 0;
             var wrs = playerInfo["world-records"];
-            console.log("WORLD RECORDS " + wrs);
 
 
             var barFontStyle = "";

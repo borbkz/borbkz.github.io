@@ -52,7 +52,8 @@ layout: default
 				</div>
 			</div>
 			<div id="table-container">
-				<div class="table-tips"></div>
+					{% include tooltip.html text="default" id="global-tooltip" %}
+
 				<div class="handsontable" id="spreadsheet-global"> </div>
 			</div>
 		</div>
@@ -69,7 +70,7 @@ layout: default
 					</div>
 				</div>
 				<div id="table-container">
-					<div class="table-tips"></div>
+					{% include tooltip.html text="default" id="personal-tooltip" %}
 					<div class="handsontable" id="spreadsheet-local"> </div>
 				</div>
 			</div>

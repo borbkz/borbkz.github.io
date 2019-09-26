@@ -58,50 +58,6 @@ function getDifficultyArray() {
 
 	return difficultyArray;
 }
-function createTable(tableData, headerArray, tableContainer) {
-	var tables = document.getElementsByTagName("table");
-	for (var i = tables.length - 1; i >= 0; i -= 1)
-		if (tables[i]) tables[i].parentNode.removeChild(tables[i]);
-
-	var table = document.createElement('table');
-
-	var tableBody = document.createElement('tbody');
-
-	var headerRow = document.createElement('tr');
-	for (var header in headerArray) {
-
-		if(headerArray[header] !== "Steam ID"){
-
-
-		var cell = document.createElement('th');
-
-		cell.appendChild(document.createTextNode(headerArray[header]));
-		headerRow.appendChild(cell);
-		}
-
-	}
-	tableBody.appendChild(headerRow);
-	tableData.forEach(function (rowData) {
-		var row = document.createElement('tr');
-
-
-		var i = 0;
-		rowData.forEach(function (cellData) {
-			//steam_id is first col
-			if(i > 0){
-				var cell = document.createElement('td');
-				cell.appendChild(document.createTextNode(cellData));
-				row.appendChild(cell);
-			}
-			i++;
-		});
-
-		tableBody.appendChild(row);
-	});
-
-	table.appendChild(tableBody);
-	tableContainer.appendChild(table);
-}
 
 
 function getServerName(serverID) {
@@ -280,8 +236,8 @@ function genTable(container, maps, header, filterArray, myColumns, colWidth) {
 
 	$(".table-tips").each(function (i, table) {
 
-		$(table).html(`Tip: Click on any column to sort. Right click to hide. Type <b>:</b>  in the time filter to see only finished maps, or <b>/</b> to see only unfinished maps. <br>`+
-		`Example: To see all of your world records, Type <b>:</b> in the time filter, then sort the "Pts" column in descending order.<br>`)
+		//$(table).html(`Tip: Click on any column to sort. Right click to hide. Type <b>:</b>  in the time filter to see only finished maps, or <b>/</b> to see only unfinished maps. <br>`+
+		//`Example: To see all of your world records, Type <b>:</b> in the time filter, then sort the "Pts" column in descending order.<br>`)
 	});
 	first = false;
 	return mapTable;
