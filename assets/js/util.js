@@ -63,7 +63,6 @@ function getDifficultyArray(difficultyArray) {
 			tier = field[mapKeys["Tier"]];
 			protier = field[mapKeys["Pro Tier"]];
 			length = field[mapKeys["Length"]];
-			console.log(tier + " " + length)
 			difficultyArray[field[mapKeys["Map"]]] = [tier, protier, length];
 		});
 
