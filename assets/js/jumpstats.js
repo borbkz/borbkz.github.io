@@ -35,8 +35,83 @@ var jumpstatTable = {
 }
 
 var topstats = {};
+function createTable(tableData, headerArray, tableContainer) {
+	var tables = document.getElementsByTagName("table");
+	for (var i = tables.length - 1; i >= 0; i -= 1)
+		if (tables[i]) tables[i].parentNode.removeChild(tables[i]);
+
+	var table = document.createElement('table');
+
+	var tableBody = document.createElement('tbody');
+
+	var headerRow = document.createElement('tr');
+	for (var header in headerArray) {
+
+		if(headerArray[header] !== "Steam ID"){
+
+
+		var cell = document.createElement('th');
+
+		cell.appendChild(document.createTextNode(headerArray[header]));
+		headerRow.appendChild(cell);
+		}
+
+	}
+	tableBody.appendChild(headerRow);
+	tableData.forEach(function (rowData) {
+		var row = document.createElement('tr');
+
+
+		var i = 0;
+		var steamID = "";
+		rowData.forEach(function (cellData) {
+			var cell = document.createElement('td');
+
+			if(i == 0){	
+			// don't show steamID
+				steamID = cellData;
+			}else if(i ==1){
+				var queryString = "/local?steamid=" + steamID + "&teleports=false";
+				//player link
+				$(cell).html(`<a style="color: black" href="${queryString}"><u>${cellData}</u></a>`)
+
+				row.appendChild(cell);
+			}else if(i==2){
+				//verification
+				var cellText  = "";
+				if(cellData === "true"){
+
+					cellText = '<span style="color: green; font-weight:bold">\u2713 </span>';
+				}else if(cellData === "false"){
+
+					cellText = '<span style="color: red; font-weight:bold">\u2717 </span>';
+				}else{
+					cellText = cellData;
+
+				}
+				$(cell).html(cellText);
+			}
+			else{
+				cell.appendChild(document.createTextNode(cellData));
+
+				row.appendChild(cell);
+			}
+
+			if(i != 0){
+				row.appendChild(cell);
+
+			}
+			i++;
+		});
+
+		tableBody.appendChild(row);
+	});
+
+	table.appendChild(tableBody);
+	tableContainer.appendChild(table);
+}
 $(document).ready(function () {
-	var header = ["Player", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
+	var header = ["Steam ID", "Player", "Verification", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
 
 
 	var localContainer = $("#localJumpstatsContainer")[0];
@@ -80,6 +155,17 @@ $(document).ready(function () {
 	}
 
 
+	function isSteamIDEqual(steamID1, steamID2){
+		return getSteamIDSubstring(steamID1) === getSteamIDSubstring(steamID2);
+	}
+	function getSteamIDSubstring(steamID){
+		if(isValidSteamID(steamID))
+			return steamID.substring(steamID.lastIndexOf(":")+ 1);
+		else
+			return "";
+
+	}
+
 	function retrieveStats(requestURL, container, global) {
 
 		$.getJSON(requestURL, function (data) {
@@ -103,16 +189,18 @@ $(document).ready(function () {
 				var server = "N/A";
 				var serverID = field["server_id"];
 				var player = sanitizeName(field["player_name"]);
+
 				var steam_id = sanitizeName(field["steam_id"]);
+				var uniq_id = getSteamIDSubstring(steam_id);
 				var distance = field["distance"];
 
 				//filter out any non-whitelisted WR's
 
 				if (first && global) {
 
-					if (steam_id in whitelist) {
+					if (uniq_id in whitelist) {
 
-						player = whitelist[steam_id];
+						player = whitelist[uniq_id];
 						first = false;
 					} else {
 						return true;
@@ -128,7 +216,7 @@ $(document).ready(function () {
 					servers[serverID] = server.substring(0, 25);
 
 				}
-				var statRow = [player, jumpstatType,
+				var statRow = [steam_id, player, "N/A", jumpstatType,
 					distance, field[
 					"strafe_count"],
 					field["is_crouch_bind"] ? "Yes" : "No", field[
@@ -138,16 +226,24 @@ $(document).ready(function () {
 
 
 				if (!global) {
-					if(jumpstats.length < 10)
+					$("#jumpstat-tip").css("visibility", "hidden");
+					if(jumpstats.length < 10){
 					jumpstats.push(statRow);
+
+					}
 				} else if(jumpstats.length < 10){
 
-					if (steam_id in whitelist && distance > highestStat) {
-						highestStat = distance;
+					$("#jumpstat-tip").css("visibility", "visible");
+					if (uniq_id in whitelist) {
+						statRow[2] = "true";
+
+						if(distance > highestStat)
+							highestStat = distance;
 						jumpstats.push(statRow);
 					} else {
 						//if not in whitelist but not WR either...
 						if (distance < highestStat || highestStat == 0) {
+							statRow[2] = "false";
 							jumpstats.push(statRow);
 						}
 

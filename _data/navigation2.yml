@@ -1,0 +1,20 @@
+- title: Global Stats
+  url: /
+  sublinks:
+    - title: Leaderboard 
+      url: /leaderboard
+    - title: Worlrd Record Distribution
+      url: /world
+    - title: separator
+- title: Player Stats
+  url: /local
+  sublinks:
+    - title: Jumpstats 
+      url: /jumpstat
+- title: Map Info
+  url: /records
+  sublinks:
+    - title: Tag Cloud 
+      url: /tagcloud
+    - title: Maps
+      url: /maps

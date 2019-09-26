@@ -69,10 +69,15 @@ function createTable(tableData, headerArray, tableContainer) {
 
 	var headerRow = document.createElement('tr');
 	for (var header in headerArray) {
+
+		if(headerArray[header] !== "Steam ID"){
+
+
 		var cell = document.createElement('th');
 
 		cell.appendChild(document.createTextNode(headerArray[header]));
 		headerRow.appendChild(cell);
+		}
 
 	}
 	tableBody.appendChild(headerRow);
@@ -80,10 +85,15 @@ function createTable(tableData, headerArray, tableContainer) {
 		var row = document.createElement('tr');
 
 
+		var i = 0;
 		rowData.forEach(function (cellData) {
-			var cell = document.createElement('td');
-			cell.appendChild(document.createTextNode(cellData));
-			row.appendChild(cell);
+			//steam_id is first col
+			if(i > 0){
+				var cell = document.createElement('td');
+				cell.appendChild(document.createTextNode(cellData));
+				row.appendChild(cell);
+			}
+			i++;
 		});
 
 		tableBody.appendChild(row);

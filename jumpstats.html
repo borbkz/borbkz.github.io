@@ -26,7 +26,9 @@ layout: default
                 <div class="innerSelection">
                     <input type="button" id="globalJumpstatsButton" value="Fetch Jumpstat" />
                 </div>
-                <span>All Global #1 stats for a particular jumptype are whitelisted to filter out cheated or bugged jumpstats. If you have a legit WR and do not see it here, please contact me.</span>
+
+                    <span style="visibility: hidden; color:red;" id="jumpstat-tip">Only whitelisted players are allowed for the world record. Click on a player's name. If they
+                        don't have any map times, chances are the stat is not legit.</span>
                 <div id="globalJumpstatsContainer">
                     <table class="global-table" id="jumpstatTable"></table>
                 </div>
