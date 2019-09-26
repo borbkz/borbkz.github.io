@@ -295,7 +295,7 @@ $(document).ready(function () {
             var tierPercentage = Math.floor(100 * tierRuns / tierMax) || 0;
             var wrs = playerInfo["world-records"];
 
-            var tierAveragePoints = playerInfo["points-total-by-tier"][tier]/tierMax;
+            var tierAveragePoints = playerInfo["points-total-by-tier"][tier]/playerInfo["runs-by-tier"][tier];
 
 
             if(tierMax > playerInfo["runs-possible-by-tier"][playerInfo["tier-max-maps"]]){
