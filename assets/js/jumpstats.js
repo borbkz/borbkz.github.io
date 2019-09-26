@@ -206,6 +206,10 @@ $(document).ready(function () {
 						return true;
 					}
 
+				}else if(!first && global){
+						if(uniq_id in whitelist)
+							player = whitelist[uniq_id];
+
 				}
 
 				if (serverID in servers) {
