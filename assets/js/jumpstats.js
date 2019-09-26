@@ -8,7 +8,7 @@ var requestJumpType = "jumptype=";
 var requestLimit = "limit=";
 var requestMaximum = "less_than_distance=";
 
-var requestBind = "is_crouch_bind=";
+var requestBoost = "is_crouch_boost=";
 //two different ways of getting top jumpstats, using /jumpstat/jumpstattype/ seems to root out cheated stats
 var jumpstatsPBURLBase = "https://kztimerglobal.com/api/v1.0/jumpstats?";
 var jumpstatsGlobalURLBase = "https://kztimerglobal.com/api/v1.0/jumpstats/";
@@ -111,7 +111,7 @@ function createTable(tableData, headerArray, tableContainer) {
 	tableContainer.appendChild(table);
 }
 $(document).ready(function () {
-	var header = ["Steam ID", "Player", "Verification", "Jump Type", "Distance", "Strafe Count", "Binded", "Date", "Server"];
+	var header = ["Steam ID", "Player", "Verification", "Jump Type", "Distance", "Strafe Count", "Crouch Boost", "Date", "Server"];
 
 
 	var localContainer = $("#localJumpstatsContainer")[0];
@@ -223,7 +223,7 @@ $(document).ready(function () {
 				var statRow = [steam_id, player, "N/A", jumpstatType,
 					distance, field[
 					"strafe_count"],
-					field["is_crouch_bind"] ? "Yes" : "No", field[
+					field["is_crouch_boost"] ? "Yes" : "No", field[
 					"created_on"],
 					server
 				];
@@ -299,19 +299,19 @@ $(document).ready(function () {
 		if (typeof reqLimit === "undefined")
 			reqLimit = jumpLimit;
 
-		var requestBindURI = requestBind + "false";
+		var requestBindURI = requestBoost + "false";
 		var globalRequestBindURI = "";
 		if (binded === "both") {
 			requestBindURI = "";
 		} else if (binded === "binded") {
-			requestBindURI = requestBind + "true";
+			requestBindURI = requestBoost + "true";
 			globalRequestBindURI = "is_crouch_boost=true&";
 		}else{
 			globalRequestBindURI = "is_crouch_boost=false&";
 		}
 
 		if (jumpstatType === "ladder") {
-			requestBindURI = requestBind + "false";
+			requestBindURI = requestBoost + "false";
 			globalRequestBindURI = "is_crouch_boost=false&";
 		}
 

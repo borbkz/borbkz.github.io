@@ -444,12 +444,12 @@
 
 
  .player-info-container {
-     width: 80%;
+     width: 90%;
      height: 400px;
      clear: both;
      display: none;
-     margin: 20px auto;
-     padding: 30px;
+     margin: 10px auto;
+     padding: 20px;
      margin-bottom: 5px
  }
 
@@ -496,7 +496,7 @@
      vertical-align: middle;
 
      height: 1.5em;
-     width: 90%;
+     width: 85%;
      float: right;
  }
  div.progress {
