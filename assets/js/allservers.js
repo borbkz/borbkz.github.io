@@ -348,7 +348,6 @@ $(document).ready(function () {
                 $('.progress').css("border-radius", "0");
                 $('.progress-bar-tier').css("border-radius", "0");
                 $('.progress-bar-tier').css("border", "none");
-
         }
 
         $('#tier-percentage-dropdown').click(function(){
@@ -382,8 +381,12 @@ $(document).ready(function () {
                 if (curPercentage <2  && i == 6) {
                     $curProgressBar.css("color", "black");
                 }
+
+                let troll="";
+                if(+playerInfo["world-records"] == 1 && playerInfo["records-by-tier"][i] == 1)
+                    troll="&nbsp;&nbsp;&nbsp;<---- only one stinking record LOL, better hold on to it";
                 resetProgressBar();
-                setProgressWdith($("#progress-bar-"+i), curPercentage,  records + "/" + curMax);
+                setProgressWdith($("#progress-bar-"+i), curPercentage,  records + "/" + curMax + troll);
             } 
         });
 
@@ -427,7 +430,7 @@ $(document).ready(function () {
 
         function setProgressWdith($myProgressBar, percentageWidth, myText){
             $myProgressBar.css("width", percentageWidth+"%");
-            $myProgressBar.text(myText);
+            $myProgressBar.html(myText);
         }
         function getPercentage(value, min, max){
             // OR with 0 in case of NaN
