@@ -331,7 +331,7 @@ $(document).ready(function () {
                 let curRuns = +playerInfo["runs-by-tier"][i];
                 let curMax = +playerInfo["runs-possible-by-tier"][i];
                 let $curProgressBar = $("#progress-bar-"+i);
-                setProgressWdith($("#progress-bar-"+i), getPercentage(curRuns, 0, curMax), "(" + curRuns+"/" +curMax+")");
+                setProgressWdith($("#progress-bar-"+i), getPercentage(curRuns, 0, curMax), curRuns+"/" +curMax);
             } 
         });
 
