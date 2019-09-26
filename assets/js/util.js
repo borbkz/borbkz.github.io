@@ -1,5 +1,3 @@
-
-
 const jsonPath = "/assets/json/"
 const jsPath = "/assets/js/"
 const difficultyJSON = jsonPath + "maps.json";
@@ -241,13 +239,20 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		licenseKey: 'non-commercial-and-evaluation'
 	});
 
+		//set to perfect wdith based on column width total
+		var newWidth =  $('#' + container.id + ' .wtHider').width();
+		const WIDTH_OFFSET = 12;//scrollbar width offset
+
+	mapTable.updateSettings({
+		width: newWidth + WIDTH_OFFSET
+	});
 	let $checkboxContainer = $('<div class="checkboxContainer innerSelection"></div>');
-	$(".checkboxContainer").remove();
+	$('#' + container.id + ' .checkboxContainer').remove();
 
 
 	for (let i = 1; i < header.length; i++) {
 		let curHeader = header[i];
-		let id = curHeader.replace(/\s+/g, '-').toLowerCase() + '-checkbox';
+		let id = container.id + '-' + curHeader.replace(/\s+/g, '-').toLowerCase() + '-checkbox';
 
 		$checkboxContainer.append(`<div style="display: inline; margin: 0 10px"><input class='${container.id + "-checkbox"}' name="${header[i]}" type="checkbox" id="${id}" checked> <b>${curHeader}</b></div>`);
 		//$(container).parent().prepend(`<input type="checkbox" id="${id}" checked> ${curHeader}`);
@@ -255,6 +260,7 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		$("#" + id).change(function () {
 
 			var hidden = [];
+			var selector = "#" + container.id +" ." + container.id +"-checkbox";
 			$("." + container.id + "-checkbox").each(function () {
 
 				var curIndex = header.indexOf(this.name);
@@ -264,12 +270,19 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 
 			});
 
+			//Important to hide columns first, then reset width
+			//has to be done in two steps
 			mapTable.updateSettings({
 				hiddenColumns: {
 					indicators: false,
 					columns: hidden
 				}
 			});
+
+			mapTable.updateSettings({
+				width: $('#' + container.id + ' .wtHider').width() + WIDTH_OFFSET
+			});
+
 
 		});
 	}
@@ -282,7 +295,6 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 
 (function(){
 	let a = Math.floor(Math.random() * 8); 
-	console.log(a);
 
 	if(a == 1)
 		new BugController({ 'minBugs': 3, 'maxBugs': 5, 'min_frames': 10});
