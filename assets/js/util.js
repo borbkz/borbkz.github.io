@@ -247,8 +247,11 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		width: newWidth + WIDTH_OFFSET
 	});
 	let $checkboxContainer = $('<div class="checkboxContainer innerSelection"></div>');
-	$('#' + container.id + ' .checkboxContainer').remove();
 
+	let $prevCheckboxContainer = $(container).parent().children(':first-child');
+	if($prevCheckboxContainer.hasClass('checkboxContainer')) 
+		$prevCheckboxContainer.remove();
+	
 
 	for (let i = 1; i < header.length; i++) {
 		let curHeader = header[i];
