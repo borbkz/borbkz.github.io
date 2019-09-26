@@ -384,7 +384,7 @@ $(document).ready(function () {
 
                 let troll="";
                 if(+playerInfo["world-records"] == 1 && playerInfo["records-by-tier"][i] == 1)
-                    troll="&nbsp;&nbsp;&nbsp;<---- only one stinking record LOL, better hold on to it";
+                    troll="&nbsp;&nbsp;&nbsp;<---- only one stinking record LOL 😂, better hold on to it";
                 resetProgressBar();
                 setProgressWdith($("#progress-bar-"+i), curPercentage,  records + "/" + curMax + troll);
             } 
