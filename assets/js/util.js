@@ -285,9 +285,9 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 	console.log(a);
 
 	if(a == 1)
-		new BugController({ 'minBugs': 3, 'maxBugs': 5});
+		new BugController({ 'minBugs': 3, 'maxBugs': 5, 'min_frames': 10});
 	else if (a==2)
-		new SpiderController({ 'minBugs': 1, 'maxBugs': 1});
+		new SpiderController({ 'minBugs': 1, 'maxBugs': 1, 'min_frames': 7});
 
 
 })();
