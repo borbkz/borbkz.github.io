@@ -225,7 +225,7 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		},
 		manualColumnResize: true,
 		filters: true,
-			hiddenColumns: {
+		hiddenColumns: {
 			indicators: true,
 			columns: [] //hide pro teleports by default
 		},
@@ -234,25 +234,28 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		beforeOnCellMouseDown: doNotSelectColumn,
 		licenseKey: 'non-commercial-and-evaluation'
 	});
-	let $checkboxContainer = $('<div class="innerSelection"></div>');
+
+	let $checkboxContainer = $('<div class="checkboxContainer innerSelection"></div>');
+	$(".checkboxContainer").remove();
+
 
 	for (let i = 1; i < header.length; i++) {
 		let curHeader = header[i];
 		let id = curHeader.replace(/\s+/g, '-').toLowerCase() + '-checkbox';
 
-		$checkboxContainer.append(`<div style="display: inline; margin: 0 10px"><input class='${container.id+"-checkbox"}' name="${header[i]}" type="checkbox" id="${id}" checked> <b>${curHeader}</b></div>`);
+		$checkboxContainer.append(`<div style="display: inline; margin: 0 10px"><input class='${container.id + "-checkbox"}' name="${header[i]}" type="checkbox" id="${id}" checked> <b>${curHeader}</b></div>`);
 		//$(container).parent().prepend(`<input type="checkbox" id="${id}" checked> ${curHeader}`);
 		$(container).parent().prepend($checkboxContainer);
 		$("#" + id).change(function () {
 
 			var hidden = [];
-			$("."+container.id+"-checkbox").each(function(){
-				
+			$("." + container.id + "-checkbox").each(function () {
+
 				var curIndex = header.indexOf(this.name);
 
-				if(!this.checked)
+				if (!this.checked)
 					hidden.push(curIndex);
-				
+
 			});
 
 			mapTable.updateSettings({
