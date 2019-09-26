@@ -102,7 +102,8 @@ $(document).ready(function () {
 
 
             $("#personal-tooltip").show();
-            localTable = genTable(spreadsheetContainer, tableBuffer, localHeader, [0, 4, 7], cols);
+
+            localTable = genTable(spreadsheetContainer, tableBuffer, localHeader, [0, 1,2,3,4, 7], cols);
 
             plugin = localTable.getPlugin('hiddenColumns');
 

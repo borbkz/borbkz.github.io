@@ -38,7 +38,8 @@ layout: default
 
                 $("#maps-tooltip").show();
                 cols[0] = { className: "htLeft"};
-                genTable(spreadsheetContainer, maps, header, [0], cols);
+
+                genTable(spreadsheetContainer, maps, header, [...Array(header.length).keys()], cols);
 
             }); //end json
 

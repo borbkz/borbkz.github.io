@@ -136,6 +136,15 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 
 	colWidth =1000;
 	initialSort = initialSort || 0;
+	//var narrowHeaders = ["time","tier", "length"];
+	var wideHeaders = ["map", "server", "date"];
+
+
+	function isNarrowHeader(myHeader){
+		//see if it's a narrow input field
+		return  !(new RegExp(wideHeaders.join("|")).test(myHeader));
+	}
+
 	var debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
 		var filtersPlugin = mapTable.getPlugin('filters');
 
@@ -154,6 +163,12 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 	var getInitializedElements = function (colIndex) {
 		var div = document.createElement('div');
 		var input = document.createElement('input');
+
+		var curHeader = header[colIndex].trim().toLowerCase();
+
+		if(isNarrowHeader(curHeader)){
+			$(input).css('width', '4.5em');
+		}
 
 		div.className = 'filterHeader';
 
@@ -207,7 +222,6 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		initialConfig: sortConfig
 		},
 		filters: true,
-		dropdownMenu: ["filter_by_value", "filter_action_bar"],
 		contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
 		hiddenColumns: {
 			indicators: true,

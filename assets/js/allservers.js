@@ -9,7 +9,7 @@ var playerInfoRequestBaseURL = "https://kztimerglobal.com/api/v1.0/player_ranks?
 var playerInfoProRequestURL = playerInfoRequestBaseURL + "&has_teleports=false";
 var playerInfoTPRequestURL = playerInfoRequestBaseURL + "&has_teleports=true";
 var playerSteam64URI = "steamid64s=";
-var globalHeader = ["Map", "Pts", "Tier", "Pro Tier", "Length", "Time", "TPs", "Date",
+var globalHeader = ["Map", "Pts", "Time", "TPs", "Tier", "Pro Tier", "Length", "Date",
     "Server" ];
 
 var RANKING ={
@@ -228,7 +228,7 @@ $(document).ready(function () {
 
             $("#global-tooltip").show();
             globalTable = genTable(spreadsheetContainer, maps, globalHeader, [globalHeader.indexOf("Map"), globalHeader.indexOf("Time"), 
-               globalHeader.indexOf("Server")], cols, {column: globalHeader.indexOf("Pts"), sortOrder: "desc"});
+               globalHeader.indexOf("Server"), globalHeader.indexOf("Tier"), globalHeader.indexOf("Pro Tier"), globalHeader.indexOf("Length")], cols, {column: globalHeader.indexOf("Pts"), sortOrder: "desc"});
 
             printPlayerProfile();
         }); //end json
