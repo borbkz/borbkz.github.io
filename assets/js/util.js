@@ -5,6 +5,7 @@ const headerJSON = jsonPath + "header.json";
 const STEAMID_PERSISTENT = "STEAMID-PERSISTENT";
 const USE_STEAMID_PERSISTENT = "USE-STEAMID-PERSISTENT";
 
+const MAX_MAPS_TOTAL = 500;
 const TROPHY = {
 	"gold": '🏆',
 	"silver": '🥈',
@@ -34,6 +35,16 @@ const TIERKEY = {
 }
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 
+function isSteamIDEqual(steamID1, steamID2) {
+	return getSteamIDSubstring(steamID1) === getSteamIDSubstring(steamID2);
+}
+function getSteamIDSubstring(steamID) {
+	if (isValidSteamID(steamID))
+		return steamID.substring(steamID.lastIndexOf(":") + 1);
+	else
+		return "";
+
+}
 
 function getHeaderArray() {
 	//var header = {};
@@ -225,8 +236,7 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		width: colWidth,
 		colHeaders: header,
 		columns: myColumns,
-		columnSorting: true,
-		columnSorting: {
+		multiColumnSorting: {
 			initialConfig: sortConfig
 		},
 		filters: true,
