@@ -143,9 +143,16 @@ $(document).ready(function () {
 		}
 
 	} else {
-        if(useSteamIDPersistent() && persistentSteamIDExists()){
-            $('#steamIDText').val(localStorage.getItem(STEAMID_PERSISTENT));
-        }
+		if (useSteamIDPersistent() && persistentSteamIDExists()) {
+			let potentialSteamID = localStorage.getItem(STEAMID_PERSISTENT);
+			$('#steamIDText').val(potentialSteamID);
+			if (isValidSteamID(potentialSteamID)) {
+
+				$('#steamButton').attr('value', 'Fetching...');
+				retrieveStats(getRequestURL(potentialSteamID, "longjump", "both"), localContainer, false);
+			}
+
+		}
 	}
 
 

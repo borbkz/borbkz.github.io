@@ -45,8 +45,14 @@ $(document).ready(function () {
         }
     } else{
         if(useSteamIDPersistent() && persistentSteamIDExists()){
-            $('#steamIDText').val(localStorage.getItem(STEAMID_PERSISTENT));
+            var potentialSteamID = localStorage.getItem(STEAMID_PERSISTENT);
+            $('#steamIDText').val(potentialSteamID);
 
+            if(isValidSteamID(potentialSteamID)){
+                $('#tpradio').click();
+                retrieveStats(potentialSteamID, true);
+            }
+            
         }
 
     }
