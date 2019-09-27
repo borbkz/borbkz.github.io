@@ -67,8 +67,8 @@ $(document).ready(function () {
         $("#player-info-text").text(playerInfo["player-name"]);
 
         $("#wr-info-label").text('World Records: ');
-        $("#silver-info-label").text('Silvers: ');
-        $("#bronze-info-label").text('Bronzes: ');
+        $("#silver-info-label").text('Silvers:');
+        $("#bronze-info-label").text('Bronzes:');
         var goldmedal = "", silvermedal = "", bronzemedal = "";
 
         if (+playerInfo["world-records"] !== 0)

@@ -20,13 +20,14 @@ layout: default
 						<div class="infofield">
 							<span class="infolabel" id="wr-info-label"> </span>
 							<span class="infotext" id="wr-info-text"></span>
+
 						</div>
-						<div class="infofield">
-							<span class="infolabel" id="silver-info-label"> </span>
+						<div title="900+ point times, not necessarily Top 20" class="infofield">
+							<span class="infolabel tier-tooltip" id="silver-info-label"></span>
 							<span class="infotext" id="silver-info-text"></span>
 						</div>
-						<div class="infofield">
-							<span class="infolabel" id="bronze-info-label"> </span>
+						<div title="800+ point times, not necessarily Top 100" class="infofield">
+							<span class="infolabel tier-tooltip" id="bronze-info-label"></span>
 							<span class="infotext" id="bronze-info-text"></span>
 						</div>
 					</div>
@@ -49,12 +50,13 @@ layout: default
 							style="width: 250px; font: 20px sans-serif !important">
 						</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" id="tier-percentage-dropdown">Completion Percentage</a>
+							<a class="dropdown-item" id="tier-percentage-dropdown"
+								title="Normalized by total possible maps in each tier">Completion Percentage</a>
 							<a class="dropdown-item" id="tier-total-dropdown">Completion Total</a>
 							<a class="dropdown-item" id="tier-average-dropdown">Average Points</a>
-							<a class="dropdown-item" id="tier-records-dropdown">🏆 Records (1000 pts)</a>
-							<a class="dropdown-item" id="tier-silvers-dropdown">🥈 Silvers (900+ pts)</a>
-							<a class="dropdown-item" id="tier-bronzes-dropdown">🥉 Bronzes (800+ pts)</a>
+							<a class="dropdown-item" id="tier-records-dropdown" title="Nothing to see here. A record is a record!">🏆 Records</a>
+							<a class="dropdown-item" id="tier-silvers-dropdown" title="Not necessarily Top 20">🥈 Silvers (900+ pts)</a>
+							<a class="dropdown-item" id="tier-bronzes-dropdown" title="Not necessairly Top 100">🥉 Bronzes (800+ pts)</a>
 						</div>
 					</div>
 				</div>

@@ -544,3 +544,7 @@
 
     margin: 0 auto !important;
  }
+
+ .tier-tooltip{
+  border-bottom: 1px dotted;
+ }
