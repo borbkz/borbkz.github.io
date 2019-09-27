@@ -16,8 +16,20 @@ layout: default
 					<div class="infoline"><span class="infolabel" id="player-info-label"> </span> <span class="infotext"
 							id="player-info-text"></span></div>
 
-					<div class="infoline"><span class="infolabel" id="wr-info-label"> </span> <span class="infotext"
-							id="wr-info-text"></span></div>
+					<div class="infoline">
+						<div class="infofield">
+							<span class="infolabel" id="wr-info-label"> </span>
+							<span class="infotext" id="wr-info-text"></span>
+						</div>
+						<div class="infofield">
+							<span class="infolabel" id="silver-info-label"> </span>
+							<span class="infotext" id="silver-info-text"></span>
+						</div>
+						<div class="infofield">
+							<span class="infolabel" id="bronze-info-label"> </span>
+							<span class="infotext" id="bronze-info-text"></span>
+						</div>
+					</div>
 
 					<div class="infoline"><span class="infolabel" id="run-info-label"> </span> <span class="infotext"
 							id="run-info-text"></span></div>
@@ -31,24 +43,26 @@ layout: default
 
 				<div class="titleDiv progress-bar-group-title">
 
-				<div class="dropdown">
-					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 250px; font: 20px sans-serif !important">
-						Completion Percentage
-					</button>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item" id="tier-percentage-dropdown">Completion Percentage</a>
-						<a class="dropdown-item" id="tier-total-dropdown">Completion Amount</a>
-						<a class="dropdown-item" id="tier-average-dropdown">Average Points</a>
-						<a class="dropdown-item" id="tier-records-dropdown">World Records</a>
+					<div class="dropdown">
+						<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+							style="width: 250px; font: 20px sans-serif !important">
+						</button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item" id="tier-percentage-dropdown">Completion Percentage</a>
+							<a class="dropdown-item" id="tier-total-dropdown">Completion Normalized</a>
+							<a class="dropdown-item" id="tier-average-dropdown">Average Points</a>
+							<a class="dropdown-item" id="tier-records-dropdown">🏆 Records (1000 pts)</a>
+							<a class="dropdown-item" id="tier-silvers-dropdown">🥈 Silvers (900+ pts)</a>
+							<a class="dropdown-item" id="tier-bronzes-dropdown">🥉 Bronzes (800+ pts)</a>
+						</div>
 					</div>
 				</div>
-			</div>
-			<script>
-				$('.dropdown-menu a').click(function(){
-				$('#dropdownMenuButton').text($(this).text()); 
-				});
-			</script>
+				<script>
+					$('.dropdown-menu a').click(function () {
+						$('#dropdownMenuButton').text($(this).text());
+					});
+				</script>
 
 				<div class="progress-group-container">
 

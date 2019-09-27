@@ -488,6 +488,10 @@
      text-align: left;
      margin-bottom: 5px;
  }
+ .infofield{
+     display: inline;
+     margin-right: 3em;
+ }
 
  .progress-label {
      margin: 0;
@@ -532,7 +536,7 @@
     color: #333; 
     font: 16px sans-serif;
     font-weight: bold;
-    border: 2px solid lightgrey;;
+    border: 1px solid darkgrey;
     border-radius: 7px;
  }
 
