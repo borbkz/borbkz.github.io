@@ -3,7 +3,7 @@
     {% for item in site.data.navigation %}<li><a href="{{ item.link }}" {% if page.url == item.link %}class="active"
         {% endif %}>{{ item.name }}</a></li>
     {% endfor %}
-    <div style="padding-top: .7em"><input type="text" style="background-color:lightgrey; color: black; height: 1.5em; width: 200px !important"
+    <div style="padding-top: .7em"><input type="text" style="background-color:lightgrey; color: black; height: 1.5em; "
         id="steamid-persistent-input" oninput="updateCheckPersistentSteamID()" value="Enter Your SteamID"><br>
       <input id='steamid-persistent-checkbox' type="checkbox"><span style="color:white">Remember this
         SteamID</span></div>
@@ -38,7 +38,7 @@
   function updateCheckPersistentSteamID() {
     //dont check if isvalidSteamID(), juse fill in whatever the user put in the input field
     let curSteamID = $steamIDPersistentInput.val();
-    if(useSteamIDPersistent()){
+    if (useSteamIDPersistent()) {
       localStorage.setItem(STEAMID_PERSISTENT, curSteamID);
     }
   }
@@ -47,14 +47,14 @@
 
     if (useSteamIDPersistent()) {
       $steamIDPersistentCheckbox.prop('checked', true);
-      if(persistentSteamIDExists){
+      if (persistentSteamIDExists) {
         $steamIDPersistentInput.val(localStorage.getItem(STEAMID_PERSISTENT));
       }
-    }else{
+    } else {
       localStorage.removeItem(STEAMID_PERSISTENT);
     }
 
-    if(!persistentSteamIDExists()){
+    if (!persistentSteamIDExists()) {
       $steamIDPersistentInput.val("Enter Your SteamID");
     }
   })();
