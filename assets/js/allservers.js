@@ -26,7 +26,6 @@ $(document).ready(function () {
 
     var steamID = "";
     if (typeof URI["steamid"] !== 'undefined' && URI["teleports"] !== 'undefined') {
-        console.log("wtf")
         steamID = URI["steamid"];
         teleports = URI["teleports"]
         if (isValidSteamID(steamID)) {
@@ -44,12 +43,11 @@ $(document).ready(function () {
 
 
         }
-    } else if(localStorage.getItem(STEAMID_PERSISTENT) !== null){
+    } else{
 
-        console.log("hello")
         //just autofill the steamid input, don't actually fetch anything
-        $('#steamIDText').val(localStorage.getItem(STEAMID_PERSISTENT));
 
+        loadPersistentSteamID($('#steamIDText'));
 
     }
 

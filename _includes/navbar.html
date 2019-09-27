@@ -4,24 +4,24 @@
         {% endif %}>{{ item.name }}</a></li>
     {% endfor %}
     <div style="padding-top: .7em"><input type="text" style="background-color:lightgrey; color: black; height: 1.5em"
-        id="steamid-persistent-input" oninput="rememberSteamID()" steamID" value="Enter Your SteamID"><br>
-      <input id='steamid-persistent-checkbox' type="checkbox" checked><span style="color:white">Remember this SteamID</span></div>
+        id="steamid-persistent-input" oninput="checkPersistentSteamID()" steamID" value="Enter Your SteamID"><br>
+      <input id='steamid-persistent-checkbox' type="checkbox" checked><span style="color:white">Remember this
+        SteamID</span></div>
   </ul>
 </nav>
 
 <script>
-  let loadedSteamID = localStorage.getItem('STEAMID-PERSISTENT');
-  if(loadedSteamID !== null && isValidSteamID(loadedSteamID)){
-    $('#steamid-persistent-input').val(loadedSteamID);
+  loadPersistentSteamID($('#steamid-persistent-input'));
+
+  $('#steamid-persistent-checkbox').change(function(){
+    loadPersistentSteamID();
+
+  });
+
+
+  function checkPersistentSteamID(){
+    loadPersistentSteamID();
 
   }
-  function rememberSteamID() {
 
-    let curSteamID = $('#steamid-persistent-input').val();
-    let curSteamIDChecked = $('#steamid-persistent-checkbox').is(':checked');
-
-    if(isValidSteamID(curSteamID) && curSteamIDChecked){
-      localStorage.setItem('STEAMID-PERSISTENT', curSteamID);
-    }
-  }
 </script>

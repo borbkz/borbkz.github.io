@@ -33,6 +33,27 @@ const TIERKEY = {
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 
 
+function loadPersistentSteamID(steamIDInputContainer) {
+
+
+	let curSteamID = $('#steamid-persistent-input').val();
+	let curSteamIDChecked = $('#steamid-persistent-checkbox').is(':checked');
+
+	if (isValidSteamID(curSteamID) && curSteamIDChecked) {
+		localStorage.setItem(STEAMID_PERSISTENT, curSteamID);
+		if (steamIDInputContainer) {
+
+			$(steamIDInputContainer).val(curSteamID);
+		}
+	} else if (localStorage.getItem(STEAMID_PERSISTENT) !== null && curSteamIDChecked) {
+		if (steamIDInputContainer) {
+			$(steamIDInputContainer).val(localStorage.getItem(STEAMID_PERSISTENT));
+		}
+
+	}
+
+}
+
 function getHeaderArray() {
 	//var header = {};
 	$.getJSON(headerJSON, function (data) {
@@ -56,13 +77,13 @@ function getDifficultyArray(difficultyArray) {
 				"Length": 3,
 			}
 
-		$.each(data, function (i, field) {
-			//if (i == 0) return true;
-			tier = field[mapKeys["Tier"]];
-			protier = field[mapKeys["Pro Tier"]];
-			length = field[mapKeys["Length"]];
-			difficultyArray[field[mapKeys["Map"]]] = [tier, protier, length];
-		});
+			$.each(data, function (i, field) {
+				//if (i == 0) return true;
+				tier = field[mapKeys["Tier"]];
+				protier = field[mapKeys["Pro Tier"]];
+				length = field[mapKeys["Length"]];
+				difficultyArray[field[mapKeys["Map"]]] = [tier, protier, length];
+			});
 
 		}
 	});
@@ -238,9 +259,9 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		licenseKey: 'non-commercial-and-evaluation'
 	});
 
-		//set to perfect wdith based on column width total
-		var newWidth =  $('#' + container.id + ' .wtHider').width();
-		const WIDTH_OFFSET = 12;//scrollbar width offset
+	//set to perfect wdith based on column width total
+	var newWidth = $('#' + container.id + ' .wtHider').width();
+	const WIDTH_OFFSET = 12;//scrollbar width offset
 
 	mapTable.updateSettings({
 		width: newWidth + WIDTH_OFFSET
@@ -248,9 +269,9 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 	let $checkboxContainer = $('<div class="checkboxContainer innerSelection"></div>');
 
 	let $prevCheckboxContainer = $(container).parent().children(':first-child');
-	if($prevCheckboxContainer.hasClass('checkboxContainer')) 
+	if ($prevCheckboxContainer.hasClass('checkboxContainer'))
 		$prevCheckboxContainer.remove();
-	
+
 
 	for (let i = 1; i < header.length; i++) {
 		let curHeader = header[i];
@@ -294,13 +315,13 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 
 }
 
-(function(){
-	let a = Math.floor(Math.random() * 8); 
+(function () {
+	let a = Math.floor(Math.random() * 8);
 
-	if(a == 1)
-		new BugController({ 'minBugs': 3, 'maxBugs': 5, 'min_frames': 10});
-	else if (a==2)
-		new SpiderController({ 'minBugs': 1, 'maxBugs': 1, 'min_frames': 7});
+	if (a == 1)
+		new BugController({ 'minBugs': 3, 'maxBugs': 5, 'min_frames': 10 });
+	else if (a == 2)
+		new SpiderController({ 'minBugs': 1, 'maxBugs': 1, 'min_frames': 7 });
 
 
 })();

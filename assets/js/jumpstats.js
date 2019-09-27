@@ -142,8 +142,8 @@ $(document).ready(function () {
 			retrieveStats(getRequestURL(steamID, jumptype, "both"), localContainer, false);
 		}
 
-	} else if (localStorage.getItem(STEAMID_PERSISTENT) !== null) {
-		$('#steamIDText').val(localStorage.getItem(STEAMID_PERSISTENT));
+	} else {
+        loadPersistentSteamID($('#steamIDText'));
 	}
 
 
