@@ -435,9 +435,22 @@
  .map-link {
      cursor: pointer;
  }
+
+
+ .dropdown-toggle{
+
+    width: 250px;
+ }
+ .dropdown-menu{
+     width: 250px; 
+     text-align:left;
+
+ }
+
  .dropdown-item{
      cursor: pointer;
  }
+
 
  /*for svg text tags*/
  text {

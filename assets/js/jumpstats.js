@@ -47,13 +47,13 @@ function createTable(tableData, headerArray, tableContainer) {
 	var headerRow = document.createElement('tr');
 	for (var header in headerArray) {
 
-		if(headerArray[header] !== "Steam ID"){
+		if (headerArray[header] !== "Steam ID") {
 
 
-		var cell = document.createElement('th');
+			var cell = document.createElement('th');
 
-		cell.appendChild(document.createTextNode(headerArray[header]));
-		headerRow.appendChild(cell);
+			cell.appendChild(document.createTextNode(headerArray[header]));
+			headerRow.appendChild(cell);
 		}
 
 	}
@@ -67,37 +67,37 @@ function createTable(tableData, headerArray, tableContainer) {
 		rowData.forEach(function (cellData) {
 			var cell = document.createElement('td');
 
-			if(i == 0){	
-			// don't show steamID
+			if (i == 0) {
+				// don't show steamID
 				steamID = cellData;
-			}else if(i ==1){
+			} else if (i == 1) {
 				var queryString = "/local?steamid=" + steamID + "&teleports=false";
 				//player link
 				$(cell).html(`<a style="color: black" href="${queryString}"><u>${cellData}</u></a>`)
 
 				row.appendChild(cell);
-			}else if(i==2){
+			} else if (i == 2) {
 				//verification
-				var cellText  = "";
-				if(cellData === "true"){
+				var cellText = "";
+				if (cellData === "true") {
 
 					cellText = '<span style="color: green; font-weight:bold">\u2713 </span>';
-				}else if(cellData === "false"){
+				} else if (cellData === "false") {
 
 					cellText = '<span style="color: red; font-weight:bold">\u2717 </span>';
-				}else{
+				} else {
 					cellText = cellData;
 
 				}
 				$(cell).html(cellText);
 			}
-			else{
+			else {
 				cell.appendChild(document.createTextNode(cellData));
 
 				row.appendChild(cell);
 			}
 
-			if(i != 0){
+			if (i != 0) {
 				row.appendChild(cell);
 
 			}
@@ -142,25 +142,17 @@ $(document).ready(function () {
 			retrieveStats(getRequestURL(steamID, jumptype, "both"), localContainer, false);
 		}
 
-	} else {
-		steamID = localStorage.getItem("jumpstatSteamID");
-		jumptype = localStorage.getItem("jumpstatType");
-		binded = localStorage.getItem("jumpstatBinded");
-		if (isValidSteamID(steamID) && isValidStat(jumptype) && isValidBind(binded)) {
-			$('#steamIDText').val(steamID);
-			$("#expandLocal").click();
-			retrieveStats(getRequestURL(steamID, jumptype, binded), localContainer, false);
-
-		}
+	} else if (localStorage.getItem(STEAMID_PERSISTENT) !== null) {
+		$('#steamIDText').val(localStorage.getItem(STEAMID_PERSISTENT));
 	}
 
 
-	function isSteamIDEqual(steamID1, steamID2){
+	function isSteamIDEqual(steamID1, steamID2) {
 		return getSteamIDSubstring(steamID1) === getSteamIDSubstring(steamID2);
 	}
-	function getSteamIDSubstring(steamID){
-		if(isValidSteamID(steamID))
-			return steamID.substring(steamID.lastIndexOf(":")+ 1);
+	function getSteamIDSubstring(steamID) {
+		if (isValidSteamID(steamID))
+			return steamID.substring(steamID.lastIndexOf(":") + 1);
 		else
 			return "";
 
@@ -200,15 +192,15 @@ $(document).ready(function () {
 
 					if (uniq_id in whitelist) {
 
-						player = TROPHY["gold"] + " " + whitelist[uniq_id] + " " +  TROPHY["gold"];
+						player = TROPHY["gold"] + " " + whitelist[uniq_id] + " " + TROPHY["gold"];
 						first = false;
 					} else {
 						return true;
 					}
 
-				}else if(!first && global){
-						if(uniq_id in whitelist)
-							player = whitelist[uniq_id];
+				} else if (!first && global) {
+					if (uniq_id in whitelist)
+						player = whitelist[uniq_id];
 
 				}
 
@@ -231,17 +223,17 @@ $(document).ready(function () {
 
 				if (!global) {
 					$("#jumpstat-tip").css("visibility", "hidden");
-					if(jumpstats.length < 10){
-					jumpstats.push(statRow);
+					if (jumpstats.length < 10) {
+						jumpstats.push(statRow);
 
 					}
-				} else if(jumpstats.length < 10){
+				} else if (jumpstats.length < 10) {
 
 					$("#jumpstat-tip").css("visibility", "visible");
 					if (uniq_id in whitelist) {
 						statRow[2] = "true";
 
-						if(distance > highestStat)
+						if (distance > highestStat)
 							highestStat = distance;
 						jumpstats.push(statRow);
 					} else {
@@ -306,7 +298,7 @@ $(document).ready(function () {
 		} else if (binded === "binded") {
 			requestBindURI = requestBoost + "true";
 			globalRequestBindURI = "is_crouch_boost=true&";
-		}else{
+		} else {
 			globalRequestBindURI = "is_crouch_boost=false&";
 		}
 

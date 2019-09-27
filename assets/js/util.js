@@ -2,7 +2,7 @@ const jsonPath = "/assets/json/"
 const jsPath = "/assets/js/"
 const difficultyJSON = jsonPath + "maps.json";
 const headerJSON = jsonPath + "header.json";
-
+const STEAMID_PERSISTENT = "STEAMID-PERSISTENT";
 
 const TROPHY = {
 	"gold": '🏆',
@@ -262,7 +262,6 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		$("#" + id).change(function () {
 
 			var hidden = [];
-			var selector = "#" + container.id +" ." + container.id +"-checkbox";
 			$("." + container.id + "-checkbox").each(function () {
 
 				var curIndex = header.indexOf(this.name);

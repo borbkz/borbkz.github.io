@@ -26,6 +26,7 @@ $(document).ready(function () {
 
     var steamID = "";
     if (typeof URI["steamid"] !== 'undefined' && URI["teleports"] !== 'undefined') {
+        console.log("wtf")
         steamID = URI["steamid"];
         teleports = URI["teleports"]
         if (isValidSteamID(steamID)) {
@@ -43,21 +44,12 @@ $(document).ready(function () {
 
 
         }
-    } else {
-        var steamID = localStorage.getItem("globalMapsSteamID");
-        var teleportsBool = "true" === localStorage.getItem(
-            "globalMapsTeleports"); //convert string to boolean
-        if (isValidSteamID(steamID)) {
-            $('#steamIDText').val(steamID);
-            if (teleportsBool) {
-                $('#tpradio').click();
-            } else {
-                $('#proradio').click();
-            }
+    } else if(localStorage.getItem(STEAMID_PERSISTENT) !== null){
 
-            $("#expandGlobal").click(); //autoexpand if url linked by steamid
-            retrieveStats(steamID, teleportsBool);
-        }
+        console.log("hello")
+        //just autofill the steamid input, don't actually fetch anything
+        $('#steamIDText').val(localStorage.getItem(STEAMID_PERSISTENT));
+
 
     }
 
