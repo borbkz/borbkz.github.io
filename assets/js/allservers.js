@@ -22,7 +22,213 @@ var globalHeader = ["Map", "Pts", "Time", "TPs", "Tier", "Pro Tier", "Length", "
 var RANKING = {
 
 }
+
+var playerInfo = getEmptyPlayer(); 
+
+function getEmptyPlayer() {
+    return {
+        "player-name": "",
+        "world-records": 0,
+        "run-type": "",
+        "runs-possible": 0,
+        "runs-total": 0,
+        "points-total": 0,
+        "points-average": 0,
+        "runs-by-tier": new Array(7).fill(0),
+        "runs-possible-by-tier": new Array(7).fill(0),
+        "points-total-by-tier": new Array(7).fill(0),
+        "points-average-by-tier": new Array(7).fill(0),
+        "records-by-tier": new Array(7).fill(0),
+        "tier-max-maps": 1
+    }
+
+}
 $(document).ready(function () {
+
+    printPlayerProfile();
+    function printPlayerProfile() {
+
+        playerInfo["points-average"] = (playerInfo["points-total"] / playerInfo["runs-total"] || 0).toFixed(1);
+        var runPercentage = (100 * playerInfo["runs-total"] / playerInfo["runs-possible"] || 0).toFixed(1);
+
+        $("#player-info").show();
+
+        $("#player-info-label").text("Player: ");
+        $("#player-info-text").text(playerInfo["player-name"]);
+
+        $("#wr-info-label").text('World Records: ');
+        var medalType = "";
+
+        if (+playerInfo["world-records"] !== 0)
+            medalType = TROPHY["gold"];
+
+        $("#wr-info-text").html(playerInfo["world-records"] + medalType);
+
+        $("#run-info-text").text(`${playerInfo["runs-total"]}/${playerInfo["runs-possible"]} (${runPercentage}%)`);
+        $("#points-info-label").text("Total Points: ")
+        $("#points-info-text").text(`${playerInfo["points-total"].toLocaleString("en")} (avg: ${playerInfo["points-average"]})`);
+
+        $("#rank-info-text").text('To be implemented');
+
+        if (playerInfo["run-type"] === "pro") {
+            $("#run-info-label").text("Total Pro Runs: ")
+            $("#rank-info-label").text('PRO Rank: ');
+
+        } else if (playerInfo["run-type"] === "tp") {
+            $("#run-info-label").text("Total TP Runs: ")
+            $("#rank-info-label").text('TP Rank: ');
+
+        }
+
+        $(".progress-group-container").empty();
+        for (var tier in TIERKEY) {
+            if (tier == 0)
+                continue;
+
+
+            var tierText = TIERKEY[tier][0];
+            var tierColor = TIERKEY[tier][1];
+            var tierMax = playerInfo["runs-possible-by-tier"][tier];
+            var tierRuns = playerInfo["runs-by-tier"][tier];
+            var tierPercentage = Math.floor(100 * tierRuns / tierMax) || 0;
+            var wrs = playerInfo["world-records"];
+
+            var tierAveragePoints = playerInfo["points-total-by-tier"][tier] / playerInfo["runs-by-tier"][tier];
+
+
+            if (tierMax > playerInfo["runs-possible-by-tier"][playerInfo["tier-max-maps"]]) {
+                playerInfo["tier-max-maps"] = tier;
+
+            }
+
+            playerInfo["points-average-by-tier"][tier] = tierAveragePoints.toFixed(1);
+
+            var barFontStyle = "";
+            //so you can see against white background
+            if (tierPercentage > 2 && tier == 6) {
+                barFontStyle = "color: #DDD;";
+            }
+            if (tierPercentage < 2 && tier == 6) {
+                barFontStyle = "color: black;";
+            }
+
+            var $progressBar = $(`<div id="progress-bar-${tier}"class='progress-bar progress-bar-tier' 
+                role='progressbar' style='width:${tierPercentage}%; background-color: ${tierColor} !important; ${barFontStyle}'aria-valuenow='${tierPercentage}'
+                aria-valuemin='0' aria-valuemax='100'>${tierRuns}/${tierMax}</div>`);
+            var $progressBarContainer = $('<div class="progress"></div>');
+            $progressBarContainer.append($progressBar);
+
+            var $progressLabel = $(`<div class="progress-label">${tierText}</div>`);
+
+            var $progressContainer = $('<div class=progress-container></div>');
+            $progressContainer.append($progressLabel);
+            $progressContainer.append($progressBarContainer);
+            $(".progress-group-container").append($progressContainer);
+
+            $('#tier-percentage-dropdown').click();
+        }
+
+        function resetProgressBar() {
+            $('.progress').css("border-radius", "7px");
+            $('.progress-bar-tier').css("border", "solid 2px lightgrey");
+            $('.progress-bar-tier').css("border-radius", "7px");
+        }
+        function setProgressBar() {
+            $('.progress').css("border-radius", "0");
+            $('.progress-bar-tier').css("border-radius", "0");
+            $('.progress-bar-tier').css("border", "none");
+        }
+
+        $('#tier-percentage-dropdown').click(function () {
+            for (let i = 1; i <= 6; i++) {
+                let curRuns = +playerInfo["runs-by-tier"][i];
+                let curMax = +playerInfo["runs-possible-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-" + i);
+                let curPercentage = getPercentage(curRuns, 0, curMax);
+
+
+                if (curPercentage >= 2 && i == 6) {
+                    $curProgressBar.css("color", "#DDD");
+                }
+                if (curPercentage < 2 && i == 6) {
+                    $curProgressBar.css("color", "black");
+                }
+                resetProgressBar();
+                setProgressWdith($("#progress-bar-" + i), curPercentage, curRuns + "/" + curMax);
+            }
+        });
+        $('#tier-records-dropdown').click(function () {
+            for (let i = 1; i <= 6; i++) {
+                let records = +playerInfo["records-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-" + i);
+                let curMax = playerInfo["runs-possible-by-tier"][i];
+                let curPercentage = getPercentage(records, 0, curMax);
+
+                if (curPercentage >= 2 && i == 6) {
+                    $curProgressBar.css("color", "#DDD");
+                }
+                if (curPercentage < 2 && i == 6) {
+                    $curProgressBar.css("color", "black");
+                }
+
+                resetProgressBar();
+                setProgressWdith($("#progress-bar-" + i), curPercentage, records + "/" + curMax);
+            }
+        });
+
+        $('#tier-average-dropdown').click(function () {
+            for (let i = 1; i <= 6; i++) {
+                let avgPoints = +playerInfo["points-average-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-" + i);
+                let curPercentage = getPercentage(avgPoints, 0, 1000);
+
+                if (curPercentage >= 2 && i == 6) {
+                    $curProgressBar.css("color", "#DDD");
+                }
+                if (curPercentage < 2 && i == 6) {
+                    $curProgressBar.css("color", "black");
+                }
+                resetProgressBar();
+                setProgressWdith($("#progress-bar-" + i), curPercentage, avgPoints || 0);
+            }
+        });
+
+
+        $('#tier-total-dropdown').click(function () {
+            for (let i = 1; i <= 6; i++) {
+                let curVal = +playerInfo["runs-by-tier"][i];
+                let curMax = playerInfo["runs-possible-by-tier"][playerInfo["tier-max-maps"]];
+                let $curProgressBar = $("#progress-bar-" + i);
+
+                let curPercentage = getPercentage(curVal, 0, curMax);
+
+                if (curPercentage >= 2 && i == 6) {
+                    $curProgressBar.css("color", "#DDD");
+                }
+                if (curPercentage < 2 && i == 6) {
+                    $curProgressBar.css("color", "black");
+                }
+                setProgressBar();
+                setProgressWdith($("#progress-bar-" + i), curPercentage, curVal);
+            }
+        });
+
+
+        function setProgressWdith($myProgressBar, percentageWidth, myText) {
+            $myProgressBar.css("width", percentageWidth + "%");
+            $myProgressBar.html(myText);
+        }
+        function getPercentage(value, min, max) {
+            // OR with 0 in case of NaN
+            return Math.floor(100 * value / max) || 0;
+
+        }
+
+
+    }
+
+
+
 
     var steamID = "";
     if (typeof URI["steamid"] !== 'undefined' && URI["teleports"] !== 'undefined') {
@@ -43,37 +249,23 @@ $(document).ready(function () {
 
 
         }
-    } else{
-        if(useSteamIDPersistent() && persistentSteamIDExists()){
+    } else {
+        if (useSteamIDPersistent() && persistentSteamIDExists()) {
             var potentialSteamID = localStorage.getItem(STEAMID_PERSISTENT);
             $('#steamIDText').val(potentialSteamID);
 
-            if(isValidSteamID(potentialSteamID)){
+            if (isValidSteamID(potentialSteamID)) {
                 $('#tpradio').click();
                 retrieveStats(potentialSteamID, true);
             }
-            
+
         }
 
     }
 
     function retrieveStats(steamID, teleports) {
 
-        playerInfo = {
-            "player-name": "",
-            "world-records": 0,
-            "run-type": "",
-            "runs-possible": 0,
-            "runs-total": 0,
-            "points-total": 0,
-            "points-average": 0,
-            "runs-by-tier": new Array(7).fill(0),
-            "runs-possible-by-tier":  new Array(7).fill(0),
-            "points-total-by-tier":  new Array(7).fill(0),
-            "points-average-by-tier":  new Array(7).fill(0),
-            "records-by-tier": new Array(7).fill(0),
-            "tier-max-maps": 1
-        }
+        playerInfo=getEmptyPlayer();
         //temp max limit based on ~440 maps, eventually should change to indexdb storage 
         //so you dont fetch every map all the time, and just fetch the latest runs
 
@@ -148,7 +340,7 @@ $(document).ready(function () {
 
                     }
 
-                    if(tptier !==0){
+                    if (tptier !== 0) {
                         playerInfo["points-total-by-tier"][tptier] += points;
                     }
 
@@ -253,186 +445,6 @@ $(document).ready(function () {
         }); //end json
     }
 
-    function printPlayerProfile() {
-
-        playerInfo["points-average"] = (playerInfo["points-total"] / playerInfo["runs-total"]).toFixed(1);
-        var runPercentage = (100 * playerInfo["runs-total"] / playerInfo["runs-possible"] || 0).toFixed(1);
-
-        $("#player-info").show();
-
-        $("#player-info-label").text("Player: ");
-        $("#player-info-text").text(playerInfo["player-name"]);
-
-        $("#wr-info-label").text('World Records: ');
-        var medalType = "";
-
-        if (+playerInfo["world-records"] !== 0)
-            medalType = TROPHY["gold"];
-
-        $("#wr-info-text").html(playerInfo["world-records"] + medalType);
-
-        $("#run-info-text").text(`${playerInfo["runs-total"]}/${playerInfo["runs-possible"]} (${runPercentage}%)`);
-        $("#points-info-label").text("Total Points: ")
-        $("#points-info-text").text(`${playerInfo["points-total"].toLocaleString("en")} (avg: ${playerInfo["points-average"]})`);
-
-        $("#rank-info-text").text('To be implemented');
-
-        if (playerInfo["run-type"] === "pro") {
-            $("#run-info-label").text("Total Pro Runs: ")
-            $("#rank-info-label").text('PRO Rank: ');
-
-        } else if (playerInfo["run-type"] === "tp") {
-            $("#run-info-label").text("Total TP Runs: ")
-            $("#rank-info-label").text('TP Rank: ');
-
-        }
-
-        $(".progress-group-container").empty();
-        for (var tier in TIERKEY) {
-            if (tier == 0)
-                continue;
-
-
-            var tierText = TIERKEY[tier][0];
-            var tierColor = TIERKEY[tier][1];
-            var tierMax = playerInfo["runs-possible-by-tier"][tier];
-            var tierRuns = playerInfo["runs-by-tier"][tier];
-            var tierPercentage = Math.floor(100 * tierRuns / tierMax) || 0;
-            var wrs = playerInfo["world-records"];
-
-            var tierAveragePoints = playerInfo["points-total-by-tier"][tier]/playerInfo["runs-by-tier"][tier];
-
-
-            if(tierMax > playerInfo["runs-possible-by-tier"][playerInfo["tier-max-maps"]]){
-                playerInfo["tier-max-maps"] = tier;
-
-            }
-
-            playerInfo["points-average-by-tier"][tier] = tierAveragePoints.toFixed(1);
-
-            var barFontStyle = "";
-            //so you can see against white background
-            if (tierPercentage > 2 && tier == 6) {
-                barFontStyle = "color: #DDD;";
-            }
-            if (tierPercentage < 2 && tier == 6) {
-                barFontStyle = "color: black;";
-            }
-
-            var $progressBar = $(`<div id="progress-bar-${tier}"class='progress-bar progress-bar-tier' 
-                role='progressbar' style='width:${tierPercentage}%; background-color: ${tierColor} !important; ${barFontStyle}'aria-valuenow='${tierPercentage}'
-                aria-valuemin='0' aria-valuemax='100'>${tierRuns}/${tierMax}</div>`);
-            var $progressBarContainer = $('<div class="progress"></div>');
-            $progressBarContainer.append($progressBar);
-
-            var $progressLabel = $(`<div class="progress-label">${tierText}</div>`);
-
-            var $progressContainer = $('<div class=progress-container></div>');
-            $progressContainer.append($progressLabel);
-            $progressContainer.append($progressBarContainer);
-            $(".progress-group-container").append($progressContainer);
-
-            $('#tier-percentage-dropdown').click();
-        }
-
-        function resetProgressBar(){
-                $('.progress').css("border-radius", "7px");
-                $('.progress-bar-tier').css("border", "solid 2px lightgrey");
-                $('.progress-bar-tier').css("border-radius", "7px");
-        }
-        function setProgressBar(){
-                $('.progress').css("border-radius", "0");
-                $('.progress-bar-tier').css("border-radius", "0");
-                $('.progress-bar-tier').css("border", "none");
-        }
-
-        $('#tier-percentage-dropdown').click(function(){
-            for (let i = 1; i <= 6; i++) {
-                let curRuns = +playerInfo["runs-by-tier"][i];
-                let curMax = +playerInfo["runs-possible-by-tier"][i];
-                let $curProgressBar = $("#progress-bar-"+i);
-                let curPercentage = getPercentage(curRuns, 0, curMax);
-
-
-                if(curPercentage >= 2 && i == 6){
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if(curPercentage < 2 && i == 6){
-                    $curProgressBar.css("color", "black");
-                }
-                resetProgressBar();
-                setProgressWdith($("#progress-bar-"+i), curPercentage, curRuns+"/" +curMax);
-            } 
-        });
-        $('#tier-records-dropdown').click(function(){
-            for (let i = 1; i <= 6; i++) {
-                let records = +playerInfo["records-by-tier"][i];
-                let $curProgressBar = $("#progress-bar-"+i);
-                let curMax = playerInfo["runs-possible-by-tier"][i];
-                let curPercentage = getPercentage(records, 0, curMax);
-
-                if(curPercentage >= 2 && i == 6){
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if (curPercentage <2  && i == 6) {
-                    $curProgressBar.css("color", "black");
-                }
-
-                resetProgressBar();
-                setProgressWdith($("#progress-bar-"+i), curPercentage,  records + "/" + curMax);
-            } 
-        });
-
-        $('#tier-average-dropdown').click(function(){
-            for (let i = 1; i <= 6; i++) {
-                let avgPoints = +playerInfo["points-average-by-tier"][i];
-                let $curProgressBar = $("#progress-bar-"+i);
-                let curPercentage = getPercentage(avgPoints, 0, 1000);
-
-                if(curPercentage >= 2 && i == 6){
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if (curPercentage < 2 && i == 6) {
-                    $curProgressBar.css("color", "black");
-                }
-                resetProgressBar();
-                setProgressWdith($("#progress-bar-"+i), curPercentage, avgPoints || 0);
-            } 
-        });
-
-
-        $('#tier-total-dropdown').click(function(){
-            for (let i = 1; i <= 6; i++) {
-                let curVal = +playerInfo["runs-by-tier"][i];
-                let curMax = playerInfo["runs-possible-by-tier"][playerInfo["tier-max-maps"]];
-                let $curProgressBar = $("#progress-bar-"+i);
-
-                let curPercentage = getPercentage(curVal, 0, curMax);
-
-                if(curPercentage >= 2 && i == 6){
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if (curPercentage <2  && i == 6) {
-                    $curProgressBar.css("color", "black");
-                }
-                setProgressBar();
-                setProgressWdith($("#progress-bar-"+i), curPercentage, curVal);
-            } 
-        });
-
-
-        function setProgressWdith($myProgressBar, percentageWidth, myText){
-            $myProgressBar.css("width", percentageWidth+"%");
-            $myProgressBar.html(myText);
-        }
-        function getPercentage(value, min, max){
-            // OR with 0 in case of NaN
-            return Math.floor(100 *  value/max) || 0;
-
-        }
-
-
-    }
 
     $("#steamButton").click(function () {
 
