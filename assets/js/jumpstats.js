@@ -149,6 +149,8 @@ $(document).ready(function () {
 			if (isValidSteamID(potentialSteamID)) {
 
 				$('#steamButton').attr('value', 'Fetching...');
+				//just use default options if no URI strings specified
+				window.history.pushState("object or string", "Title", "?steamid=" + potentialSteamID + "&jumptype=longjump");
 				retrieveStats(getRequestURL(potentialSteamID, "longjump", "both"), localContainer, false);
 			}
 
