@@ -1,14 +1,14 @@
 - name: Recent Globals
   link: /
 - name: Leaderboard
-  link: /leaderboard
+  link: /leaderboard.html
 - name: Your Times
-  link: /local
+  link: /local.html
 - name: Jumpstats
-  link: /jumpstats
+  link: /jumpstats.html
 - name: Record Distribution 
-  link: /world
+  link: /world.html
 - name: Maps
-  link: /maps
+  link: /maps.html
 - name: Tag Cloud 
-  link: /tagcloud
+  link: /tagcloud.html

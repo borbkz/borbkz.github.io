@@ -27,9 +27,9 @@ var playerInfo = getEmptyPlayer();
 
 function getEmptyPlayer() {
     return {
-        "player-name": "",
+        "player-name": "N/A",
         "world-records": 0,
-        "run-type": "",
+        "run-type": "tp",
         "runs-possible": 0,
         "runs-total": 0,
         "points-total": 0,

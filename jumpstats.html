@@ -24,7 +24,7 @@ layout: default
                     <input type="radio" id="globalCountjumpRadio" name="globalJumpstat" value="countjump">Countjump
                 </div>
                 <div class="innerSelection">
-                    <input type="button" id="globalJumpstatsButton" value="Fetch Jumpstat" />
+                    <input type="button" style="width: 150px" id="globalJumpstatsButton" value="Fetch Stats" />
                 </div>
 
                     <span style="visibility: hidden;" id="jumpstat-tip">Only <a style="color: red !important;" href="/assets/json/jumpstats_whitelist.json">whitelisted players</a> are allowed for the world record. Click on a player's name. If they
@@ -35,7 +35,7 @@ layout: default
             </div>
         </div>
         {% endcapture %}
-        {% include collapse.html parent-id="accordion-times" id="global-jumpstats" title="Global Top Jumpstats" content=inner%}
+        {% include collapse.html parent-id="accordion-times" id="global-jumpstats" title="Global Top Jumpstats"  content=inner%}
         {% capture inner2 %}
         <div class="content-wrap">
             <div class="inputSelection">
@@ -53,7 +53,7 @@ layout: default
                     <input type="radio" id="ladderjumpRadio" name="jumpstat" value="ladder">Ladder
                     <input type="radio" id="countjumpRadio" name="jumpstat" value="countjump">Countjump
                 </div>
-                {% include steamid.html searchtip="Enter your SteamID" buttontext="Fetch Jumpstat"%}
+                {% include steamid.html searchtip="Enter your SteamID" buttontext="Fetch Stats"%}
                 <div id="localJumpstatsContainer">
                     <table class="local-table" id="jumpstatTable"></table>
                 </div>
