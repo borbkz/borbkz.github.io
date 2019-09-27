@@ -179,16 +179,6 @@ $(document).ready(function () {
 	}
 
 
-	function isSteamIDEqual(steamID1, steamID2) {
-		return getSteamIDSubstring(steamID1) === getSteamIDSubstring(steamID2);
-	}
-	function getSteamIDSubstring(steamID) {
-		if (isValidSteamID(steamID))
-			return steamID.substring(steamID.lastIndexOf(":") + 1);
-		else
-			return "";
-
-	}
 
 	function retrieveStats(requestURL, container, global) {
 
