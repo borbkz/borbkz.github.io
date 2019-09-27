@@ -3,12 +3,14 @@ const jsPath = "/assets/js/"
 const difficultyJSON = jsonPath + "maps.json";
 const headerJSON = jsonPath + "header.json";
 const STEAMID_PERSISTENT = "STEAMID-PERSISTENT";
+const USE_STEAMID_PERSISTENT = "USE-STEAMID-PERSISTENT";
 
 const TROPHY = {
 	"gold": '🏆',
 	"silver": '🥈',
 	"bronze": '🥉'
 }
+
 
 var jumpBinds = ["bind", "nobind", "both"];
 const JUMPSTATSKEY = {
@@ -32,27 +34,6 @@ const TIERKEY = {
 }
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 
-
-function loadPersistentSteamID(steamIDInputContainer) {
-
-
-	let curSteamID = $('#steamid-persistent-input').val();
-	let curSteamIDChecked = $('#steamid-persistent-checkbox').is(':checked');
-
-	if (isValidSteamID(curSteamID) && curSteamIDChecked) {
-		localStorage.setItem(STEAMID_PERSISTENT, curSteamID);
-		if (steamIDInputContainer) {
-
-			$(steamIDInputContainer).val(curSteamID);
-		}
-	} else if (localStorage.getItem(STEAMID_PERSISTENT) !== null && curSteamIDChecked) {
-		if (steamIDInputContainer) {
-			$(steamIDInputContainer).val(localStorage.getItem(STEAMID_PERSISTENT));
-		}
-
-	}
-
-}
 
 function getHeaderArray() {
 	//var header = {};

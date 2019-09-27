@@ -143,7 +143,9 @@ $(document).ready(function () {
 		}
 
 	} else {
-        loadPersistentSteamID($('#steamIDText'));
+        if(useSteamIDPersistent() && persistentSteamIDExists()){
+            $('#steamIDText').val(localStorage.getItem(STEAMID_PERSISTENT));
+        }
 	}
 
 

@@ -44,10 +44,10 @@ $(document).ready(function () {
 
         }
     } else{
+        if(useSteamIDPersistent() && persistentSteamIDExists()){
+            $('#steamIDText').val(localStorage.getItem(STEAMID_PERSISTENT));
 
-        //just autofill the steamid input, don't actually fetch anything
-
-        loadPersistentSteamID($('#steamIDText'));
+        }
 
     }
 

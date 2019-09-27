@@ -2,11 +2,58 @@
 title: kz.gl BETA
 layout: default
 ---
+
+<style>
+
+
+.right-container{
+    width: 50%; 
+    float: right;
+}
+.left-container{
+    width: 50%; 
+    float: left;
+}
+
+
+</style>
 <div class="content-wrap">
-    <script>
-    </script>
     <div class="content-wrap">
-        <h1>Coming Soon...</h1>
+
+				<div class="dropdown">
+					<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 250px; font: 20px sans-serif !important">
+					 Global WR Top	
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" id="tier-percentage-dropdown">Global WR Top</a>
+						<a class="dropdown-item" id="tier-average-dropdown">Global Points Top</a>
+						<a class="dropdown-item" id="tier-total-dropdown">Global Completion Top</a>
+					</div>
+                </div>
+
+            <div class="content-wrap left-container" id="pro-container">
+                <div class="titleDiv">Top PRO Runners</div>
+
+            </div>
+
+
+            <div class="content-wrap right-container">
+
+                <div class="titleDiv">Top TP Runners</div>
+            </div>
     </div>
 </div>
 </div>
+    <script>
+
+        for(let i = 0; i < 20; i++){
+
+
+            $tpcontainer = $(`<div >TP RUN TEST</div>`);
+            $procontainer = $(`<div>PRO RUN </div>`);
+            $('.right-container').append($tpcontainer);
+
+            $('.left-container').append($procontainer);
+        }
+    </script>
