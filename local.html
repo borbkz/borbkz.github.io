@@ -46,8 +46,7 @@ layout: default
 			</div>
 			<script>
 				$('.dropdown-menu a').click(function(){
-				$('#dropdownMenuButton').text($(this).text());
-					
+				$('#dropdownMenuButton').text($(this).text()); 
 				});
 			</script>
 
@@ -97,6 +96,6 @@ layout: default
 		{% endcapture %}
 
 		{% include collapse.html parent-id="accordion-times" id="allservers" title="Your Times Across All Servers" content=server-times status="show" %}
-		{% include collapse.html parent-id="accordion-times" id="local" title="Your Local Server Times" content=local-times %}
+		{% include collapse.html parent-id="accordion-times" id="local" title="Server Finished Maps Tool" content=local-times status="show" %}
 	</div>
 </div>

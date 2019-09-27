@@ -105,6 +105,7 @@ function publishPlayerTimes(recordContainer, playerEntries) {
         var bestTime = parseFloat(playerEntries[playerKey][0]["time"]);
         var prevTime = bestTime;
 
+        var uniqTimes = {};
 
         for (var i = 0; i < playerEntries[playerKey].length; i++) {
             var recordTimeText = "";
@@ -118,8 +119,12 @@ function publishPlayerTimes(recordContainer, playerEntries) {
                 bestTime = prevTime;
             }
 
+            let uniqKey = playerEntries[playerKey][i]["time"];
+            if(!uniqTimes[playerEntries[playerKey][i]["time"]] ){
+                publishEntry(recordContainer, playerEntries[playerKey][i], indent, timeDiff);
+                uniqTimes[uniqKey] = true;
 
-            publishEntry(recordContainer, playerEntries[playerKey][i], indent, timeDiff);
+            }
 
         }
     }
