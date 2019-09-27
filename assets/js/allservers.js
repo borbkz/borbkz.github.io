@@ -68,7 +68,7 @@ $(document).ready(function () {
 
         $("#wr-info-label").text('World Records: ');
         $("#silver-info-label").text('Silvers: ');
-        $("#bronze-info-label").text('Bronze: ');
+        $("#bronze-info-label").text('Bronzes: ');
         var goldmedal = "", silvermedal = "", bronzemedal = "";
 
         if (+playerInfo["world-records"] !== 0)
@@ -80,7 +80,7 @@ $(document).ready(function () {
 
         $("#wr-info-text").html(playerInfo["world-records"] + goldmedal);
         $("#silver-info-text").html(playerInfo["silvers"] + silvermedal);
-        $("#bronze-info-text").html(playerInfo["bronzes"] + bronzemedal);
+            $("#bronze-info-text").html(playerInfo["bronzes"] + bronzemedal);
 
         $("#run-info-text").text(`${playerInfo["runs-total"]}/${playerInfo["runs-possible"]} (${runPercentage}%)`);
         $("#points-info-label").text("Total Points: ")
