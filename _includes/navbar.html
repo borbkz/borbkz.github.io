@@ -28,10 +28,13 @@
 
   $steamIDPersistentCheckbox.change(function () {
     let stillUse = $steamIDPersistentCheckbox.is(':checked')
+    let steamIDText = $steamIDPersistentCheckbox.val();
     localStorage.setItem(USE_STEAMID_PERSISTENT, stillUse);
 
     if (!stillUse) {
       localStorage.removeItem(STEAMID_PERSISTENT);
+    }else{
+      localStorage.setItem(STEAMID_PERSISTENT, steamIDText);
     }
   });
 
