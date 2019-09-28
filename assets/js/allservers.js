@@ -23,7 +23,7 @@ var RANKING = {
 
 }
 
-var playerInfo = getEmptyPlayer(); 
+var playerInfo = getEmptyPlayer();
 
 function getEmptyPlayer() {
     //records = 1000 points
@@ -80,7 +80,7 @@ $(document).ready(function () {
 
         $("#wr-info-text").html(playerInfo["world-records"] + goldmedal);
         $("#silver-info-text").html(playerInfo["silvers"] + silvermedal);
-            $("#bronze-info-text").html(playerInfo["bronzes"] + bronzemedal);
+        $("#bronze-info-text").html(playerInfo["bronzes"] + bronzemedal);
 
         $("#run-info-text").text(`${playerInfo["runs-total"]}/${playerInfo["runs-possible"]} (${runPercentage}%)`);
         $("#points-info-label").text("Total Points: ")
@@ -107,9 +107,9 @@ $(document).ready(function () {
             var tierText = TIERKEY[tier][0];
             var tierColor = TIERKEY[tier][1];
             var tierMax = playerInfo["runs-by-tier"][tier];
-            var tierRecordsMax= playerInfo["records-by-tier"][tier];
-            var tierSilversMax= playerInfo["silvers-by-tier"][tier];
-            var tierBronzesMax= playerInfo["bronzes-by-tier"][tier];
+            var tierRecordsMax = playerInfo["records-by-tier"][tier];
+            var tierSilversMax = playerInfo["silvers-by-tier"][tier];
+            var tierBronzesMax = playerInfo["bronzes-by-tier"][tier];
             var tierRuns = playerInfo["runs-by-tier"][tier];
 
             var tierPercentage = Math.floor(100 * tierRuns / tierMax) || 0;
@@ -133,13 +133,6 @@ $(document).ready(function () {
             playerInfo["points-average-by-tier"][tier] = tierAveragePoints.toFixed(1);
 
             var barFontStyle = "";
-            //so you can see against white background
-            if (tierPercentage > 2 && tier == 6) {
-                barFontStyle = "color: #DDD;";
-            }
-            if (tierPercentage < 2 && tier == 6) {
-                barFontStyle = "color: black;";
-            }
 
             var $progressBar = $(`<div id="progress-bar-${tier}"class='progress-bar progress-bar-tier' 
                 role='progressbar' style='width:${tierPercentage}%; background-color: ${tierColor} !important; ${barFontStyle}'aria-valuenow='${tierPercentage}'
@@ -154,6 +147,7 @@ $(document).ready(function () {
             $progressContainer.append($progressBarContainer);
             $(".progress-group-container").append($progressContainer);
 
+            deathTierColorText(tierPercentage, tier, $progressBar);
             $('#tier-percentage-dropdown').click();
         }
 
@@ -175,15 +169,9 @@ $(document).ready(function () {
                 let $curProgressBar = $("#progress-bar-" + i);
                 let curPercentage = getPercentage(curRuns, 0, curMax);
 
-
-                if (curPercentage >= 2 && i == 6) {
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if (curPercentage < 2 && i == 6) {
-                    $curProgressBar.css("color", "black");
-                }
+                deathTierColorText(curPercentage, i, $curProgressBar);
                 resetProgressBar();
-                setProgressWdith($("#progress-bar-" + i), curPercentage, curRuns + "/" + curMax +" (" + curPercentage+"%)");
+                setProgressWdith($("#progress-bar-" + i), curPercentage, curRuns + "/" + curMax + " (" + curPercentage + "%)");
             }
         });
 
@@ -193,12 +181,7 @@ $(document).ready(function () {
                 let $curProgressBar = $("#progress-bar-" + i);
                 let curPercentage = getPercentage(avgPoints, 0, 1000);
 
-                if (curPercentage >= 2 && i == 6) {
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if (curPercentage < 2 && i == 6) {
-                    $curProgressBar.css("color", "black");
-                }
+                deathTierColorText(curPercentage, i, $curProgressBar);
                 resetProgressBar();
                 setProgressWdith($("#progress-bar-" + i), curPercentage, avgPoints || 0);
             }
@@ -214,12 +197,7 @@ $(document).ready(function () {
 
                 let curPercentage = getPercentage(curVal, 0, curMax);
 
-                if (curPercentage >= 2 && i == 6) {
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if (curPercentage < 2 && i == 6) {
-                    $curProgressBar.css("color", "black");
-                }
+                deathTierColorText(curPercentage, i, $curProgressBar);
                 setProgressBar();
                 setProgressWdith($("#progress-bar-" + i), curPercentage, curVal);
             }
@@ -233,12 +211,7 @@ $(document).ready(function () {
                 let curMax = playerInfo["records-by-tier"][playerInfo["records-max-maps"]];
                 let curPercentage = getPercentage(records, 0, curMax);
 
-                if (curPercentage >= 2 && i == 6) {
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if (curPercentage < 2 && i == 6) {
-                    $curProgressBar.css("color", "black");
-                }
+                deathTierColorText(curPercentage, i, $curProgressBar);
 
                 resetProgressBar();
                 setProgressWdith($("#progress-bar-" + i), curPercentage, records);
@@ -252,43 +225,32 @@ $(document).ready(function () {
                 let curMax = playerInfo["silvers-by-tier"][playerInfo["silvers-max-maps"]];
                 let curPercentage = getPercentage(records, 0, curMax);
 
-                if (curPercentage >= 2 && i == 6) {
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if (curPercentage < 2 && i == 6) {
-                    $curProgressBar.css("color", "black");
-                }
+                deathTierColorText(curPercentage, i, $curProgressBar);
 
                 resetProgressBar();
                 setProgressWdith($("#progress-bar-" + i), curPercentage, records);
             }
         });
-        function deathTierColorText(percentage, tier, bar){
-            if(percentage>=2 && tier == 6){
-                bar.css("color", "#DDD");
-            }else if(percentage <2 && tier == 6){
-                bar.css("color", "black");
-            }
-        }
         $('#tier-bronzes-dropdown').click(function () {
-            console.log("clicked bron")
             for (let i = 1; i <= 6; i++) {
                 let records = +playerInfo["bronzes-by-tier"][i];
                 let $curProgressBar = $("#progress-bar-" + i);
                 let curMax = playerInfo["bronzes-by-tier"][playerInfo["bronzes-max-maps"]];
                 let curPercentage = getPercentage(records, 0, curMax);
 
-                if (curPercentage >= 2 && i == 6) {
-                    $curProgressBar.css("color", "#DDD");
-                }
-                if (curPercentage < 2 && i == 6) {
-                    $curProgressBar.css("color", "black");
-                }
+                deathTierColorText(curPercentage, i, $curProgressBar);
 
                 resetProgressBar();
                 setProgressWdith($("#progress-bar-" + i), curPercentage, records);
             }
         });
+        function deathTierColorText(percentage, tier, bar) {
+            if (percentage >= 1 && tier == 6) {
+                bar.css("color", "#DDD");
+            } else if (percentage < 1 && tier == 6) {
+                bar.css("color", "black");
+            }
+        }
 
 
         function setProgressWdith($myProgressBar, percentageWidth, myText) {
@@ -342,7 +304,7 @@ $(document).ready(function () {
 
     function retrieveStats(steamID, teleports) {
 
-        playerInfo=getEmptyPlayer();
+        playerInfo = getEmptyPlayer();
         //temp max limit based on ~440 maps, eventually should change to indexdb storage 
         //so you dont fetch every map all the time, and just fetch the latest runs
 
@@ -410,7 +372,7 @@ $(document).ready(function () {
                 if (map in finishedGlobals) {
                     tptier = difficultyArray[field["map_name"]][0];
 
-                    if(tptier !== 0 ){
+                    if (tptier !== 0) {
                         if (+points === 1000) {
                             playerInfo["world-records"]++;
                             playerInfo["records-by-tier"][tptier]++;
