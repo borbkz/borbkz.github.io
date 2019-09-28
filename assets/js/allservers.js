@@ -164,16 +164,6 @@ $(document).ready(function () {
         }
 
         $("#rank-info-text").text(getRanking());
-        function resetProgressBar() {
-            //$('.progress').css("border-radius", "7px");
-            //$('.progress-bar-tier').css("border", "solid 2px lightgrey");
-            //$('.progress-bar-tier').css("border-radius", "7px");
-        }
-        function setProgressBar() {
-            //$('.progress').css("border-radius", "0");
-            //$('.progress-bar-tier').css("border-radius", "0");
-            //$('.progress-bar-tier').css("border", "none");
-        }
 
         //checking the checkbox wil trigger new progress bars
         $("#normalize-checkbox").click(function () {
@@ -276,22 +266,8 @@ $(document).ready(function () {
         $('#tier-bronzes-dropdown').click(function () {
             for (let i = 1; i <= 6; i++) {
                 let records = +playerInfo["bronzes-by-tier"][i];
-                let $curProgressBar = $("#progress-bar-" + i);
                 let curMax = playerInfo["bronzes-by-tier"][playerInfo["bronzes-max-maps"]];
-                let normalizeText = "";
-
-                if(normalizeRatings){
-                    curMax = +playerInfo["runs-possible-by-tier"][i];
-                }
-                let curPercentage = getPercentage(records, 0, curMax);
-
-                if(normalizeRatings){
-                    normalizeText = "/" + curMax + " (" + curPercentage + "%)";
-                }
-                deathTierColorText(curPercentage, i, $curProgressBar);
-
-                resetProgressBar();
-                setProgressWdith($("#progress-bar-" + i), curPercentage, records + normalizeText);
+                setProgressBar(records, curMax, i);
             }
         });
         $('#tier-average-dropdown').click(function () {
