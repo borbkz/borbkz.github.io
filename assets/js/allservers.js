@@ -18,9 +18,20 @@ var playerInfoTPRequestURL = playerInfoRequestBaseURL + "&has_teleports=true";
 var playerSteam64URI = "steamid64s=";
 var globalHeader = ["Map", "Pts", "Time", "TPs", "Tier", "Pro Tier", "Length", "Date",
     "Server"];
+var normalizeRatings = true;
 
 var RANKING = {
-
+    10: "CHEATER",
+    9: "GOD",
+    8: "PRO",
+    7: "SEMI-PRO",
+    6: "EXPERT",
+    5: "SKILLED",
+    4: "REGULAR",
+    3: "CASUAL",
+    2: "TRAINEE",
+    1: "SCRUB",
+    0: "NEW",
 }
 
 var playerInfo = getEmptyPlayer();
@@ -55,6 +66,11 @@ function getEmptyPlayer() {
 }
 $(document).ready(function () {
 
+    $('.dropdown-menu a').click(function () {
+        $('#dropdownMenuButton').text($(this).text());
+        $('#dropdownMenuButton').attr('target-id', this.id);
+    });
+    normalizeRatings = $("#normalize-checkbox").is(':checked');
     printPlayerProfile();
     function printPlayerProfile() {
 
@@ -82,7 +98,6 @@ $(document).ready(function () {
         $("#points-info-label").text("Total Points: ")
         $("#points-info-text").text(`${playerInfo["points-total"].toLocaleString("en")} (avg: ${playerInfo["points-average"]})`);
 
-        $("#rank-info-text").text('To be implemented');
 
         if (playerInfo["run-type"] === "pro") {
             $("#run-info-label").text("Total Pro Runs: ")
@@ -128,11 +143,10 @@ $(document).ready(function () {
 
             playerInfo["points-average-by-tier"][tier] = tierAveragePoints.toFixed(1);
 
-            var barFontStyle = "";
 
             var $progressBar = $(`<div id="progress-bar-${tier}"class='progress-bar progress-bar-tier' 
-                role='progressbar' style='width:${tierPercentage}%; background-color: ${tierColor} !important; ${barFontStyle}'aria-valuenow='${tierPercentage}'
-                aria-valuemin='0' aria-valuemax='100'>${tierRuns}/${tierMax}</div>`);
+                role='progressbar' style='width:0%; background-color: ${tierColor} !important;'aria-valuenow='0'
+                aria-valuemin='0' aria-valuemax='100'></div>`);
             var $progressBarContainer = $('<div class="progress"></div>');
             $progressBarContainer.append($progressBar);
 
@@ -144,9 +158,12 @@ $(document).ready(function () {
             $(".progress-group-container").append($progressContainer);
 
             deathTierColorText(tierPercentage, tier, $progressBar);
-            $('#tier-percentage-dropdown').click();
+            $('#tier-total-dropdown').click();
+
+
         }
 
+        $("#rank-info-text").text(getRanking());
         function resetProgressBar() {
             //$('.progress').css("border-radius", "7px");
             //$('.progress-bar-tier').css("border", "solid 2px lightgrey");
@@ -158,19 +175,170 @@ $(document).ready(function () {
             //$('.progress-bar-tier').css("border", "none");
         }
 
-        $('#tier-percentage-dropdown').click(function () {
+        //checking the checkbox wil trigger new progress bars
+        $("#normalize-checkbox").click(function () {
+            normalizeRatings = this.checked;
+            $('#' + $("#dropdownMenuButton").attr('target-id')).click();
+        });
+
+
+
+        function getRanking() {
+            //1:20:50:500
+            let wrPoints = 1000;
+            let goldToSilver = 20, goldToBronze = 50,
+                goldToUnranked = 500;
+
+
+            let silverPoints = Math.floor(wrPoints / goldToSilver);
+            let bronzePoints = Math.floor(wrPoints / goldToBronze);
+            let unrankedPoints = Math.floor(wrPoints / goldToUnranked);
+
+            let rankedMaps = playerInfo["world-records"] +
+                playerInfo["silvers"] + playerInfo["bronzes"];
+            let unrankedMaps = playerInfo["runs-total"] - rankedMaps;
+
+
+
+            let placementTotal = playerInfo["world-records"] * wrPoints +
+                + playerInfo["silvers"] * silverPoints + playerInfo["bronzes"] * bronzePoints
+                + unrankedMaps * unrankedPoints;
+
+            let r_base = 2.5;
+            let placementRanking = getPlacementRank(placementTotal, r_base);
+
+            let placementMax = getPlacementRank(playerInfo["runs-possible"] * wrPoints, r_base);
+
+            let normalizedPlacementRating = placementRanking / placementMax;
+            let steepPlacement = 3.0;
+            let placementMid = getPlacementRank(200, r_base) / placementMax;
+
+            let placementRating = sigmoid(normalizedPlacementRating, 1.0, steepPlacement, placementMid);
+
+            let pointsMax = playerInfo["runs-possible"] * wrPoints;
+            let pointsMid = .25, steepPoints = 3.5;
+            if (playerInfo["run-type"] == "pro") {
+                pointsMid = pointsMid * 0.3;
+            }
+            let normalizedPoints = playerInfo["points-total"] / pointsMax;
+            let pointsRating = sigmoid(normalizedPoints, 1.0, steepPoints, pointsMid);
+
+
+            let pointsWeight = .1, placementWeight = .8, avgWeight = 1- (placementWeight + pointsWeight);
+            let finalRating = pointsWeight * pointsRating + placementWeight * placementRating + avgWeight * (playerInfo["points-average"]/1000);
+            console.log("points " + pointsRating + " placement " + placementRating);
+            finalRating = (10 * Math.max(0, finalRating || 0));
+
+            let goldBonus = Math.min(playerInfo["world-records"], Math.min(1.5, Math.log(10+playerInfo["world-records"])/2 ));
+            let silverBonus = Math.min(playerInfo["silvers"]/20, Math.min(0.5, Math.log(10+playerInfo["silvers"])/5 ));
+
+            console.log("final " + finalRating + " gold bonus " + goldBonus + " silverBonus " + silverBonus);
+            finalRating = finalRating + (goldBonus + silverBonus) - .5;
+
+
+            finalRating = Math.min(10, finalRating);
+
+            let rankText = RANKING[Math.floor(finalRating+.1)];
+            return rankText;// + " ("+finalRating.toFixed(1)+")";
+        }
+        function getPlacementRank(r_val, r_base) {
+            return Math.log(r_val) / Math.log(r_base);
+
+        }
+        function sigmoid(val, f_max, k, x_0) {
+            return  f_max / (1 + Math.exp(-1 * k * (val - x_0)));
+        }
+        $('#tier-total-dropdown').click(function () {
             for (let i = 1; i <= 6; i++) {
-                let curRuns = +playerInfo["runs-by-tier"][i];
-                let curMax = +playerInfo["runs-possible-by-tier"][i];
+                let curVal = +playerInfo["runs-by-tier"][i];
+                let curMax = playerInfo["runs-by-tier"][playerInfo["tier-max-maps"]];
+
+                let normalizeText = "";
+                //we normalize by setting the max on the bar graph to the max map completion out of all tiers
+                if (normalizeRatings) {
+                    curMax = +playerInfo["runs-possible-by-tier"][i];
+                }
                 let $curProgressBar = $("#progress-bar-" + i);
-                let curPercentage = getPercentage(curRuns, 0, curMax);
+                let curPercentage = getPercentage(curVal, 0, curMax);
+
+                if (normalizeRatings) {
+                    normalizeText = "/" + curMax + " (" + curPercentage + "%)";
+                }
 
                 deathTierColorText(curPercentage, i, $curProgressBar);
+                setProgressBar();
+                setProgressWdith($("#progress-bar-" + i), curPercentage, curVal + normalizeText);
+            }
+        });
+        $('#tier-records-dropdown').click(function () {
+            for (let i = 1; i <= 6; i++) {
+                let records = +playerInfo["records-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-" + i);
+                //normalize by max map completion in all tiers
+                let curMax = playerInfo["records-by-tier"][playerInfo["records-max-maps"]];
+                
+                let normalizeText = "";
+
+                if(normalizeRatings){
+                    curMax = +playerInfo["runs-possible-by-tier"][i];
+                }
+                let curPercentage = getPercentage(records, 0, curMax);
+
+
+                if(normalizeRatings){
+                    normalizeText =  "/" + curMax + " (" + curPercentage + "%)";
+                }
+                deathTierColorText(curPercentage, i, $curProgressBar);
+
                 resetProgressBar();
-                setProgressWdith($("#progress-bar-" + i), curPercentage, curRuns + "/" + curMax + " (" + curPercentage + "%)");
+                setProgressWdith($("#progress-bar-" + i), curPercentage, records + normalizeText);
             }
         });
 
+
+        $('#tier-silvers-dropdown').click(function () {
+            for (let i = 1; i <= 6; i++) {
+                let records = +playerInfo["silvers-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-" + i);
+                let curMax = playerInfo["silvers-by-tier"][playerInfo["silvers-max-maps"]];
+                let normalizeText = "";
+
+                if(normalizeRatings){
+                    curMax = +playerInfo["runs-possible-by-tier"][i];
+                }
+                let curPercentage = getPercentage(records, 0, curMax);
+                if(normalizeRatings){
+                    normalizeText = "/" + curMax + " (" + curPercentage + "%)";
+
+                }
+
+                deathTierColorText(curPercentage, i, $curProgressBar);
+
+                resetProgressBar();
+                setProgressWdith($("#progress-bar-" + i), curPercentage, records  + normalizeText);
+            }
+        });
+        $('#tier-bronzes-dropdown').click(function () {
+            for (let i = 1; i <= 6; i++) {
+                let records = +playerInfo["bronzes-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-" + i);
+                let curMax = playerInfo["bronzes-by-tier"][playerInfo["bronzes-max-maps"]];
+                let normalizeText = "";
+
+                if(normalizeRatings){
+                    curMax = +playerInfo["runs-possible-by-tier"][i];
+                }
+                let curPercentage = getPercentage(records, 0, curMax);
+
+                if(normalizeRatings){
+                    normalizeText = "/" + curMax + " (" + curPercentage + "%)";
+                }
+                deathTierColorText(curPercentage, i, $curProgressBar);
+
+                resetProgressBar();
+                setProgressWdith($("#progress-bar-" + i), curPercentage, records + normalizeText);
+            }
+        });
         $('#tier-average-dropdown').click(function () {
             for (let i = 1; i <= 6; i++) {
                 let avgPoints = +playerInfo["points-average-by-tier"][i];
@@ -184,62 +352,6 @@ $(document).ready(function () {
         });
 
 
-        $('#tier-total-dropdown').click(function () {
-            for (let i = 1; i <= 6; i++) {
-                let curVal = +playerInfo["runs-by-tier"][i];
-                //we normalize by setting the max on the bar graph to the max map completion out of all tiers
-                let curMax = playerInfo["runs-by-tier"][playerInfo["tier-max-maps"]];
-                let $curProgressBar = $("#progress-bar-" + i);
-
-                let curPercentage = getPercentage(curVal, 0, curMax);
-
-                deathTierColorText(curPercentage, i, $curProgressBar);
-                setProgressBar();
-                setProgressWdith($("#progress-bar-" + i), curPercentage, curVal);
-            }
-        });
-
-        $('#tier-records-dropdown').click(function () {
-            for (let i = 1; i <= 6; i++) {
-                let records = +playerInfo["records-by-tier"][i];
-                let $curProgressBar = $("#progress-bar-" + i);
-                //normalize by max map completion in all tiers
-                let curMax = playerInfo["records-by-tier"][playerInfo["records-max-maps"]];
-                let curPercentage = getPercentage(records, 0, curMax);
-
-                deathTierColorText(curPercentage, i, $curProgressBar);
-
-                resetProgressBar();
-                setProgressWdith($("#progress-bar-" + i), curPercentage, records);
-            }
-        });
-
-        $('#tier-silvers-dropdown').click(function () {
-            for (let i = 1; i <= 6; i++) {
-                let records = +playerInfo["silvers-by-tier"][i];
-                let $curProgressBar = $("#progress-bar-" + i);
-                let curMax = playerInfo["silvers-by-tier"][playerInfo["silvers-max-maps"]];
-                let curPercentage = getPercentage(records, 0, curMax);
-
-                deathTierColorText(curPercentage, i, $curProgressBar);
-
-                resetProgressBar();
-                setProgressWdith($("#progress-bar-" + i), curPercentage, records);
-            }
-        });
-        $('#tier-bronzes-dropdown').click(function () {
-            for (let i = 1; i <= 6; i++) {
-                let records = +playerInfo["bronzes-by-tier"][i];
-                let $curProgressBar = $("#progress-bar-" + i);
-                let curMax = playerInfo["bronzes-by-tier"][playerInfo["bronzes-max-maps"]];
-                let curPercentage = getPercentage(records, 0, curMax);
-
-                deathTierColorText(curPercentage, i, $curProgressBar);
-
-                resetProgressBar();
-                setProgressWdith($("#progress-bar-" + i), curPercentage, records);
-            }
-        });
         function deathTierColorText(percentage, tier, bar) {
             if (percentage >= 1 && tier == 6) {
                 bar.css("color", "#DDD");
@@ -334,7 +446,7 @@ $(document).ready(function () {
             var steam_id = firstEntry["steam_id"];
 
             //hi rufus
-            if(getSteamIDSubstring(steam_id) === "84091052" && Math.floor(Math.random() * 4) == 1) {
+            if (getSteamIDSubstring(steam_id) === "84091052" && Math.floor(Math.random() * 4) == 1) {
                 new SpiderController({ 'minBugs': 5, 'maxBugs': 10, 'min_frames': 7 });
             }
 

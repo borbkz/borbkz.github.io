@@ -48,7 +48,7 @@ layout: default
 							id="points-info-text"></span></div>
 
 					<div class="infoline"><span class="infolabel" id="rank-info-label"> </span> <span class="infotext"
-							id="rank-info-text"></span></div>
+							id="rank-info-text" title="Not official" style="border-bottom: 1px dotted"></span></div>
 				</div>
 
 				<div class="titleDiv progress-bar-group-title">
@@ -58,11 +58,10 @@ layout: default
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
 							style="width: 250px; font: 20px sans-serif !important">
 						</button>
-						<!--<div><input id='normalize-checkbox' type="checkbox"><span class="infolabel"
-								style="font-weight: normal !important">percentage</span></div>--->
+						<div><div class="center-div" style="width: 300px"><input id='normalize-checkbox' type="checkbox" checked><span class="infolabel"
+								style="font-weight: normal !important">Percentage</span></div></div>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" id="tier-percentage-dropdown">Completion Percentage</a>
-							<a class="dropdown-item" id="tier-total-dropdown">Completion Total</a>
+							<a class="dropdown-item" id="tier-total-dropdown">Completions</a>
 							<a class="dropdown-item" id="tier-average-dropdown">Average Points</a>
 							<a class="dropdown-item" id="tier-records-dropdown"
 								title="Nothing to see here. A record is a record!">🏆 Records</a>
@@ -73,11 +72,6 @@ layout: default
 						</div>
 					</div>
 				</div>
-				<script>
-					$('.dropdown-menu a').click(function () {
-						$('#dropdownMenuButton').text($(this).text());
-					});
-				</script>
 				<div class="progress-group-container"> </div>
 			</div>
 

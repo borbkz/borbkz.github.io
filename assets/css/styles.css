@@ -556,3 +556,8 @@
  .tier-tooltip{
   border-bottom: 1px dotted;
  }
+
+ .center-div{
+     text-align: center;
+     display: inline;
+ }
