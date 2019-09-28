@@ -307,10 +307,10 @@ $(document).ready(function () {
                 max = +playerInfo["runs-possible-by-tier"][tier];
             }
             let percentage = getPercentage(val, 0, max);
-            
+           console.log(percentage) 
             if(normalizeRatings){
                 resetBarGraph();
-                normalizeText = "/" + max + " (" + percentage + "%)";
+                normalizeText = "/" + max + " (" + percentage.toFixed(1) + "%)";
             }else{
                 setBarGraph();
             }
@@ -333,7 +333,7 @@ $(document).ready(function () {
         }
         function getPercentage(value, min, max) {
             // OR with 0 in case of NaN
-            return Math.floor(100 * value / max) || 0;
+            return(100 * value / max) || 0;
 
         }
 
