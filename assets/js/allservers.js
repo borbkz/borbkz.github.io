@@ -151,10 +151,12 @@ $(document).ready(function () {
             $progressBarContainer.append($progressBar);
 
             var $progressLabel = $(`<div class="progress-label">${tierText}</div>`);
+            var $progressEndLabel= $(`<div class="progress-end-label" id="progress-end-label-${tier}"></div>`);
 
             var $progressContainer = $('<div class=progress-container></div>');
             $progressContainer.append($progressLabel);
             $progressContainer.append($progressBarContainer);
+            $progressContainer.append($progressEndLabel);
             $(".progress-group-container").append($progressContainer);
 
             deathTierColorText(tierPercentage, tier, $progressBar);
@@ -297,6 +299,7 @@ $(document).ready(function () {
 
                 deathTierColorText(curPercentage, i, $curProgressBar);
                 setProgressWdith($("#progress-bar-" + i), curPercentage, avgPoints || 0);
+                    $('#progress-end-label-'+i).text(avgPoints.toFixed(1));
             }
         });
 
@@ -315,6 +318,12 @@ $(document).ready(function () {
             }
             deathTierColorText(percentage, tier, progressBar);
             setProgressWdith(progressBar, percentage, val+normalizeText);
+            if(normalizeRatings){
+            $('#progress-end-label-'+tier).css('text-align','right');
+            } else{
+            $('#progress-end-label-'+tier).css('text-align','center');
+            }
+            $('#progress-end-label-'+tier).text(val+normalizeText);
         }
 
         function deathTierColorText(percentage, tier, bar) {
@@ -328,7 +337,7 @@ $(document).ready(function () {
 
         function setProgressWdith($myProgressBar, percentageWidth, myText) {
             $myProgressBar.css("width", percentageWidth + "%");
-            $myProgressBar.html(myText);
+            //$myProgressBar.html(myText);
         }
         function getPercentage(value, min, max) {
             // OR with 0 in case of NaN

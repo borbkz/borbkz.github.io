@@ -508,6 +508,14 @@
      font: 1.2em sans-serif;
      text-align: left;
  }
+ .progress-end-label {
+     margin: 0;
+     margin-left: 1em;
+     width: 200px !important;
+     float: left;
+     font: 1.2em sans-serif;
+     text-align: center;
+ }
 
  .progress-container {
      height: 1.8em;
