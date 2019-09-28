@@ -2,7 +2,6 @@
 title: kz.gl BETA
 layout: default
 ---
-<div class="content-wrap">
     <script>
         function getMaps() {
             var maps = [];
@@ -49,11 +48,11 @@ layout: default
             myMaps = getMaps();
         });
     </script>
-    <div class="content-wrap">
+    <div class="content-no-wrap">
+        <h3>Work In Progress!</h3>
         <div id="table-container">
             {% include tooltip.html id="maps-tooltip" text="maps-only" %}
             <div class="handsontable" id="spreadsheet"> </div>
         </div>
     </div>
-</div>
 </div>

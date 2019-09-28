@@ -4,17 +4,24 @@ layout: default
 ---
 <script type="text/javascript" src="/assets/js/allservers.js?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
 <script type="text/javascript" src="/assets/js/local.js?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
-<div class="content-wrap">
+
+<div class="content-no-wrap">
+
 	<div class="accordion" id="accordion-times">
 		{% capture server-times %}
 		<div class="content-wrap">
 
+					{% include steamid.html searchtip="Enter Your SteamID" buttontext="Fetch Times" %}
+					<div style="margin-right: 35px">
+						<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
+						<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
+					</div>
 
 			<div id="player-info" class="player-info-container">
 				<div class="player-info-text">
 
-					<div class="infoline"><span class="infolabel" id="player-info-label">Player: </span> <span class="infotext"
-							id="player-info-text"></span></div>
+					<div class="infoline"><span class="infolabel" id="player-info-label">Player: </span> <span
+							class="infotext" id="player-info-text"></span></div>
 
 					<div class="infoline">
 						<div class="infofield">
@@ -22,11 +29,13 @@ layout: default
 							<span class="infotext" id="wr-info-text"></span>
 
 						</div>
-						<div title="Times with 900+ pts. {% include point-explanation text='Top 20' %}" class="infofield">
+						<div title="Times with 900+ pts. {% include point-explanation text='Top 20' %}"
+							class="infofield">
 							<span class="infolabel tier-tooltip" id="silver-info-label">Silver:</span>
 							<span class="infotext" id="silver-info-text"></span>
 						</div>
-						<div title="Times with 800+ pts. {% include point-explanation text='Top 100' %}" class="infofield">
+						<div title="Times with 800+ pts. {% include point-explanation text='Top 100' %}"
+							class="infofield">
 							<span class="infolabel tier-tooltip" id="bronze-info-label">Bronze:</span>
 							<span class="infotext" id="bronze-info-text"></span>
 						</div>
@@ -49,15 +58,18 @@ layout: default
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
 							style="width: 250px; font: 20px sans-serif !important">
 						</button>
+						<div><input id='normalize-checkbox' type="checkbox"><span class="infolabel"
+								style="font-weight: normal !important">percentage</span></div>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" id="tier-percentage-dropdown"
-								title="Normalized by total possible maps in each tier">Completion Percentage</a>
+							<a class="dropdown-item" id="tier-percentage-dropdown">Completion Percentage</a>
 							<a class="dropdown-item" id="tier-total-dropdown">Completion Total</a>
 							<a class="dropdown-item" id="tier-average-dropdown">Average Points</a>
-							<a class="dropdown-item" id="tier-records-dropdown" title="Nothing to see here. A record is a record!">🏆 Records</a>
+							<a class="dropdown-item" id="tier-records-dropdown"
+								title="Nothing to see here. A record is a record!">🏆 Records</a>
 							<a class="dropdown-item" id="tier-silvers-dropdown"
 								title="{% include point-explanation text='Top 20' %}">🥈 Silver (900+ pts)</a>
-							<a class="dropdown-item" id="tier-bronzes-dropdown" title="{% include point-explanation text='Top 100'%}">🥉 Bronze (800+ pts)</a>
+							<a class="dropdown-item" id="tier-bronzes-dropdown"
+								title="{% include point-explanation text='Top 100'%}">🥉 Bronze (800+ pts)</a>
 						</div>
 					</div>
 				</div>
@@ -66,26 +78,10 @@ layout: default
 						$('#dropdownMenuButton').text($(this).text());
 					});
 				</script>
-
-				<div class="progress-group-container">
-
-
-				</div>
-
+				<div class="progress-group-container"> </div>
 			</div>
 
 
-			<div class="inputSelection">
-				<div class="innerSelection">
-					{% include steamid.html searchtip="Enter Your SteamID" buttontext="Fetch Times" %}
-
-					<div style="margin-right: 35px">
-						<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
-						<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
-					</div>
-				</div>
-
-			</div>
 			<div id="global-table-container">
 				{% include tooltip.html text="default" id="global-tooltip" %}
 
@@ -115,4 +111,5 @@ layout: default
 		{% include collapse.html parent-id="accordion-times" id="allservers" title="Your Times Across All Servers" content=server-times status="show" %}
 		{% include collapse.html parent-id="accordion-times" id="local" title="Server Finished Maps Tool" content=local-times status="show" %}
 	</div>
+
 </div>

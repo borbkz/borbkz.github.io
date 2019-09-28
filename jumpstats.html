@@ -2,11 +2,11 @@
 title: kz.gl BETA
 layout: default
 ---
-<div class="content-wrap">
+<div class="content-no-wrap">
     <script type="text/javascript" src="/assets/js/jumpstats.js?{{site.time | date: '%s%N'}}"></script>
     <div class="accordion" id="accordion-times">
         {% capture inner %}
-        <div class="content-wrap">
+        <div class="content-no-wrap">
             <div class="inputSelection">
                 <div class="innerSelection">
                     <input type="radio" id="globalBindRadio" name="globalBind" value="binded">Binded
@@ -37,7 +37,8 @@ layout: default
         {% endcapture %}
         {% include collapse.html parent-id="accordion-times" id="global-jumpstats" title="Global Top Jumpstats"  content=inner%}
         {% capture inner2 %}
-        <div class="content-wrap">
+        <div class="content-no-wrap">
+                {% include steamid.html searchtip="Enter your SteamID" buttontext="Fetch Stats"%}
             <div class="inputSelection">
                 <div class="innerSelection">
                     <input type="radio" id="bindRadio" name="bind" value="binded">Binded
@@ -53,7 +54,6 @@ layout: default
                     <input type="radio" id="ladderjumpRadio" name="jumpstat" value="ladder">Ladder
                     <input type="radio" id="countjumpRadio" name="jumpstat" value="countjump">Countjump
                 </div>
-                {% include steamid.html searchtip="Enter your SteamID" buttontext="Fetch Stats"%}
                 <div id="localJumpstatsContainer">
                     <table class="local-table" id="jumpstatTable"></table>
                 </div>
