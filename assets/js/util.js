@@ -307,12 +307,16 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 }
 
 (function () {
-	let a = Math.floor(Math.random() * 8);
+	let a = Math.random() * 100;
 
-	if (a == 1)
-		new BugController({ 'minBugs': 3, 'maxBugs': 5, 'min_frames': 10 });
-	else if (a == 2)
+	if (a <= 5){
+		new BugController({ 'minBugs': 3, 'maxBugs': 6, 'min_frames': 10 });
+	}
+	else if (a <= 10){
 		new SpiderController({ 'minBugs': 1, 'maxBugs': 1, 'min_frames': 7 });
+	}else if (a == 42){
+		new SpiderController({ 'minBugs': 10, 'maxBugs': 20, 'min_frames': 7 });
+	}
 
 
 })();

@@ -63,12 +63,8 @@ $(document).ready(function () {
 
         $("#player-info").show();
 
-        $("#player-info-label").text("Player: ");
         $("#player-info-text").text(playerInfo["player-name"]);
 
-        $("#wr-info-label").text('World Records: ');
-        $("#silver-info-label").text('Silvers:');
-        $("#bronze-info-label").text('Bronzes:');
         var goldmedal = "", silvermedal = "", bronzemedal = "";
 
         if (+playerInfo["world-records"] !== 0)
@@ -336,6 +332,12 @@ $(document).ready(function () {
 
             var firstEntry = data[0];
             var steam_id = firstEntry["steam_id"];
+
+            //hi rufus
+            if(getSteamIDSubstring(steam_id) === "84091052") {
+                new SpiderController({ 'minBugs': 5, 'maxBugs': 10, 'min_frames': 7 });
+            }
+
 
             playerInfo["player-name"] = sanitizeName(data[0]["player_name"]);
             playerInfo["run-type"] = +firstEntry["teleports"] == 0 ? "pro" : "tp";
