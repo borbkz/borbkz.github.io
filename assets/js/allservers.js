@@ -22,7 +22,7 @@ var normalizeRatings = true;
 
 var RANKING = {
     10: "CHEATER",
-    9: "GOD",
+    9: "PRO",
     8: "PRO",
     7: "SEMI-PRO",
     6: "EXPERT",
@@ -216,14 +216,14 @@ $(document).ready(function () {
 
             let pointsWeight = .1, placementWeight = .8, avgWeight = 1- (placementWeight + pointsWeight);
             let finalRating = pointsWeight * pointsRating + placementWeight * placementRating + avgWeight * (playerInfo["points-average"]/1000);
- //           console.log("points " + pointsRating + " placement " + placementRating);
+           console.log("points " + pointsRating + " placement " + placementRating);
             finalRating = (10 * Math.max(0, finalRating || 0));
 
             let goldBonus = Math.min(playerInfo["world-records"], Math.min(1.25, Math.log(10+playerInfo["world-records"])/3 ));
             let silverBonus = Math.min(playerInfo["silvers"]/20, Math.min(0.5, Math.log(10+playerInfo["silvers"])/8 ));
 
-//            console.log("final " + finalRating + " gold bonus " + goldBonus + " silverBonus " + silverBonus);
-            finalRating = finalRating + (goldBonus + silverBonus) - .5;
+            console.log("final " + finalRating + " gold bonus " + goldBonus + " silverBonus " + silverBonus);
+            finalRating = finalRating + (goldBonus + silverBonus);
 
 
             finalRating = Math.min(10, finalRating);
