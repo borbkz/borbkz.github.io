@@ -229,8 +229,8 @@ $(document).ready(function () {
             console.log("points " + pointsRating + " placement " + placementRating);
             finalRating = (10 * Math.max(0, finalRating || 0));
 
-            let goldBonus = Math.min(playerInfo["world-records"], Math.min(1.5, Math.log(10+playerInfo["world-records"])/2 ));
-            let silverBonus = Math.min(playerInfo["silvers"]/20, Math.min(0.5, Math.log(10+playerInfo["silvers"])/5 ));
+            let goldBonus = Math.min(playerInfo["world-records"], Math.min(1.25, Math.log(10+playerInfo["world-records"])/3 ));
+            let silverBonus = Math.min(playerInfo["silvers"]/20, Math.min(0.5, Math.log(10+playerInfo["silvers"])/8 ));
 
             console.log("final " + finalRating + " gold bonus " + goldBonus + " silverBonus " + silverBonus);
             finalRating = finalRating + (goldBonus + silverBonus) - .5;
