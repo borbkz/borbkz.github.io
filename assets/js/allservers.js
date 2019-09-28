@@ -276,8 +276,22 @@ $(document).ready(function () {
         $('#tier-bronzes-dropdown').click(function () {
             for (let i = 1; i <= 6; i++) {
                 let records = +playerInfo["bronzes-by-tier"][i];
+                let $curProgressBar = $("#progress-bar-" + i);
                 let curMax = playerInfo["bronzes-by-tier"][playerInfo["bronzes-max-maps"]];
-                setProgressWdith(records,curMax, i);
+                let normalizeText = "";
+
+                if(normalizeRatings){
+                    curMax = +playerInfo["runs-possible-by-tier"][i];
+                }
+                let curPercentage = getPercentage(records, 0, curMax);
+
+                if(normalizeRatings){
+                    normalizeText = "/" + curMax + " (" + curPercentage + "%)";
+                }
+                deathTierColorText(curPercentage, i, $curProgressBar);
+
+                resetProgressBar();
+                setProgressWdith($("#progress-bar-" + i), curPercentage, records + normalizeText);
             }
         });
         $('#tier-average-dropdown').click(function () {
