@@ -239,7 +239,10 @@ $(document).ready(function () {
             finalRating = Math.min(10, finalRating);
 
             let rankText = RANKING[Math.floor(finalRating+.1)];
-            console.log(finalRating);
+
+
+            $("#rank-info-text").attr('title', '('+ finalRating.toFixed(2) +') Not an official ranking!')
+
             return rankText;// + " ("+finalRating.toFixed(1)+")";
         }
         function getPlacementRank(r_val, r_base) {
