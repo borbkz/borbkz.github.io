@@ -1,0 +1,45 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"> </script>
+<canvas id="myChart" width="600px" height="400px !important"></canvas>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [
+            {
+                fill: false,
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        },
+            {
+            label: '# of Votes',
+                fill: false,
+            data: [122, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(25, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        }
+    
+    ]
+    },
+    options: {
+        responsive:false,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>

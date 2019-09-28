@@ -242,6 +242,20 @@ $(document).ready(function () {
         function sigmoid(val, f_max, k, x_0) {
             return  f_max / (1 + Math.exp(-1 * k * (val - x_0)));
         }
+
+        function resetBarGraph() {
+            //$('.progress').css("border-radius", "7px");
+            //$('.progress').css("height", "1.5em");
+            //$('.progress-bar-tier').css("border", "solid 2px lightgrey");
+            //$('.progress-bar-tier').css("border-radius", "7px");
+        }
+        function setBarGraph() {
+            //$('.progress').css("border-radius", "0");
+            //$('.progress').css("height", "2.25em");
+            //$('.progress-bar-tier').css("border-radius", "0");
+            //$('.progress-bar-tier').css("border", "none");
+        }
+
         $('#tier-total-dropdown').click(function () {
             for (let i = 1; i <= 6; i++) {
                 let curVal = +playerInfo["runs-by-tier"][i];
@@ -275,9 +289,13 @@ $(document).ready(function () {
                 let avgPoints = +playerInfo["points-average-by-tier"][i];
                 let $curProgressBar = $("#progress-bar-" + i);
                 let curPercentage = getPercentage(avgPoints, 0, 1000);
+                if(normalizeRatings){
+                    resetBarGraph();
+                }else{
+                    setBarGraph();
+                }
 
                 deathTierColorText(curPercentage, i, $curProgressBar);
-                resetProgressBar();
                 setProgressWdith($("#progress-bar-" + i), curPercentage, avgPoints || 0);
             }
         });
@@ -289,12 +307,15 @@ $(document).ready(function () {
                 max = +playerInfo["runs-possible-by-tier"][tier];
             }
             let percentage = getPercentage(val, 0, max);
+            
             if(normalizeRatings){
+                resetBarGraph();
                 normalizeText = "/" + max + " (" + percentage + "%)";
+            }else{
+                setBarGraph();
             }
             deathTierColorText(percentage, tier, progressBar);
             setProgressWdith(progressBar, percentage, val+normalizeText);
-
         }
 
         function deathTierColorText(percentage, tier, bar) {
