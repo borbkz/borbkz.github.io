@@ -198,6 +198,7 @@ $(document).ready(function () {
 				isbinded = "";
 
 			var first = true;
+			let top5Count = 0;
 			$.each(data, function (i, field) {
 
 				var server = "N/A";
@@ -258,7 +259,10 @@ $(document).ready(function () {
 						if (distance > highestStat)
 							highestStat = distance;
 						jumpstats.push(statRow);
-					} else {
+						top5Count++;
+
+					} else if (top5Count >= 5){
+
 						//if not in whitelist but not WR either...
 						if (distance < highestStat || highestStat == 0) {
 							statRow[2] = "false";
@@ -306,7 +310,7 @@ $(document).ready(function () {
 
 		$(this).attr('value', 'Fetching...');
 
-		retrieveStats(getRequestURL("", jumpstatType, isbinded, 30), globalContainer, true);
+		retrieveStats(getRequestURL("", jumpstatType, isbinded, 25), globalContainer, true);
 	});
 
 	function getRequestURL(steamID, jumpstatType, binded, reqLimit) {
