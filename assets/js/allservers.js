@@ -21,7 +21,7 @@ var globalHeader = ["Map", "Pts", "Time", "TPs", "Tier", "Pro Tier", "Length", "
 var normalizeRatings = true;
 
 var RANKING = {
-    10: "CHEATER",
+    10: "GOD",
     9: "PRO",
     8: "PRO",
     7: "SEMI-PRO",
@@ -318,10 +318,10 @@ $(document).ready(function () {
             }
             deathTierColorText(percentage, tier, progressBar);
             setProgressWdith(progressBar, percentage, val+normalizeText);
-            if(normalizeRatings){
-            $('#progress-end-label-'+tier).css('text-align','right');
-            } else{
-            $('#progress-end-label-'+tier).css('text-align','center');
+            if (normalizeRatings) {
+                $('#progress-end-label-' + tier).css('text-align', 'right');
+            } else {
+                $('#progress-end-label-' + tier).css('text-align', 'center');
             }
             $('#progress-end-label-'+tier).text(val+normalizeText);
         }
