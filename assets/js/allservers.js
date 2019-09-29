@@ -22,6 +22,7 @@ var normalizeRatings = true;
 
 var RANKING = {
     10: "GOD",
+    9.5: "DEMIGOD",
     9: "PRO",
     8: "PRO",
     7: "SEMI-PRO",
@@ -230,7 +231,7 @@ $(document).ready(function () {
 
             finalRating = Math.min(10, finalRating);
 
-            let rankText = RANKING[Math.floor(finalRating+.05)];
+            let rankText = (finalRating>=9.5 && finalRating<9.9)?RANKING[9.5]:RANKING[Math.floor(finalRating+.05)];
 
 
             $("#rank-info-text").attr('title', '('+ finalRating.toFixed(2) +') Not an official ranking!')
