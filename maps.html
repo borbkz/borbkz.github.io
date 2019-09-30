@@ -221,6 +221,7 @@ layout: default
                     var time = getTimeFromSeconds(+field["time"]);
                     var points = field["points"];
                     var server = field["server_name"];
+                    let steam_id = field["steam_id"];
                     if (server !== null)
                         server = server.substring(0, 15);
                     var date = field["created_on"];
@@ -232,8 +233,9 @@ layout: default
                     }
 
 
+                    let playerLink = `<span class="map-link"><a href="/local.html?steamid=${steam_id}&teleports=${teleports!=0}">${player}</a></span>`;
                     $recordLine = $(`<tr class="record-line">` +
-                        `<td class="record-player-name">${place}: ${player}</td>
+                        `<td class="record-player-name" style="text-align:left">${place}: ${playerLink}</td>
                             <td class="record-time">${time}</td>
                             var $recordLine = "";
                             <td class="record-points">${points}</td>` +

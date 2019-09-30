@@ -231,6 +231,17 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 
 	//$(container).parent().prepend($checkboxContainer)
 
+
+	 myColumns[0] = {
+				title: 'TEST',
+				renderer: function(instance, td, row, col, prop, value, cellProperties) {
+					Handsontable.renderers.TextRenderer.apply(this, arguments);
+
+					td.innerHTML = '<span class="map-link"><a href="/maps.html?map=' + value + '">' + value + '</a></span>';
+
+					return td;
+				}};
+
 	var mapTable = new Handsontable(container, {
 		data: maps,
 		height: 1000,

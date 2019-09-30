@@ -652,3 +652,14 @@
      font-family: Wonton;
      src: url('/assets/fonts/Wonton.ttf');
  }
+
+.map-link a{
+     color: black;
+ }
+.map-link a:hover{
+     color: blue;
+ }
+
+ li a:hover{
+     color: white;
+ }
