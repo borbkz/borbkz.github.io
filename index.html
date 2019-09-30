@@ -6,24 +6,41 @@ layout: default
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Satisfy" />
 
 <div class="content-wrap">
-
-    <div class="record-pro-all-container">
-        <divclass="titleDiv"><h3>Pro World Records</h3>
+    <div>
+        <div class="center-div" style="width: 300px"><input id='fancy-checkbox' type="checkbox" checked><span
+                class="infolabel" style="font-weight: normal !important">Fancy</span></div>
     </div>
-    <div class="record-tp-all-container">
-        <div class="titleDiv"><h3>TP World Records</h3></div>
-    </div>
-    <div class="accordion" id="accordion-times">
-        <div class="content-wrap" id="top-1-container" style="text-align: left"></div>
 
-        {% capture inner2 %}
-        <div class="content-wrap" id="top-20-container" style="text-align: left"></div>
-        {% endcapture %}
-        {% include collapse.html parent-id="accordion-times" id="top-20" title="Recent Global Top 20 Times" content=inner2 %}
+    <div class="fancy-container">
+        <div class="record-pro-all-container">
+            <divclass="titleDiv">
+                <h3>Pro World Records</h3>
+        </div>
+        <div class="record-tp-all-container">
+            <div class="titleDiv">
+                <h3>TP World Records</h3>
+            </div>
+        </div>
 
-        {% capture inner3 %}
-        <div class="content-wrap" id="top-100-container" style="text-align: left"></div>
-        {% endcapture %}
-        {% include collapse.html parent-id="accordion-times" id="top-100" title="Recent Global Top 100 Times" content=inner3 %}
     </div>
+
+    <div class="plain-records-container" style="padding: 50px">
+        <div class="content-wrap" id="top-1-container" style="text-align: left">
+            <div class="record-title">
+                World Records
+            </div>
+        </div>
+        <div class="content-wrap" id="top-20-container" style="text-align: left">
+            <div class="record-title">
+                Global Top 20 Times
+            </div>
+        </div>
+        <div class="content-wrap" id="top-100-container" style="text-align: left">
+            <div class="record-title">
+                Global Top 100 Times
+            </div>
+        </div>
+
+    </div>
+    </input>
 </div>

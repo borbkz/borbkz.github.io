@@ -28,6 +28,41 @@ $.getJSON(jsonPath + 'map_thumbs.json', function (data) {
 });
 
 var mapthumbs = {};
+
+var useFancy = false;
+
+
+$(document).ready(function(){
+
+
+let useFancy = localStorage.getItem("USE_FANCY");
+ $('.fancy-container').show();
+ $('#top-1-container').hide();
+
+if (useFancy !== null && useFancy === "false") {
+        $('.fancy-container').hide();
+        $('#fancy-checkbox').prop('checked', false);
+
+}
+
+  $('#fancy-checkbox').change(function () {
+      //localStorage.setItem("USE_FANCY", this.checked);
+      console.log(this.checked);
+      if(this.checked){
+          localStorage.setItem('USE_FANCY', true);
+
+          $('.fancy-container').show();
+          $('#top-1-container').hide();
+
+      }else{
+          localStorage.setItem('USE_FANCY', false);
+          $('.fancy-container').hide();
+          $('#top-1-container').show();
+
+      }
+  });
+
+
 for (var ranking in globalURLs) {
 
     $.getJSON(globalURLs[ranking], (function (ranking) {
@@ -199,7 +234,7 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
 
 
     if (medal === "gold") {
-        let $fancyRecordContainer = $('.record-pro-all-container')
+        let $fancyRecordContainer = $('.record-pro-all-container');
 
         let $divRecordCard = $('<div class="record-card"></div>');
 
@@ -227,16 +262,17 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
             $fancyRecordContainer.append($divRecordCard);
         }
 
-    } else {
+    } 
 
         $(recordContainer).append(recordHTML);
-    }
 
 
 
 
 
 }
+
+
 
 //input format : YYYY-MM-DDTHH:MM:SS
 //output format : X Days, Y Hours, Z Minutes
@@ -262,3 +298,6 @@ function getTimeAgo(time) {
 
     return daysText + hoursText + minutesText;
 };
+
+
+});
