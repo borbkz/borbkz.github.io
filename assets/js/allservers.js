@@ -410,6 +410,7 @@ $(document).ready(function () {
         $.getJSON(requestURL, function (data) {
             if (data.length == 0) {
                 alert("No Times Found for " + steamID);
+            $("#steamButton").attr('value', 'Fetch Times');
                 return true;
             }
             var maps = [];

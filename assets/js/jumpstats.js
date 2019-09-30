@@ -188,6 +188,8 @@ $(document).ready(function () {
 
 			if (data.length == 0) {
 				alert("No Stats Obtained");
+
+				$('#steamButton').attr('value', 'Fetch Stats');
 				return true;
 			}
 			var jumpstats = [];

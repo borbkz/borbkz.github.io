@@ -206,6 +206,11 @@ layout: default
 
         for (let url in urls) {
             $.getJSON(urls[url] + curmap, function (data) {
+                if(data.length==0){
+                    alert("No " + url + " times found for " + curmap +"!");
+                    return true;
+
+                }
                 let place = 1;
 
                 if (url === "pro") {
