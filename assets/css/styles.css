@@ -592,7 +592,7 @@
  .record-card {
      display: flex;
      overflow: hidden;
-     border: 1px solid lightgrey;
+     border: 2px solid lightslategray;
      height: 120px;
      width: 90%;
      margin: 20px auto;

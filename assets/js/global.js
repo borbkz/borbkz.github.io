@@ -259,9 +259,9 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
             fontType="chinablock";
             medalIcon="🥢";
         }
-        let maplink = `<a href="maps.html?map=${map}">${map}</a>`
+        let maplink = `<a href="maps.html?map=${map}">${map} (${time})</a>`
         
-        $divRecordCard.html(`<p><span class="map-title-text">${medalIcon}${maplink} (${time})<span class="wr-minus-time">${timeMinusText}</span>${medalIcon}</span>` +
+        $divRecordCard.html(`<p><span class="map-title-text">${medalIcon}${maplink}<span class="wr-minus-time">${timeMinusText}</span>${medalIcon}</span>` +
             `<br><span class="runner-title-text">—<${fontType}>&nbsp;&nbsp;${nameLink}&nbsp;&nbsp;</${fontType}>—<br>${timeFinished + (timeFinished === "" ? "just now" : " ago")}</span></p>`)
 
 

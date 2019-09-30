@@ -420,10 +420,6 @@ $(document).ready(function () {
             var firstEntry = data[0];
             var steam_id = firstEntry["steam_id"];
 
-            //hi rufus
-            if ((getSteamIDSubstring(steam_id) === "84091052" || getSteamIDSubstring(steam_id) === "176700598")) {
-                new SpiderController({ 'minBugs': 5, 'maxBugs': 10, 'min_frames': 7 });
-            }
 
 
             playerInfo["player-name"] = sanitizeName(data[0]["player_name"]);
