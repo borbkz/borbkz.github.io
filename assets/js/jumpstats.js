@@ -1,5 +1,7 @@
 
-const MAX_STATS = 10;
+const MAX_STATS = 25;
+const MAX_GLOBAL_STATS = 10;
+const MAX_GLOBAL_STATS_REQ_LIMIT = 25;
 //over 20 violates CORS wtf
 var jumpLimit = 20,
 	jumpMin = 100,
@@ -37,28 +39,28 @@ var jumpstatTable = {
 
 
 var header = ["Steam ID", "Player", "Verification", "Jump Type", "Distance", "Strafe Count", "Crouch Boost", "Date", "Server"];
-var personalStats = initStats();
-var globalStats = initStats();
+var personalStats = initStats(MAX_STATS);
+var globalStats = initStats(MAX_GLOBAL_STATS);
 
-function initStats(){
-	return Array(MAX_STATS).fill(Array(header.length).fill("N/A"));
+function initStats(maxlen) {
+	return Array(maxlen).fill(Array(header.length).fill("N/A"));
 
 }
 
 
-	//var emptyLocalTable, emptyGlobalTable;
-	//createTable(emptyStats, header, localContainer);
-	//createTable(emptyStats, header, globalContainer);
+//var emptyLocalTable, emptyGlobalTable;
+//createTable(emptyStats, header, localContainer);
+//createTable(emptyStats, header, globalContainer);
 
 function createTable(tableData, headerArray, tableContainer) {
 	//var tables = document.getElementsByTagName("table");
 	//for (var i = tables.length - 1; i >= 0; i -= 1)
-		//if (tables[i]) tables[i].parentNode.removeChild(tables[i]);
+	//if (tables[i]) tables[i].parentNode.removeChild(tables[i]);
 
-		$('#' + tableContainer.id+'table').remove();
+	$('#' + tableContainer.id + 'table').remove();
 	var table = document.createElement('table');
 
-	table.setAttribute('id', tableContainer.id+"table");
+	table.setAttribute('id', tableContainer.id + "table");
 	var tableBody = document.createElement('tbody');
 
 	var headerRow = document.createElement('tr');
@@ -130,12 +132,12 @@ function createTable(tableData, headerArray, tableContainer) {
 $(document).ready(function () {
 
 
-	
+
 	var localContainer = $("#localJumpstatsContainer")[0];
 	var globalContainer = $("#globalJumpstatsContainer")[0];
 
-	createTable(initStats(),header,localContainer);
-	createTable(initStats(),header,globalContainer);
+	createTable(initStats(MAX_STATS), header, localContainer);
+	createTable(initStats(MAX_GLOBAL_STATS), header, globalContainer);
 
 
 	$.getJSON(jsonPath + "jumpstats_whitelist.json",
@@ -250,7 +252,7 @@ $(document).ready(function () {
 						jumpstats.push(statRow);
 
 					}
-				} else if (jumpstats.length < MAX_STATS) {
+				} else if (jumpstats.length < MAX_GLOBAL_STATS) {
 
 					$("#jumpstat-tip").css("visibility", "visible");
 					if (uniq_id in whitelist) {
@@ -261,7 +263,7 @@ $(document).ready(function () {
 						jumpstats.push(statRow);
 						top5Count++;
 
-					} else if (top5Count >= 5){
+					} else if (top5Count >= 5) {
 
 						//if not in whitelist but not WR either...
 						if (distance < highestStat || highestStat == 0) {
@@ -310,7 +312,7 @@ $(document).ready(function () {
 
 		$(this).attr('value', 'Fetching...');
 
-		retrieveStats(getRequestURL("", jumpstatType, isbinded, 25), globalContainer, true);
+		retrieveStats(getRequestURL("", jumpstatType, isbinded, MAX_GLOBAL_STATS_REQ_LIMIT), globalContainer, true);
 	});
 
 	function getRequestURL(steamID, jumpstatType, binded, reqLimit) {
