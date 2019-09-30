@@ -40,8 +40,9 @@ let useFancy = localStorage.getItem("USE_FANCY");
  $('#top-1-container').hide();
 
 if (useFancy !== null && useFancy === "false") {
-        $('.fancy-container').hide();
-        $('#fancy-checkbox').prop('checked', false);
+    $('.fancy-container').hide();
+    $('#top-1-container').show();
+    $('#fancy-checkbox').prop('checked', false);
 
 }
 
