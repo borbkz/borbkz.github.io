@@ -47,7 +47,6 @@ if (useFancy !== null && useFancy === "false") {
 
   $('#fancy-checkbox').change(function () {
       //localStorage.setItem("USE_FANCY", this.checked);
-      console.log(this.checked);
       if(this.checked){
           localStorage.setItem('USE_FANCY', true);
 
@@ -250,9 +249,19 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
         let timeMinusText = "";
         if (timeMinusInSeconds != 0)
             timeMinusText = "-" + getTimeFromSeconds(timeMinusInSeconds);
+
+        let fontType = "fancy";
+        let medalIcon ="🏆";
+        if(map==="kz_chinablock"){
+            $divRecordCard.css('font-family',"Wonton");
+            $divRecordCard.css('font-size',"1.3em");
+            fontType="chinablock";
+            medalIcon="🥢";
+        }
         
-        $divRecordCard.html(`<p><span class="map-title-text">🏆 ${map} (${time})<span class="wr-minus-time">${timeMinusText}</span>🏆</span>` +
-            `<br><span class="runner-title-text">—<fancy>&nbsp;&nbsp;${nameLink}&nbsp;&nbsp;</fancy>—<br>${timeFinished + (timeFinished === "" ? "just now" : " ago")}</span></p>`)
+        $divRecordCard.html(`<p><span class="map-title-text">${medalIcon}${map} (${time})<span class="wr-minus-time">${timeMinusText}</span>${medalIcon}</span>` +
+            `<br><span class="runner-title-text">—<${fontType}>&nbsp;&nbsp;${nameLink}&nbsp;&nbsp;</${fontType}>—<br>${timeFinished + (timeFinished === "" ? "just now" : " ago")}</span></p>`)
+
 
         if (runtype === "TP") {
             $fancyRecordContainer = $('.record-tp-all-container');
