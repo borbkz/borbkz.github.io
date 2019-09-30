@@ -2,6 +2,7 @@
 title: kz.gl BETA
 layout: default
 ---
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"> </script>
 <style>
     .map-info-container {
         font-weight: bold;
@@ -115,6 +116,13 @@ layout: default
 
         height: 1.2em;
     }
+
+    .map-chart {
+        margin: 30px auto;
+        width: 90%;
+        background-color: white;
+
+    }
 </style>
 
 <div class="content-no-wrap">
@@ -132,7 +140,14 @@ layout: default
         </div>
     </div>
 
+    <div class="center-div" style="width: 300px"><input id='plot-checkbox' type="checkbox" checked><span
+            class="infolabel" style="font-weight: normal !important">Display Plot</span></div>
 
+    <div class="chart-container">
+
+        <canvas class="map-chart" id="myChart"></canvas>
+
+    </div>
 
 
     <div class="fancy-container">
@@ -168,11 +183,158 @@ layout: default
 </div>
 
 
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
 
+    let datapoints = {
+        "protimes": [],
+        "tptimes":[],
+        "propoints":[],
+        "tppoints":[]
+
+    }
+
+    function normalizeValues(data) {
+        let max = Math.max.apply(Math, data);
+        for (let i = 0; i < data.length; i++) {
+            if (max != 0) {
+                data[i] /= max;
+            }
+        }
+        return data;
+    }
+
+    function createChart(pointsData, timeData, xMax, step) {
+        if (pointsData.length != timeData.length && !(pointsData.length > 2)) {
+            return false;
+        }
+        let labels = ["WR"];
+        let count = 0;
+        for (let i = step; i <= xMax; i += step) {
+            labels.push("Top " + i);
+            count++;
+        }
+        console.log("COUNT " + count)
+        console.log(timeData);
+        console.log(timeData[99])
+        let timeMax = timeData[count];
+        let timeMin = timeData[0];
+        let pointsMin = pointsData[count];
+        let pointsMax = pointsData[0];
+        let myStepSize = 10;
+        console.log("# " + count + " time max " + timeMax);
+        //console.log(pointsData);
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                        label: 'Points',
+                        fill: false,
+                        data: pointsData, //normalizeValues(pointsData),
+                        backgroundColor: [
+                            'orange'
+                        ],
+                        borderColor: [
+                            'orange'
+                        ],
+                        yAxisID: 'A',
+
+                        borderWidth: 1
+                    },
+
+                    {
+                        label: 'Time',
+                        fill: false,
+                        data: timeData,
+                        backgroundColor: [
+                            'green'
+                        ],
+                        borderColor: [
+                            'green'
+                        ],
+                        yAxisID: 'B',
+                        borderWidth: 1
+                    }
+
+                ]
+            },
+            options: {
+                responsive: false,
+                tooltips: {
+                    mode: 'label',
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var indice = tooltipItem.index;
+                            return "HELLO " + data.labels[indice] + ': ' + data.datasets[0].data[indice] + '';
+                        }
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        id: 'A',
+                        type: 'linear',
+                        position: 'left',
+                        ticks: {
+                            max: pointsMax,
+                            min: pointsMin,
+                            stepSize: Math.floor((pointsMax - pointsMin) / myStepSize)
+                        }
+                    }, {
+                        id: 'B',
+                        type: 'linear',
+                        position: 'right',
+                        ticks: {
+                            max: timeMax,
+                            min: timeMin,
+                            stepSize: Math.floor((timeMax - timeMin) / myStepSize),
+                            userCallback: function (item, index) {
+                                if (index == 0 || index % 2 == 0) return getTimeFromSeconds(item);
+                            }
+                        },
+                        tooltips: {
+                            enabled: true,
+                            callbacks: (v) => this.getTimeFromSeconds(v)
+
+
+                        }
+                    }],
+
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+    }
+</script>
 
 
 
 <script>
+    let showPlot = localStorage.getItem("SHOW_PLOT");
+    $('#myChart').show();
+
+    if (showPlot !== null && showPlot === "false") {
+        $('#myChart').hide();
+        $('#plot-checkbox').prop('checked', false);
+
+    }
+
+    $('#plot-checkbox').change(function () {
+        //localStorage.setItem("USE_FANCY", this.checked);
+        if (this.checked) {
+            localStorage.setItem('SHOW_PLOT', true);
+            $('#myChart').show();
+        } else {
+            localStorage.setItem('SHOW_PLOT', false);
+            $('#myChart').hide();
+        }
+    });
+
     var currentmap = "kz_beginnerblock_go";
     const PRO_URL_BASE =
         'https://kztimerglobal.com/api/v1.0/records/top?modes_list_string=kz_timer&stage=0&has_teleports=false&limit=100&tickrate=128&map_name='
@@ -206,8 +368,8 @@ layout: default
 
         for (let url in urls) {
             $.getJSON(urls[url] + curmap, function (data) {
-                if(data.length==0){
-                    alert("No " + url + " times found for " + curmap +"!");
+                if (data.length == 0) {
+                    alert("No " + url + " times found for " + curmap + "!");
                     return true;
 
                 }
@@ -220,6 +382,10 @@ layout: default
                     $('.tp-table').append($(headerHTML));
                 }
 
+                let pointsData = [],
+                    timeData = [];
+                let step = 5;
+
                 $.each(data, function (i, field) {
                     var player = sanitizeName(field["player_name"]).substring(0, 15);
                     var teleports = field["teleports"];
@@ -230,22 +396,28 @@ layout: default
                     if (server !== null)
                         server = server.substring(0, 15);
                     var date = field["created_on"];
-                    //console.log(player + " finised with a time of " + time + " earning " + points  + " on " + server + " with " + teleports + " teleports");
                     let container = $('.pro-table');
                     let $recordLine = "";
+
+
+                    if (place == 1 || (place % step == 0)) {
+                        pointsData.push(points);
+                        timeData.push(field["time"]);
+                    }
                     if (teleports != 0) {
                         container = $('.tp-table');
                     }
 
-                    let medal="";
-                    if(place == 1){
-                        medal=TROPHY["gold"];
+                    let medal = "";
+                    if (place == 1) {
+                        medal = TROPHY["gold"];
 
-                    }else if(place>1 && place <=20){
-                        medal=TROPHY["silver"];
+                    } else if (place > 1 && place <= 20) {
+                        medal = TROPHY["silver"];
                     }
 
-                    let playerLink = `<span class="map-link"><a href="/local.html?steamid=${steam_id}&teleports=${teleports!=0}">${player}</a></span>`;
+                    let playerLink =
+                        `<span class="map-link"><a href="/local.html?steamid=${steam_id}&teleports=${teleports!=0}">${player}</a></span>`;
                     $recordLine = $(`<tr class="record-line">` +
                         `<td class="record-player-name" style="text-align:left">${place}:${medal} ${playerLink}</td>
                             <td class="record-time">${time}</td>
@@ -263,6 +435,13 @@ layout: default
                     place++;
                 })
 
+                if(url == "pro"){
+                    datapoints["protimes"] = timeData;
+                    datapoints["propoints"] = pointsData;
+                }else{
+                    datapoints["tptimes"] = timeData;
+                    datapoints["tppoints"] = pointsData;
+                }
 
             });
         }

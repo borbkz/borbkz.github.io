@@ -317,7 +317,7 @@ function getMapArray() {
                             $("#map-info-name").html(`Map: ${mapname}`);
                             $("#map-info-description").html(`<b>TP Tier:</b> <span style='color:${tptierColor}'><b>${tptier}</b></span>, ` +
                                 `<b>Pro Tier:</b> <span style=' color:${protierColor}'><b>${protier}</b></span>, <b>Length:</b> ${length}`);
-                            $("#map-info-tags").html(`<b>Tags:</b> ${tags}`);
+                            $("#map-info-tags").html(`<b>Tags:</b> ${tags}<br><br><a href="/maps?map=${mapname}">View map info page</a>`);
                             fetch(proURL).then(response => {
                                 return response.json();
                             }).then(proRun => {

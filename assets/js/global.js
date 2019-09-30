@@ -29,9 +29,6 @@ $.getJSON(jsonPath + 'map_thumbs.json', function (data) {
 
 var mapthumbs = {};
 
-var useFancy = false;
-
-
 $(document).ready(function(){
 
 
