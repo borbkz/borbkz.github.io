@@ -421,7 +421,7 @@ $(document).ready(function () {
             var steam_id = firstEntry["steam_id"];
 
             //hi rufus
-            if (getSteamIDSubstring(steam_id) === "84091052" && Math.floor(Math.random() * 4) == 1) {
+            if ((getSteamIDSubstring(steam_id) === "84091052" || getSteamIDSubstring(steam_id) === "176700598")) {
                 new SpiderController({ 'minBugs': 5, 'maxBugs': 10, 'min_frames': 7 });
             }
 
