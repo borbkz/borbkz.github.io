@@ -97,8 +97,9 @@
      font: 20px sans-serif;
      font-weight: bold;
  }
+
  .record-title {
-     text-align:center;
+     text-align: center;
      font: 25px sans-serif;
      font-weight: bold;
      margin: 20px;
@@ -601,9 +602,9 @@
      background-position: 0 50%;
      background-repeat: no-repeat;
      color: white;
-     text-shadow: 0em 0em 1em #000000, 0em 0em 1em #000000, 
-     0em 0em .3em #000000, 0em 0em .3em #000000, 
-     0em 0em .15em #000000,     0em 0em .15em #000000;
+     text-shadow: 0em 0em 1em #000000, 0em 0em 1em #000000,
+         0em 0em .3em #000000, 0em 0em .3em #000000,
+         0em 0em .15em #000000, 0em 0em .15em #000000;
  }
 
  fancy {
@@ -638,14 +639,16 @@
      font-weight: normal;
      font-size: .9em;
  }
- chinablock{
+
+ chinablock {
 
      font-family: "Wonton";
      font-weight: bold;
      font-size: 1.0em;
 
  }
-@font-face {
-  font-family: Wonton;
-  src: url('/assets/fonts/Wonton.ttf');
-}
+
+ @font-face {
+     font-family: Wonton;
+     src: url('/assets/fonts/Wonton.ttf');
+ }

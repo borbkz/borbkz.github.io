@@ -2,57 +2,72 @@
 title: kz.gl BETA
 layout: default
 ---
-    <script>
-        function getMaps() {
-            var maps = [];
-            var mapKeys = {
-                "Map": 0,
-                "Tier": 1,
-                "Pro Tier": 2,
-                "Length": 3,
-                "Strafe": 4,
-                "Bhop": 5,
-                "Ladder": 6,
-                "Surf": 7,
-                "Tech": 8,
-            }
-            $.getJSON(difficultyJSON, function (data) {
-
-                var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
-                var cols = Array(header.length).fill({});
-                var spreadsheetContainer = $("#spreadsheet")[0];
-
-                $.each(data, function (i, field) {
-                    map = field[mapKeys["Map"]];
-                    tier = field[mapKeys["Tier"]];
-                    protier = field[mapKeys["Pro Tier"]];
-                    length = field[mapKeys["Length"]];
-                    strafe = field[mapKeys["Strafe"]];
-                    bhop = field[mapKeys["Bhop"]];
-                    ladder = field[mapKeys["Ladder"]];
-                    surf = field[mapKeys["Surf"]];
-                    tech = field[mapKeys["Tech"]];
-                    maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
-                });
-
-                $("#maps-tooltip").show();
-                cols[0] = { className: "htLeft"};
-
-                genTable(spreadsheetContainer, maps, header, [...Array(header.length).keys()], cols);
-
-            }); //end json
-
+<style>
+    .map-info-container{
+        font-weight: bold;
+        font-size: 2rem;
+    }
+</style>
+<script>
+var URI = getURIVars();
+    function getMaps() {
+        var maps = [];
+        var mapKeys = {
+            "Map": 0,
+            "Tier": 1,
+            "Pro Tier": 2,
+            "Length": 3,
+            "Strafe": 4,
+            "Bhop": 5,
+            "Ladder": 6,
+            "Surf": 7,
+            "Tech": 8,
         }
-        $(document).ready(function () {
 
-            myMaps = getMaps();
-        });
-    </script>
-    <div class="content-no-wrap">
-        <h3>Work In Progress!</h3>
-        <div id="table-container">
-            {% include tooltip.html id="maps-tooltip" text="maps-only" %}
-            <div class="handsontable" id="spreadsheet"> </div>
-        </div>
+        if (typeof URI["map"] !== 'undefined') {
+            let map = URI["map"];
+
+            $('.map-info-container').html("<h3>You have selected " + map + ". This section is currently under construction!</h3>")
+        }
+        $.getJSON(difficultyJSON, function (data) {
+
+            var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
+            var cols = Array(header.length).fill({});
+            var spreadsheetContainer = $("#spreadsheet")[0];
+
+            $.each(data, function (i, field) {
+                map = field[mapKeys["Map"]];
+                tier = field[mapKeys["Tier"]];
+                protier = field[mapKeys["Pro Tier"]];
+                length = field[mapKeys["Length"]];
+                strafe = field[mapKeys["Strafe"]];
+                bhop = field[mapKeys["Bhop"]];
+                ladder = field[mapKeys["Ladder"]];
+                surf = field[mapKeys["Surf"]];
+                tech = field[mapKeys["Tech"]];
+                maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
+            });
+
+            $("#maps-tooltip").show();
+            cols[0] = {
+                className: "htLeft"
+            };
+
+            genTable(spreadsheetContainer, maps, header, [...Array(header.length).keys()], cols);
+
+        }); //end json
+
+    }
+    $(document).ready(function () {
+
+        myMaps = getMaps();
+    });
+</script>
+<div class="content-no-wrap">
+    <div class="map-info-container">Work In Progress!</div>
+    <div id="table-container">
+        {% include tooltip.html id="maps-tooltip" text="maps-only" %}
+        <div class="handsontable" id="spreadsheet"> </div>
     </div>
+</div>
 </div>

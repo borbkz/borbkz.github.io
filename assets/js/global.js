@@ -241,7 +241,7 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
         //$divRecordCard.css('background-image',`url(/assets/images/${map}.jpg)`)
         let mapImage = mapthumbs[map];
         //setting to full opacity right now, since the text shadows seem to be doing the trick
-        $divRecordCard.css('background',` linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0,.2) ), url('${mapImage+THUMBNAIL_URI}')`)
+        $divRecordCard.css('background',`linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0,.2) ), url('${mapImage+THUMBNAIL_URI}')`)
         //apparently setting a background image overrides everything so I have to reset
         $divRecordCard.css('background-size','cover');
         $divRecordCard.css('background-position','0 50%');
@@ -259,8 +259,9 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
             fontType="chinablock";
             medalIcon="🥢";
         }
+        let maplink = `<a href="maps.html?map=${map}">${map}</a>`
         
-        $divRecordCard.html(`<p><span class="map-title-text">${medalIcon}${map} (${time})<span class="wr-minus-time">${timeMinusText}</span>${medalIcon}</span>` +
+        $divRecordCard.html(`<p><span class="map-title-text">${medalIcon}${maplink} (${time})<span class="wr-minus-time">${timeMinusText}</span>${medalIcon}</span>` +
             `<br><span class="runner-title-text">—<${fontType}>&nbsp;&nbsp;${nameLink}&nbsp;&nbsp;</${fontType}>—<br>${timeFinished + (timeFinished === "" ? "just now" : " ago")}</span></p>`)
 
 
