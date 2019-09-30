@@ -594,7 +594,7 @@
      border: 1px solid lightgrey;
      height: 120px;
      width: 90%;
-     margin: 10px auto;
+     margin: 20px auto;
 
      background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url ('/assets/images/kz_chinablock.jpg');
      background-size: cover;
@@ -644,12 +644,6 @@
      font-weight: bold;
      font-size: 1.0em;
 
- }
- .chinese-title-text {
-     font-family: "Wonton";
-     margin: 0 auto;
-     font-size: 1.3em;
-     font-weight: bold;
  }
 @font-face {
   font-family: Wonton;
