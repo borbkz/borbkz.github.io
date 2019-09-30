@@ -3,21 +3,26 @@ title: kz.gl BETA
 layout: default
 ---
 <script type="text/javascript" src="/assets/js/global.js?{{site.time | date: '%s%N'}}"></script>
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Satisfy" />
+
 <div class="content-wrap">
 
+    <div class="record-pro-all-container">
+        <div class="titleDiv">Pro World Records</div>
+    </div>
+    <div class="record-tp-all-container">
+        <div class="titleDiv">TP World Records</div>
+    </div>
     <div class="accordion" id="accordion-times">
-        {% capture inner %}
-            <div class="content-wrap" id="top-1-container" style="text-align: left"></div>
-        {% endcapture %}
-        {% include collapse.html parent-id="accordion-times" id="top-1" title="Recent Global World Records" status="show" content=inner %}
+        <div class="content-wrap" id="top-1-container" style="text-align: left"></div>
 
         {% capture inner2 %}
-            <div class="content-wrap" id="top-20-container" style="text-align: left"></div>
+        <div class="content-wrap" id="top-20-container" style="text-align: left"></div>
         {% endcapture %}
         {% include collapse.html parent-id="accordion-times" id="top-20" title="Recent Global Top 20 Times" content=inner2 %}
 
         {% capture inner3 %}
-            <div class="content-wrap" id="top-100-container" style="text-align: left"></div>
+        <div class="content-wrap" id="top-100-container" style="text-align: left"></div>
         {% endcapture %}
         {% include collapse.html parent-id="accordion-times" id="top-100" title="Recent Global Top 100 Times" content=inner3 %}
     </div>

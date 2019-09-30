@@ -52,7 +52,7 @@
      text-align: center;
  }
 
- .content-no-wrap{
+ .content-no-wrap {
      overflow: auto;
      background-color: #313A3F;
      color: white;
@@ -63,6 +63,7 @@
      padding-left: 10px;
      padding-bottom: 2.5rem;
  }
+
  .content-wrap {
      overflow: auto;
      background-color: #313A3F;
@@ -237,14 +238,9 @@
 
  }
 
- .record-minus-time {
-     color: lightgreen;
-
- }
 
  .map-name-container {
      /*color: lightgoldenrodyellow;*/
-     ;
      color: white;
      font-weight: bold;
  }
@@ -445,17 +441,18 @@
  }
 
 
- .dropdown-toggle{
+ .dropdown-toggle {
 
-    width: 250px;
- }
- .dropdown-menu{
-     width: 250px; 
-     text-align:left;
-
+     width: 250px;
  }
 
- .dropdown-item{
+ .dropdown-menu {
+     width: 250px;
+     text-align: left;
+
+ }
+
+ .dropdown-item {
      cursor: pointer;
  }
 
@@ -496,7 +493,8 @@
      text-align: left;
      margin-bottom: 5px;
  }
- .infofield{
+
+ .infofield {
      display: inline;
      margin-right: 3em;
  }
@@ -508,6 +506,7 @@
      font: 1.2em sans-serif;
      text-align: left;
  }
+
  .progress-end-label {
      margin: 0;
      margin-left: 1em;
@@ -537,35 +536,100 @@
      width: 90%;
      float: right;
  }
+
  div.progress {
      margin: 0;
      float: right;
-    border-radius: 7px;
+     border-radius: 7px;
  }
- .progress-bar-group-title{
+
+ .progress-bar-group-title {
      margin-bottom: 20px;
  }
 
- .progress-group-container{
- }
- .progress-bar-tier{
-    color: #333; 
-    font: 16px sans-serif;
-    font-weight: bold;
-    border: 1px solid darkgrey;
-    border-radius: 7px;
- }
 
- div.wtHider{
-
-    margin: 0 auto !important;
+ .progress-bar-tier {
+     color: #333;
+     font: 16px sans-serif;
+     font-weight: bold;
+     border: 1px solid darkgrey;
+     border-radius: 7px;
  }
 
- .tier-tooltip{
-  border-bottom: 1px dotted;
+ div.wtHider {
+
+     margin: 0 auto !important;
  }
 
- .center-div{
+ .tier-tooltip {
+     border-bottom: 1px dotted;
+ }
+
+ .center-div {
      text-align: center;
      display: inline;
+ }
+
+ .record-pro-all-container {
+     width: 50%;
+     float: left;
+     padding: 5px;
+ }
+
+ .record-tp-all-container {
+     width: 50%;
+     float: right;
+     padding: 5px;
+ }
+
+
+ .record-card {
+     display: flex;
+     overflow: hidden;
+     border: 1px solid lightgrey;
+     height: 120px;
+     width: 90%;
+     margin: 10px auto;
+
+     background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url ('/assets/images/kz_chinablock.jpg');
+     background-size: cover;
+     background-position: 0 50%;
+     background-repeat: no-repeat;
+     color: white;
+     text-shadow: 0em 0em 1em #000000, 0em 0em 1em #000000, 
+     0em 0em .3em #000000, 0em 0em .3em #000000, 
+     0em 0em .15em #000000,     0em 0em .15em #000000;
+ }
+
+ fancy {
+     font-family: "Satisfy", cursive;
+     font-weight: bold;
+     font-size: 1.0em;
+ }
+
+ .record-card p {
+     margin: auto;
+     text-align: center;
+ }
+
+ .map-title-text {
+     margin: 0 auto;
+     font-size: 1.3em;
+     font-weight: bold;
+ }
+
+ .runner-title-text {
+     margin: 0 auto;
+     font-size: 1.1em;
+     font-weight: normal;
+ }
+
+ .record-minus-time {
+     color: lightgreen;
+ }
+
+ .wr-minus-time {
+     color: lightgreen;
+     font-weight: normal;
+     font-size: .9em;
  }

@@ -1,5 +1,6 @@
 const jsonPath = "/assets/json/"
 const jsPath = "/assets/js/"
+const imagePath ="/assets/images/"
 const difficultyJSON = jsonPath + "maps.json";
 const headerJSON = jsonPath + "header.json";
 const STEAMID_PERSISTENT = "STEAMID-PERSISTENT";

@@ -7,6 +7,8 @@ var top20RequestURL = globalsRequestURLBase +
     "&place_top_at_least=20&limit=40"; //#1 counts as top 20, get 50 just in case
 var top100RequestURL = globalsRequestURLBase + "&limit=100";
 
+const THUMBNAIL_URI ="?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true";
+
 
 
 //using player_name+map_name+teleports as hash
@@ -20,10 +22,13 @@ var globalURLs = {
     "bronze": top100RequestURL,
 }
 
+$.getJSON(jsonPath + 'map_thumbs.json', function (data) {
+    mapthumbs = data;
 
+});
+
+var mapthumbs = {};
 for (var ranking in globalURLs) {
-
-
 
     $.getJSON(globalURLs[ranking], (function (ranking) {
         return function (data) {
@@ -72,6 +77,7 @@ for (var ranking in globalURLs) {
             } else {
                 publishPlayerTimes($('#top-100-container')[0], top100Players);
             }
+
         }
     })(ranking));
 
@@ -97,6 +103,8 @@ function pushPlayer(playerList, playerRecord) {
 
 function publishPlayerTimes(recordContainer, playerEntries) {
 
+
+
     for (var playerKey in playerEntries) {
 
 
@@ -120,7 +128,7 @@ function publishPlayerTimes(recordContainer, playerEntries) {
             }
 
             let uniqKey = playerEntries[playerKey][i]["time"];
-            if(!uniqTimes[playerEntries[playerKey][i]["time"]] ){
+            if (!uniqTimes[playerEntries[playerKey][i]["time"]]) {
                 publishEntry(recordContainer, playerEntries[playerKey][i], indent, timeDiff);
                 uniqTimes[uniqKey] = true;
 
@@ -189,7 +197,42 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
     var recordHTML = '<div class="' + recordDivClass + '">' + indentHTML + recordText +
         '<br></div>';
 
-    $(recordContainer).append(recordHTML);
+
+    if (medal === "gold") {
+        let $fancyRecordContainer = $('.record-pro-all-container')
+
+        let $divRecordCard = $('<div class="record-card"></div>');
+
+        //$divRecordCard.css('background-image',`url(/assets/images/${map}.jpg)`)
+        let mapImage = mapthumbs[map];
+        //setting to full opacity right now, since the text shadows seem to be doing the trick
+        $divRecordCard.css('background',` linear-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0) ), url('${mapImage+THUMBNAIL_URI}')`)
+        //apparently setting a background image overrides everything so I have to reset
+        $divRecordCard.css('background-size','cover');
+        $divRecordCard.css('background-position','0 50%');
+        $divRecordCard.css('background-repeat','no-repeat');
+
+        let timeMinusText = "";
+        if (timeMinusInSeconds != 0)
+            timeMinusText = "-" + getTimeFromSeconds(timeMinusInSeconds);
+        
+        $divRecordCard.html(`<p><span class="map-title-text">🏆 ${map} (${time})<span class="wr-minus-time">${timeMinusText}</span>🏆</span>` +
+            `<br><span class="runner-title-text">—<fancy>&nbsp;&nbsp;${nameLink}&nbsp;&nbsp;</fancy>—<br>${timeFinished + (timeFinished === "" ? "just now" : " ago")}</span></p>`)
+
+        if (runtype === "TP") {
+            $fancyRecordContainer = $('.record-tp-all-container');
+        }
+
+        if (indentLevel == 0) {
+            $fancyRecordContainer.append($divRecordCard);
+        }
+
+    } else {
+
+        $(recordContainer).append(recordHTML);
+    }
+
+
 
 
 
