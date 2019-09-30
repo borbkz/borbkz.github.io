@@ -203,7 +203,8 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
     var timeText = '<span class="' + runtype.toLowerCase() + '-run-container">' + time + '</span>';
     var placeText = '<span class="' + medal + '-place-container">#' + place + '</span>';
     var playerText = '<span class="player-name-container">' + nameLink + "</span>";
-    var mapText = '<span class="map-name-container">' + map + "</span>"
+    let map_link = `<a href="maps.html?map=${map}">${map}</a>`
+    var mapText = '<span class="map-name-container">' + map_link + "</span>"
     var dateText = '<span class="date-run-container"> ' + timeFinished + (timeFinished === "" ? "just now" : " ago") +
         "</span>";
 

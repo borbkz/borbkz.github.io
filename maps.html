@@ -3,13 +3,257 @@ title: kz.gl BETA
 layout: default
 ---
 <style>
-    .map-info-container{
+    .map-info-container {
         font-weight: bold;
         font-size: 2rem;
+        height: 300px;
+    }
+
+    .left {
+        width: 50%;
+        height: 100%;
+        float: left;
+    }
+
+    .right {
+        width: 50%;
+        height: 100%;
+        float: right;
+    }
+
+    .title-map {
+        font-size: 1em;
+
+    }
+
+    .map-screenshot-container {
+        width: 80%;
+        height: 100%;
+        margin: 0 auto;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .map-description-container {
+        color: white;
+        float: left;
+        height: 100%;
+        width: 80%;
+        margin: 0 auto;
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 10px;
+        text-align: center;
+
+    }
+
+    .map-description-sub-container {
+        font-size: .7em;
+        text-align: left;
+        margin: 2em;
+
+    }
+
+    .record-line {
+        font: .9em;
+        margin: 5px;
+
+        display: table-row;
+        vertical-align: inherit;
+    }
+
+    .record-player-name {
+        width: 150px;
+        margin: 0 5px;
+    }
+
+    .record-time {
+        margin: 0 5px;
+        width: 100px;
+
+    }
+
+    .record-points {
+        margin: 0 5px;
+        width: 50px;
+    }
+
+    .record-server {
+        margin: 0 5px;
+        width: 150px;
+
+    }
+
+    .record-teleports {
+        margin: 0 5px;
+        width: 50px;
+    }
+
+    .record-date {
+        margin: 0 5px;
+        width: 100px;
+    }
+
+    .record-table {
+        color: black;
+    }
+
+    .record-type-title {
+        font-size: 1.5em;
+        margin: 30px;
+    }
+
+
+    .header-line {
+        background: transparent;
+        color: black;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+
+    table .dr {
+
+        height: 1.2em;
     }
 </style>
+
+<div class="content-no-wrap">
+    <div class="map-info-container">
+        <div class="left">
+            <div class="map-screenshot-container"></div>
+        </div>
+
+        <div class="right">
+            <div class="map-description-container">
+                <div class="title-map map-name"></div>
+                <div class="map-description-sub-container">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="fancy-container">
+        <div class="record-pro-all-container">
+            <div class="record-type-title">
+                <h3>Pro Top 100</h3>
+            </div>
+
+            <div class="content-wrap" style="height: 600px">
+                <table class="pro-table record-table">
+                </table>
+            </div>
+        </div>
+        <div class="record-tp-all-container">
+            <div class="record-type-title">
+                <h3>TP Top 100</h3>
+            </div>
+            <div class="content-wrap" style="height: 600px">
+                <table class="tp-table record-table">
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="content-no-wrap">
+        <div id="table-container">
+            {% include tooltip.html id="maps-tooltip" text="maps-only" %}
+            <div class="handsontable" id="spreadsheet"> </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
 <script>
-var URI = getURIVars();
+    var currentmap = "kz_beginnerblock_go";
+    const PRO_URL_BASE =
+        'https://kztimerglobal.com/api/v1.0/records/top?modes_list_string=kz_timer&stage=0&has_teleports=false&limit=100&tickrate=128&map_name='
+    const TP_URL_BASE =
+        'https://kztimerglobal.com/api/v1.0/records/top?modes_list_string=kz_timer&stage=0&has_teleports=true&limit=100&tickrate=128&map_name='
+    var urls = {
+        "pro": PRO_URL_BASE,
+        "tp": TP_URL_BASE
+    };
+    var URI = getURIVars();
+
+    function displayMap(curmap) {
+
+        $('.map-name').text(curmap);
+        $.getJSON(jsonPath + 'map_thumbs.json', function (data) {
+            mapthumbs = data;
+            let thumbnail = mapthumbs[curmap];
+            let mapImage = `url('${thumbnail}')`;
+            $('.map-screenshot-container').css('background-image', mapImage);
+
+
+        });
+
+        $('tr').remove();
+        $('td').remove();
+
+        let container = $('.pro-table');
+        var headerHTML = `<tr class="header-line">` +
+            `<td class="record-player-name">Player</td><td class="record-time">Time</td><td class="record-points">Pts</td>` +
+            `<td class="record-teleports">TPs</td><td class="record-date">Date Run</td><td class="record-server">Server</td></tr></<tr>`;
+
+        for (let url in urls) {
+            $.getJSON(urls[url] + curmap, function (data) {
+                let place = 1;
+
+                if (url === "pro") {
+                    $('.pro-table').append($(headerHTML));
+                } else {
+
+                    $('.tp-table').append($(headerHTML));
+                }
+
+                $.each(data, function (i, field) {
+                    var player = sanitizeName(field["player_name"]).substring(0, 15);
+                    var teleports = field["teleports"];
+                    var time = getTimeFromSeconds(+field["time"]);
+                    var points = field["points"];
+                    var server = field["server_name"];
+                    if (server !== null)
+                        server = server.substring(0, 15);
+                    var date = field["created_on"];
+                    //console.log(player + " finised with a time of " + time + " earning " + points  + " on " + server + " with " + teleports + " teleports");
+                    let container = $('.pro-table');
+                    let $recordLine = "";
+                    if (teleports != 0) {
+                        container = $('.tp-table');
+                    }
+
+
+                    $recordLine = $(`<tr class="record-line">` +
+                        `<td class="record-player-name">${place}: ${player}</td>
+                            <td class="record-time">${time}</td>
+                            var $recordLine = "";
+                            <td class="record-points">${points}</td>` +
+                        `<td class="record-teleports">${teleports}</td>
+                            <td class="record-date">${date}</td>
+                            <td class="record-server">${server}</td>
+                        </tr>`
+                    );
+
+
+
+                    container.append($recordLine);
+                    place++;
+                })
+
+
+            });
+        }
+    }
+
     function getMaps() {
         var maps = [];
         var mapKeys = {
@@ -25,10 +269,12 @@ var URI = getURIVars();
         }
 
         if (typeof URI["map"] !== 'undefined') {
-            let map = URI["map"];
+            currentmap = URI["map"];
 
-            $('.map-info-container').html("<h3>You have selected " + map + ". This section is currently under construction!</h3>")
         }
+
+        displayMap(currentmap);
+
         $.getJSON(difficultyJSON, function (data) {
 
             var header = ["Map", "Tier", "Pro Tier", "Length", "Strafe", "Bhop", "Ladder", "Surf", "Tech"];
@@ -46,6 +292,22 @@ var URI = getURIVars();
                 surf = field[mapKeys["Surf"]];
                 tech = field[mapKeys["Tech"]];
                 maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
+
+                if (map === currentmap) {
+                    $('.title-map').text(map);
+                    let tptierColor = TIERKEY[+tier][1];
+                    let tptierText = TIERKEY[+tier][0];
+                    let protierColor = TIERKEY[+protier][1];
+                    let protierText = TIERKEY[+protier][0];
+
+                    let tags = field[9].split("|").join(",").replace(/\s\s+/g, ' ');
+
+                    $(".map-description-sub-container").append(
+                        `TP Tier: <span style='color:${tptierColor}'>${tptierText}</span><br>` +
+                        `Pro Tier: <span style=' color:${protierColor}'>${protierText}</span><br>Length: ${length}<br>` +
+                        `Tags: ${tags}`);
+                    //$("#map-info-tags").html(`<b>Tags:</b> ${tags}`);
+                }
             });
 
             $("#maps-tooltip").show();
@@ -55,19 +317,12 @@ var URI = getURIVars();
 
             genTable(spreadsheetContainer, maps, header, [...Array(header.length).keys()], cols);
 
+
         }); //end json
 
     }
     $(document).ready(function () {
-
+        //displayEmptyMap();
         myMaps = getMaps();
     });
 </script>
-<div class="content-no-wrap">
-    <div class="map-info-container">Work In Progress!</div>
-    <div id="table-container">
-        {% include tooltip.html id="maps-tooltip" text="maps-only" %}
-        <div class="handsontable" id="spreadsheet"> </div>
-    </div>
-</div>
-</div>
