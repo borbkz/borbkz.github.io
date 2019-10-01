@@ -13,7 +13,6 @@ const TROPHY = {
 	"bronze": '🥉'
 }
 
-
 var jumpBinds = ["bind", "nobind", "both"];
 const JUMPSTATSKEY = {
 	1: "longjump",
@@ -32,7 +31,6 @@ const TIERKEY = {
 	"4": ["Hard", "orange"],
 	"5": ["Very Hard", "red"],
 	"6": ["Death", "black"]
-
 }
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 
@@ -44,19 +42,13 @@ function getSteamIDSubstring(steamID) {
 		return steamID.substring(steamID.lastIndexOf(":") + 1);
 	else
 		return "";
-
 }
 
 function getHeaderArray() {
-	//var header = {};
 	$.getJSON(headerJSON, function (data) {
-		//header = data;
-	}); //end json
-	//return header;
-
+	}); 
 }
 function getDifficultyArray(difficultyArray) {
-
 	$.ajax({
 		url: difficultyJSON,
 		dataType: 'json',
@@ -69,7 +61,6 @@ function getDifficultyArray(difficultyArray) {
 				"Pro Tier": 2,
 				"Length": 3,
 			}
-
 			$.each(data, function (i, field) {
 				//if (i == 0) return true;
 				tier = field[mapKeys["Tier"]];
@@ -77,20 +68,16 @@ function getDifficultyArray(difficultyArray) {
 				length = field[mapKeys["Length"]];
 				difficultyArray[field[mapKeys["Map"]]] = [tier, protier, length];
 			});
-
 		}
 	});
-
-
 }
-
 
 function getServerName(serverID) {
 	serverReq = serverIDRequest + serverID;
 	var temp = $.ajax({
 		url: serverReq,
 		async: false,
-	});//.responseText;
+	});
 	var serverName = "N/A";
 	if (typeof temp !== 'undefined') {
 		if (temp.responseText !== "")
@@ -98,7 +85,6 @@ function getServerName(serverID) {
 	}
 	return serverName;
 }
-
 function isValidStat(stat) {
 	for (key in JUMPSTATSKEY)
 		if (JUMPSTATSKEY[key] === stat)
@@ -110,6 +96,7 @@ function isValidStat(stat) {
 function isValidBind(bind) {
 	return jumpBinds.includes(bind);
 }
+
 /*
 * returns true if steamID is valid
 * does not assumed whitespace trimmed string
@@ -124,7 +111,6 @@ function getURIVars() {
 	});
 	return vars;
 }
-
 function getTimeFromSeconds(seconds) {
 	var hours = Math.floor(seconds / 3600);
 
@@ -156,7 +142,6 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 	initialSort = initialSort || 0;
 	//var narrowHeaders = ["time","tier", "length"];
 	var wideHeaders = ["map", "server", "date"];
-
 
 	function isNarrowHeader(myHeader) {
 		//see if it's a narrow input field
@@ -205,7 +190,6 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		}
 
 		if (TH.childElementCount < 2) {
-
 			for (i = 0; i < filterArray.length; i++) {
 				if (col == filterArray[i]) {
 					TH.appendChild(getInitializedElements(col));
@@ -228,18 +212,12 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		sortOrder: "asc"
 	}
 
-
-	//$(container).parent().prepend($checkboxContainer)
-
-
 	 myColumns[0] = {
 		 className: "htLeft",
 		 readOnly:true,
 				renderer: function(instance, td, row, col, prop, value, cellProperties) {
 					Handsontable.renderers.TextRenderer.apply(this, arguments);
-
 					td.innerHTML = '<span class="map-link"><a href="/maps.html?map=' + value + '">' + value + '</a></span>';
-
 					return td;
 				}};
 
@@ -288,14 +266,11 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 
 			var hidden = [];
 			$("." + container.id + "-checkbox").each(function () {
-
 				var curIndex = header.indexOf(this.name);
-
 				if (!this.checked)
 					hidden.push(curIndex);
 
 			});
-
 			//Important to hide columns first, then reset width
 			//has to be done in two steps
 			mapTable.updateSettings({
@@ -304,24 +279,17 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 					columns: hidden
 				}
 			});
-
 			mapTable.updateSettings({
 				width: $('#' + container.id + ' .wtHider').width() + WIDTH_OFFSET
 			});
-
-
 		});
 	}
-
-
 	first = false;
 	return mapTable;
-
 }
 
 (function () {
 	let a = Math.random() * 100;
-
 	if (a <= 5){
 		new BugController({ 'minBugs': 3, 'maxBugs': 6, 'min_frames': 10 });
 	}
@@ -330,6 +298,4 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 	}else if (a == 42){
 		new SpiderController({ 'minBugs': 10, 'maxBugs': 20, 'min_frames': 7 });
 	}
-
-
 })();

@@ -138,11 +138,11 @@
     },
     "surf": {
         "type": "surf",
-        "description": "Map contains multiple surfs in a row"
+        "description": "" 
     },
     "surf chain": {
         "type": "surf",
-        "description": ""
+        "description": "Map contains multiple surfs in a row"
     },
     "big surf": {
         "type": "surf",
@@ -228,29 +228,33 @@
         "type": "bhop",
         "description": "A player must crouch before the peak of his jump to clear an obstacle or to reduce height"
     },
+    "medium multihop": {
+        "type": "bhop",
+        "description": "Map contains moderately difficulty multihop sections"
+    },
     "hard bhop": {
         "type": "bhop",
-        "description": ""
+        "description": "Map contains difficult singlehop or multihop sections"
     },
     "hard multihop": {
         "type": "bhop",
-        "description": ""
+        "description": "Contains long or difficult multihop sections"
     },
     "hard singlehop": {
         "type": "bhop",
-        "description": ""
+        "description": "Contains long or difficult singlehop sections"
     },
     "spikes": {
         "type": "bhop",
-        "description": ""
+        "description": "Contains sections where you have to bhop on spikes"
     },
     "booster": {
         "type": "booster",
-        "description": "Blocks that provide a huge upward momentum"
+        "description": "Mechanism that launches you upward when you jump on it"
     },
     "wall booster": {
         "type": "booster",
-        "description": "Blocks that provide a huge upward momentum"
+        "description": "Mechanism that launches you away from the wall"
     },
     "small block": {
         "type": "strafe",
@@ -258,35 +262,35 @@
     },
     "260 lj block": {
         "type": "strafe",
-        "description": "Map contains this lj block"
+        "description": "Map contains one or more numbered 260 lj blocks"
     },
     "256 lj block": {
         "type": "strafe",
-        "description": ""
+        "description": "Map contains one or more numbered 256 lj blocks"
     },
     "255 lj block": {
         "type": "strafe",
-        "description": ""
+        "description": "Map contains one or more numbered 255 lj blocks"
     },
     "262 lj block": {
         "type": "strafe",
-        "description": "Map contains this lj block"
+        "description": "Map contains one or more numbered 262 lj blocks"
     },
     "264 lj block": {
         "type": "strafe",
-        "description": "Map contains this lj block"
+        "description":"Map contains one or more numbered 264 lj blocks" 
     },
     "265 lj block": {
         "type": "strafe",
-        "description": "Map contains this lj block"
+        "description": "Map contains one or more numbered 265 lj blocks"
     },
     "268 lj block": {
         "type": "strafe",
-        "description": "Map contains this lj block"
+        "description": "Map contains one or more numbered 268 lj blocks"
     },
     "270 lj block": {
         "type": "strafe",
-        "description": "Map contains this lj block"
+        "description": "Map contains one or more numbered 270 lj blocks"
     },
     "280 block": {
         "type": "strafe",
@@ -358,7 +362,7 @@
     },
     "skip": {
         "type": "meta",
-        "description": "Map containing a large skip"
+        "description": "Map containing one or more unintended skips"
     },
     "surf skip": {
         "type": "meta",

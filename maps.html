@@ -24,7 +24,6 @@ layout: default
 
     .title-map {
         font-size: 1em;
-
     }
 
     .map-screenshot-container {
@@ -360,7 +359,7 @@ layout: default
 
 
 <script>
-    var currentmap = "kz_beginnerblock_go";
+    var currentmap = "kz_zxp_interstellar_v2";
     const PRO_URL_BASE =
         'https://kztimerglobal.com/api/v1.0/records/top?modes_list_string=kz_timer&stage=0&has_teleports=false&limit=100&tickrate=128&map_name='
     const TP_URL_BASE =
@@ -379,8 +378,6 @@ layout: default
             let thumbnail = mapthumbs[curmap];
             let mapImage = `url('${thumbnail}')`;
             $('.map-screenshot-container').css('background-image', mapImage);
-
-
         });
 
         $('tr').remove();

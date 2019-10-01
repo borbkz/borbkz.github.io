@@ -438,7 +438,7 @@
   ["kz_zhop_son_fix",3,3,"Long",null,null,null,null,null,"bhop|pro checkpoint zones| mini ladder"  ],
   ["kz_ziggurath_final",4,4,"Medium",3,3,3,0,3,"booster| ladder-bhop chain"  ],
   ["kz_zxp_final4",4,4,"Medium",4,4,3,0,4,"keys| nonlinear| booster| wall booster| pro checkpoint zones"  ],
-  ["kz_zxp_interstellar_v2",3,4,"Long",3,3,3,2,3,"skip| drop strafe| booster| wall booster| keys| nonlinear| 180 ladder| gravity"  ],
+  ["kz_zxp_interstellar_v2",3,4,"Long",3,3,3,2,3,"medium multihop | drop strafe| booster| wall booster| keys| nonlinear| 180 ladder| gravity | skip"  ],
   ["kz_zxp_undia",4,4,"Short",3,4,2,0,3,"180 tech surf| 180 ladder| small bhop| tech surf"  ],
   ["kzpro_concrete_c02",4,4,"Short",4,4,2,0,4,"hard singlehop| prekeep| keys| mini ladder"  ],
   ["kzpro_gull_pidr_reborn",6,6,"Medium",5,5,5,5,6,"hard ladder| hard surf| hard tech| strafeheavy| hard multihop| spikes| mini surf| 268 lj block"  ],
