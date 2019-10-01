@@ -271,10 +271,12 @@ layout: default
         min = Math.min(min, ...tpdata);
         let len = Math.max(prodata.length, tpdata.length);
 
+        
         let labels = [];
-        for (let i = 0; i < len; i++) {
-            labels.push(i * step);
+        for(let i = 1; i <= len; i++){
+            labels.push(i);
         }
+
         labels[0] = "WR";
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -324,12 +326,14 @@ layout: default
                         ticks: {
                             max: max,
                             min: min,
-                            userCallback: tickCallback
+                            userCallback: tickCallback,
                         }
                     }],
                     xAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            autoSkip: true,
+                            maxTicksLimit: 21
                         }
                     }]
                 }
@@ -408,10 +412,8 @@ layout: default
                     let $recordLine = "";
 
 
-                    if (place == 1 || (place % step == 0)) {
                         pointsData.push(points);
                         timeData.push(field["time"]);
-                    }
                     if (teleports != 0) {
                         container = $('.tp-table');
                     }
