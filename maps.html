@@ -214,9 +214,7 @@ layout: default
 
     }
     $(document).ajaxStop(function () {
-        console.log("in ajax stop")
         let showgraph = localStorage.getItem("SHOW_MAPS_GRAPH");
-        console.log(showgraph)
         if (showgraph !== null) {
             if(showgraph === "hide"){
                 return true;

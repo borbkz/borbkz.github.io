@@ -182,6 +182,7 @@
      padding: 10px;
  }
 
+
  tr:nth-child(even) {
      background-color: white;
  }
