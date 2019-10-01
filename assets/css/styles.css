@@ -640,18 +640,7 @@
      font-size: .9em;
  }
 
- chinablock {
 
-     font-family: "Wonton";
-     font-weight: bold;
-     font-size: 1.0em;
-
- }
-
- @font-face {
-     font-family: Wonton;
-     src: url('/assets/fonts/Wonton.ttf');
- }
 
 .map-link a{
      color: black;

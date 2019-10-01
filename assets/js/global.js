@@ -186,7 +186,7 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
         updatedOn = recordEntry["updated_on"],
         medal = recordEntry["medal"]
 
-    var nameLink = '<a href="local.html?steamid=' + steamID + "&teleports=" + teleportsBool + '">' + player + '</a>'
+    var nameLink = '<a title="' + player + '" href="local.html?steamid=' + steamID + "&teleports=" + teleportsBool + '">' + player + '</a>'
 
 
     var recordTimeText = "";
@@ -249,18 +249,10 @@ function publishEntry(recordContainer, recordEntry, indentLevel, timeMinusInSeco
         if (timeMinusInSeconds != 0)
             timeMinusText = "-" + getTimeFromSeconds(timeMinusInSeconds);
 
-        let fontType = "fancy";
-        let medalIcon ="🏆";
-        if(map==="kz_chinablock"){
-            $divRecordCard.css('font-family',"Wonton");
-            $divRecordCard.css('font-size',"1.3em");
-            fontType="chinablock";
-            medalIcon="🥢";
-        }
         let maplink = `<a href="maps.html?map=${map}">${map} (${time})</a>`
         
-        $divRecordCard.html(`<p><span class="map-title-text">${medalIcon}${maplink}<span class="wr-minus-time">${timeMinusText}</span>${medalIcon}</span>` +
-            `<br><span class="runner-title-text">—<${fontType}>&nbsp;&nbsp;${nameLink}&nbsp;&nbsp;</${fontType}>—<br>${timeFinished + (timeFinished === "" ? "just now" : " ago")}</span></p>`)
+        $divRecordCard.html(`<p><span class="map-title-text">🏆${maplink}<span class="wr-minus-time">${timeMinusText}</span>🏆</span>` +
+            `<br><span class="runner-title-text">—<fancy>&nbsp;&nbsp;${nameLink}&nbsp;&nbsp;</fancy>—<br>${timeFinished + (timeFinished === "" ? "just now" : " ago")}</span></p>`)
 
 
         if (runtype === "TP") {
