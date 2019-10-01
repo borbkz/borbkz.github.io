@@ -155,7 +155,7 @@
   ["kz_dejavu",3,4,"Medium",3,0,0,0,2,"climb | boxtech"  ],
   ["kz_depot",3,3,"Short",3,3,1,3,3,"climb | gap surf | tech surf"  ],
   ["kz_dethroned",5,6,"Short",4,5,5,5,5,"hard ladder| hard surf| hard tech| hard multihop| headbanger| ladder-surf-bhop chain| tech surf | crouched headbanger"  ],
-  ["kz_diajonal",3,3,"Very Short",3,0,3,4,3,"forced perf | boxtech | slanted block jump | ladder-surf chain | height surf | 180 ladder | ladder chain | slide | tech surf | crouched headbanger | spikes | big surf"  ],
+  ["kz_diajonal",3,3,"Very Short",3,0,3,4,3,"boxtech | slanted block jump | ladder-surf chain | height surf | 180 ladder | ladder chain | slide | tech surf | crouched headbanger | spikes | big surf"  ],
   ["kz_dimensions_v1",2,3,"Short",null,null,null,null,null,"climb"  ],
   ["kz_district_d01",3,4,"Short",3,4,1,0,3,"booster | boxtech | forced perf | weirdjump | gravity | tech surf | 280 block"  ],
   ["kz_doubletake",2,1,"Very Short",null,null,null,null,null,"combo"  ],

@@ -310,7 +310,7 @@
     },
     "combo": {
         "type": "easy",
-        "description": "Easy maps with good flow. Most blocks can be bhop. "
+        "description": "Easy maps with good flow. Most blocks can be bhopped"
     },
     "ladder-surf-bhop chain": {
         "type": "chain",

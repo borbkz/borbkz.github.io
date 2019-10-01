@@ -214,6 +214,7 @@ layout: default
         "tppoints": [],
         "teleports": [],
     }
+    let tagtips = {};
     $(document).ajaxStop(function () {
         let showgraph = localStorage.getItem("SHOW_MAPS_GRAPH");
         if (showgraph !== null) {
@@ -231,6 +232,12 @@ layout: default
             $('#times-dropdown').click();
         }
     });
+
+    $.getJSON(jsonPath + "maptags.json", function (data) {
+        tagtips = data;
+
+    });
+
 
     function normalizeValues(data) {
         let max = Math.max.apply(Math, data);
@@ -512,7 +519,17 @@ layout: default
                     let protierColor = TIERKEY[+protier][1];
                     let protierText = TIERKEY[+protier][0];
 
-                    let tags = field[9].split("|").join(",").replace(/\s\s+/g, ' ');
+                    let tagarray = field[9].split("|");
+                    let tagText = "";
+                    for(let i = 0; i < tagarray.length; i++){
+                        let curtag = tagarray[i].trim();
+                        let tooltip = "";
+                        if (curtag in tagtips){
+                            tooltip = tagtips[curtag].description;
+                        }
+                            tagText += `<span style="border-bottom: 1px dotted" title="${tooltip}">${curtag}</span>, `
+                    }
+                    tagText = tagText.replace(/,\s*$/, "");
 
                     if(tier == 6){
                         tptierColor = "yellow";
@@ -525,7 +542,7 @@ layout: default
                     $(".map-description-sub-container").append(
                         `TP Tier: <span style='color:${tptierColor}'>${tptierText}</span><br>` +
                         `Pro Tier: <span style=' color:${protierColor}'>${protierText}</span><br>Length: ${length}<br>` +
-                        `Tags: ${tags}`);
+                        `Tags: ${tagText}`);
                     //$("#map-info-tags").html(`<b>Tags:</b> ${tags}`);
                 }
             });
