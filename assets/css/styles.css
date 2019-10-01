@@ -143,7 +143,6 @@
  }
 
  table {
-     height: 80%;
      text-align: center;
      border-collapse: collapse;
      border: 2px black solid;
@@ -151,6 +150,9 @@
      margin: 10px auto;
      background-color: #cdcdcd;
      color: black;
+ }
+ tr{
+     height: 10px !important
  }
 
  td {
@@ -653,3 +655,136 @@
  li a:hover{
      color: white;
  }
+
+
+
+    .map-info-container {
+        font-weight: bold;
+        font-size: 2rem;
+        height: 350px;
+    }
+
+    .left {
+        width: 50%;
+        height: 100%;
+        float: left;
+    }
+
+    .right {
+        width: 50%;
+        height: 100%;
+        float: right;
+    }
+
+    .title-map {
+        font-size: 1em;
+    }
+
+    .map-screenshot-container {
+        width: 80%;
+        height: 80%;
+        margin: 0 auto;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border: 1px solid lightslategray;
+    }
+
+    .map-description-container {
+        color: white;
+        float: left;
+        height: 100%;
+        width: 80%;
+        margin: 0 auto;
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 10px;
+        text-align: center;
+
+    }
+
+    .map-description-sub-container {
+        font-size: .7em;
+        text-align: left;
+        margin: 10px;
+
+    }
+
+    .record-line {
+        font: .9em;
+        margin: 5px;
+
+        display: table-row;
+        vertical-align: inherit;
+    }
+
+    .record-player-name {
+        width: 150px;
+        margin: 0 5px;
+    }
+
+    .record-time {
+        margin: 0 5px;
+        width: 100px;
+
+    }
+
+    .record-points {
+        margin: 0 5px;
+        width: 50px;
+    }
+
+    .record-server {
+        margin: 0 5px;
+        width: 150px;
+
+    }
+
+    .record-teleports {
+        margin: 0 5px;
+        width: 50px;
+    }
+
+    .record-date {
+        margin: 0 5px;
+        width: 100px;
+    }
+
+    .record-table {
+        color: black;
+    }
+
+    .record-type-title {
+        font-size: 1.5em;
+        margin: 30px;
+    }
+
+
+    .header-line {
+        background: transparent;
+        color: black;
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+
+    table .dr {
+
+        height: 1.2em;
+    }
+
+    #my-chart {
+        margin: 30px auto;
+        width: 90%;
+        background-color: white;
+
+    }
+
+    .dropdown-toggle {
+
+        width: 180px;
+    }
+
+    .dropdown-menu {
+        width: 180px;
+        text-align: center;
+
+    }
