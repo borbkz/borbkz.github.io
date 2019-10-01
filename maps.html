@@ -271,7 +271,7 @@ layout: default
 
         let labels = [];
         for (let i = 0; i < len; i++) {
-            labels.push("Top " + i * step);
+            labels.push(i * step);
         }
         labels[0] = "WR";
         var myChart = new Chart(ctx, {
@@ -336,70 +336,6 @@ layout: default
 
     }
 
-    function createPointsChart(ctx, propointsData, tppointsData, step) {
-        min = Math.min(...propointsData);
-        min = Math.min(min, ...tppointsData);
-
-        let labels = ["WR"];
-        for (let i = step; i <= 100; i += step) {
-            labels.push("Top " + i);
-        }
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                        label: 'Pro Points',
-                        fill: false,
-                        data: propointsData,
-                        backgroundColor: [
-                            'orange'
-                        ],
-                        borderColor: [
-                            'orange'
-                        ],
-                        yAxisID: 'A',
-                        borderWidth: 1
-                    },
-
-                    {
-                        label: 'TP Points',
-                        fill: false,
-                        data: tppointsData,
-                        backgroundColor: [
-                            'green'
-                        ],
-                        borderColor: [
-                            'green'
-                        ],
-                        yAxisID: 'A',
-                        borderWidth: 1
-                    }
-
-                ]
-            },
-            options: {
-                responsive: false,
-                scales: {
-                    yAxes: [{
-                        id: 'A',
-                        type: 'linear',
-                        position: 'left',
-                        ticks: {
-                            max: 1000,
-                            min: min,
-                        }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-
-    }
 </script>
 
 
