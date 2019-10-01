@@ -86,6 +86,7 @@
             tpLabel = "Teleports";
             graphType = 'bar';
             min = Math.min(min,1);
+            max = Math.max(max, 10);
             probackgroundFill = 'green';
             tpbackgroundFill = 'green';
         }
