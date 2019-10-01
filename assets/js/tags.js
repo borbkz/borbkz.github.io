@@ -313,6 +313,12 @@ function getMapArray() {
                             } catch (error) {
                                 console.log(error);
                             }
+                            if (tptierColor === "black") {
+                                tptierColor = "yellow";
+                            }
+                            if (protierColor === "black") {
+                                protierColor = "yellow";
+                            }
 
                             $("#map-info-name").html(`Map: ${mapname}`);
                             $("#map-info-description").html(`<b>TP Tier:</b> <span style='color:${tptierColor}'><b>${tptier}</b></span>, ` +

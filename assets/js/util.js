@@ -31,7 +31,7 @@ const TIERKEY = {
 	"3": ["Medium", "dodgerblue"],
 	"4": ["Hard", "orange"],
 	"5": ["Very Hard", "red"],
-	"6": ["Death", "yellow"]
+	"6": ["Death", "black"]
 
 }
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";

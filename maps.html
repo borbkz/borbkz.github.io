@@ -514,6 +514,14 @@ layout: default
 
                     let tags = field[9].split("|").join(",").replace(/\s\s+/g, ' ');
 
+                    if(tier == 6){
+                        tptierColor = "yellow";
+                    }
+                    if(protier == 6){
+                        protierColor = "yellow";
+                    }
+                    
+
                     $(".map-description-sub-container").append(
                         `TP Tier: <span style='color:${tptierColor}'>${tptierText}</span><br>` +
                         `Pro Tier: <span style=' color:${protierColor}'>${protierText}</span><br>Length: ${length}<br>` +
