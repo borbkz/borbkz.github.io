@@ -451,14 +451,12 @@
 
 
  .dropdown-toggle {
-
      width: 250px;
  }
 
  .dropdown-menu {
      width: 250px;
-     text-align: left;
-
+     text-align: center;
  }
 
  .dropdown-item {
