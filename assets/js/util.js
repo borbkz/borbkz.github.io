@@ -234,6 +234,7 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 
 	 myColumns[0] = {
 		 className: "htLeft",
+		 readOnly:true,
 				renderer: function(instance, td, row, col, prop, value, cellProperties) {
 					Handsontable.renderers.TextRenderer.apply(this, arguments);
 
