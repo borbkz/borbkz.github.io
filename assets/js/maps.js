@@ -331,12 +331,17 @@
                     if(protier == 6){
                         protierColor = "yellow";
                     }
-                    
+                
+                    let jaklink = "https://docs.google.com/spreadsheets/d/1_P089G2GEP7ZNNXOnP0l0WnqtlPunxorbmqKpRuB2mQ/edit#gid=0";
+                    let tpLinkText = `<span title="based on Jak's Tiers"><a href="${jaklink}">TP Tier: </a></span>`;
+                    let proLinkText = `<span title="based on Jak's Tiers"><a href="${jaklink}">Pro Tier: </a></span>`;
+                    let lengthLinkText = `<span title="based on Jak's Tiers"><a href="${jaklink}">Length: </a></span>`;
+                    let tagLinkText = `<span title="custom tags, work in progress, may not be accurate in many cases"><a href="/tagcloud.html">Tags: </a></span>`
 
                     $(".map-description-sub-container").append(
-                        `TP Tier: <span style='color:${tptierColor}'>${tptierText}</span><br>` +
-                        `Pro Tier: <span style=' color:${protierColor}'>${protierText}</span><br>Length: ${length}<br>` +
-                        `Tags: ${tagText}`);
+                        `${tpLinkText}<span style='color:${tptierColor}'>${tptierText}</span><br>` +
+                        `${proLinkText}<span style=' color:${protierColor}'>${protierText}</span><br>${lengthLinkText}${length}<br>` +
+                        `${tagLinkText}${tagText}`);
                     //$("#map-info-tags").html(`<b>Tags:</b> ${tags}`);
                 }
             });
