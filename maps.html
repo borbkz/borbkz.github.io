@@ -252,12 +252,27 @@ layout: default
 
     function createChart(prodata, tpdata, step, type) {
         let ctx = document.getElementById('my-chart').getContext('2d');
+
+        let fillVal = false;
+        let graphType = 'line';
+
         let tooltipCallback = {};
         let tickCallback = function (item, index) {
-            return item;
+             if (item % 1 === 0) {return item;}
+            
         }
         let proLabel = "Pro Points";
         let tpLabel = "TP Points";
+
+        let max = Math.max(...prodata);
+        max = Math.max(max, ...tpdata);
+        let min = Math.min(...prodata);
+        min = Math.min(min, ...tpdata);
+        let len = Math.max(prodata.length, tpdata.length);
+
+        let probackgroundFill = ['orange'];
+        let tpbackgroundFill = ['green'];
+
         if (type == "time") {
             tooltipCallback = {
                 label: function (tooltipItem, data) {
@@ -276,12 +291,11 @@ layout: default
         }else if(type === "teleports"){
             proLabel = "Teleports";
             tpLabel = "Teleports";
+            graphType = 'bar';
+            min = 0;
+            probackgroundFill = 'green';
+            tpbackgroundFill = 'green';
         }
-        let max = Math.max(...prodata);
-        max = Math.max(max, ...tpdata);
-        let min = Math.min(...prodata);
-        min = Math.min(min, ...tpdata);
-        let len = Math.max(prodata.length, tpdata.length);
 
         
         let labels = [];
@@ -291,19 +305,15 @@ layout: default
 
         labels[0] = "WR";
         var myChart = new Chart(ctx, {
-            type: 'line',
+            type: graphType,
             data: {
                 labels: labels,
                 datasets: [{
                         label: proLabel,
                         fill: false,
                         data: prodata,
-                        backgroundColor: [
-                            'orange'
-                        ],
-                        borderColor: [
-                            'orange'
-                        ],
+                        backgroundColor: probackgroundFill,
+                        borderColor: probackgroundFill,
                         yAxisID: 'A',
                         borderWidth: 1
                     },
@@ -312,12 +322,8 @@ layout: default
                         label: tpLabel,
                         fill: false,
                         data: tpdata,
-                        backgroundColor: [
-                            'green'
-                        ],
-                        borderColor: [
-                            'green'
-                        ],
+                        backgroundColor: tpbackgroundFill,
+                        borderColor: tpbackgroundFill,
                         yAxisID: 'A',
                         borderWidth: 1
                     }
