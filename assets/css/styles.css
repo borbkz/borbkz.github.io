@@ -770,21 +770,3 @@
 
         height: 1.2em;
     }
-
-    #my-chart {
-        margin: 30px auto;
-        width: 90%;
-        background-color: white;
-
-    }
-
-    .dropdown-toggle {
-
-        width: 180px;
-    }
-
-    .dropdown-menu {
-        width: 180px;
-        text-align: center;
-
-    }
