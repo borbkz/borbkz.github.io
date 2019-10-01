@@ -162,6 +162,7 @@ layout: default
             <a class="dropdown-item" value="HIDE" id="none-dropdown">Hide Graph</a>
             <a class="dropdown-item" value="TIMES" id="times-dropdown">Times Graph</a>
             <a class="dropdown-item" value="POINTS" id="points-dropdown">Points Graph</a>
+            <a class="dropdown-item" value="POINTS" id="teleports-dropdown">Teleports Graph</a>
         </div>
     </div>
 
@@ -210,8 +211,8 @@ layout: default
         "protimes": [],
         "tptimes": [],
         "propoints": [],
-        "tppoints": []
-
+        "tppoints": [],
+        "teleports": [],
     }
     $(document).ajaxStop(function () {
         let showgraph = localStorage.getItem("SHOW_MAPS_GRAPH");
@@ -221,7 +222,9 @@ layout: default
             }
                 if (showgraph === "time") {
                     createChart(datapoints["protimes"], datapoints["tptimes"], 5, "time");
-                } else {
+                }else if (showgraph === "teleports"){
+                    createChart(datapoints["teleports"], datapoints["teleports"], 5, "teleports");
+                }else {
                     createChart(datapoints["propoints"], datapoints["tppoints"], 5, "points");
                 }
         } else {
@@ -264,6 +267,9 @@ layout: default
             };
             proLabel = "Pro Times";
             tpLabel = "TP Times";
+        }else if(type === "teleports"){
+            proLabel = "Teleports";
+            tpLabel = "Teleports";
         }
         let max = Math.max(...prodata);
         max = Math.max(max, ...tpdata);
@@ -395,7 +401,8 @@ layout: default
                 }
 
                 let pointsData = [],
-                    timeData = [];
+                    timeData = [],
+                    teleportData= [];
                 let step = 5;
 
                 $.each(data, function (i, field) {
@@ -414,6 +421,7 @@ layout: default
 
                         pointsData.push(points);
                         timeData.push(field["time"]);
+                        teleportData.push(teleports);
                     if (teleports != 0) {
                         container = $('.tp-table');
                     }
@@ -451,6 +459,7 @@ layout: default
                 } else {
                     datapoints["tptimes"] = timeData;
                     datapoints["tppoints"] = pointsData;
+                    datapoints["teleports"] = teleportData;
                 }
 
             });
@@ -542,6 +551,12 @@ layout: default
             $('.chart-container').append('<canvas class="map-chart" id="my-chart"></canvas>')
             createChart(datapoints["protimes"], datapoints["tptimes"], 5, "time");
         });
+        $('#teleports-dropdown').click(function () {
+            localStorage.setItem("SHOW_MAPS_GRAPH", "teleports");
+            $('.map-chart').remove();
+            $('.chart-container').append('<canvas class="map-chart" id="my-chart"></canvas>')
+            createChart(datapoints["teleports"], datapoints["teleports"], 5, "teleports");
+        });
         $('#points-dropdown').click(function () {
             localStorage.setItem("SHOW_MAPS_GRAPH", "points");
             $('.map-chart').remove();
@@ -556,7 +571,10 @@ layout: default
                 $('#none-dropdown').click();
             } else if (showgraph === "time") {
                 $('#times-dropdown').click();
-            } else {
+            } else if( showgraph === "teleports"){
+                $('#teleports-dropdown').click();
+
+            }else {
                 $('#points-dropdown').click();
 
             }
