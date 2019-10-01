@@ -253,7 +253,9 @@ layout: default
             tooltipCallback = {
                 label: function (tooltipItem, data) {
                     var indice = tooltipItem.index;
-                    return data.labels[indice] + ': ' +
+                    var index = tooltipItem.datasetIndex; 
+
+                    return (index == 0? "Pro ": "TP ")+
                         getTimeFromSeconds(data.datasets[tooltipItem.datasetIndex].data[indice]);
                 }
             };
