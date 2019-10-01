@@ -5,6 +5,7 @@
         "propoints": [],
         "tppoints": [],
         "teleports": [],
+        "teleport-density": [],
     }
     let tagtips = {};
     $(document).ajaxStop(function () {
@@ -12,12 +13,15 @@
         if (showgraph !== null) {
             if(showgraph === "hide"){
                 return true;
-            }
+            }else
+                    createChart(datapoints["protimes"], datapoints["tptimes"], 5, "time");
                 if (showgraph === "time") {
                     createChart(datapoints["protimes"], datapoints["tptimes"], 5, "time");
                 }else if (showgraph === "teleports"){
                     createChart(datapoints["teleports"], datapoints["teleports"], 5, "teleports");
-                }else {
+                }else if (showgraph === "teleport-density"){
+                    createChart(datapoints["teleport-density"], datapoints["teleports"], 5, "teleport-density");
+                } else {
                     createChart(datapoints["propoints"], datapoints["tppoints"], 5, "points");
                 }
         } else {
@@ -86,9 +90,27 @@
             tpLabel = "Teleports";
             graphType = 'bar';
             min = Math.min(min,1);
-            max = Math.max(max, 10);
+            max = Math.max(max, 5);
             probackgroundFill = 'green';
             tpbackgroundFill = 'green';
+        }else if(type ==="teleport-density"){
+            proLabel = "TPs/minute";
+            tpLabel = "TPs/minute";
+            graphType = 'bar';
+            max = Math.max(max, 5); 
+            min = 0;
+            probackgroundFill = 'green';
+            tpbackgroundFill = 'green';
+                tooltipCallback = {
+                label: function (tooltipItem, data) {
+                    var indice = tooltipItem.index;
+                    var index = tooltipItem.datasetIndex; 
+
+                    return (index == 0? "Pro ": "TP ")+
+                        getTimeFromSeconds(data.datasets[tooltipItem.datasetIndex].data[indice]);
+                }
+            };
+
         }
 
         
@@ -203,7 +225,8 @@
 
                 let pointsData = [],
                     timeData = [],
-                    teleportData= [];
+                    teleportData= [],
+                    teleportDensityData=[];
                 let step = 5;
 
                 $.each(data, function (i, field) {
@@ -221,8 +244,10 @@
 
 
                         pointsData.push(points);
-                        timeData.push(field["time"]);
+                        timeData.push(+field["time"]);
                         teleportData.push(teleports);
+                        teleportDensityData.push(60*(teleports/(+field["time"])) || 0);
+
                     if (teleports != 0) {
                         container = $('.tp-table');
                     }
@@ -261,6 +286,7 @@
                     datapoints["tptimes"] = timeData;
                     datapoints["tppoints"] = pointsData;
                     datapoints["teleports"] = teleportData;
+                    datapoints["teleport-density"] = teleportDensityData;
                 }
 
             });
@@ -380,6 +406,13 @@
             $('.map-chart').remove();
             $('.chart-container').append('<canvas class="map-chart" id="my-chart"></canvas>')
             createChart(datapoints["teleports"], datapoints["teleports"], 5, "teleports");
+        });
+
+        $('#teleport-density-dropdown').click(function () {
+            localStorage.setItem("SHOW_MAPS_GRAPH", "teleport-density");
+            $('.map-chart').remove();
+            $('.chart-container').append('<canvas class="map-chart" id="my-chart"></canvas>')
+            createChart(datapoints["teleport-density"], datapoints["teleport-density"], 5, "teleport-density");
         });
         $('#points-dropdown').click(function () {
             localStorage.setItem("SHOW_MAPS_GRAPH", "points");
