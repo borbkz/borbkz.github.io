@@ -17,7 +17,8 @@ let datapoints = {
     "top20procv": 0,
     "top20tpcv": 0,
     "top100procv": 0,
-    "top100tpcv": 0
+    "top100tpcv": 0,
+    "tier": 0
 }
 let tagtips = {};
 
@@ -56,6 +57,14 @@ $(document).ajaxStop(function () {
         $('#times-dropdown').click();
     }
 
+    let cv = coefficientOfVariation(datapoints["tptimes"],20);
+    let procv = coefficientOfVariation(datapoints["protimes"],20);
+    let l = x=>Math.sqrt(x);
+    console.log(l(1+datapoints["tier"]));
+    let compRating = l(1+datapoints["tier"])  * (1/cv);
+    let procompRating =l(1+datapoints["tier"])  * (1/procv);
+   $("#calculated-competitive-text").text(compRating.toFixed(1));
+   $("#calculated-competitive-pro-text").text(procompRating.toFixed(1));
     //$("#calculated-tier-text").text(calcTier());
 });
 
@@ -456,6 +465,7 @@ function getMaps() {
             maps.push([map, tier, protier, length, strafe, bhop, ladder, surf, tech]);
 
             if (map === currentmap) {
+                datapoints["tier"] = tier;
                 $('.title-map').text(map);
                 let tptierColor = TIERKEY[+tier][1];
                 let tptierText = TIERKEY[+tier][0];
