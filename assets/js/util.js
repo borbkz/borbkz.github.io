@@ -35,8 +35,8 @@ const TIERKEY = {
 const VERY_SHORT_MAP = 1.01;
 const SHORT_MAP = 2.01;
 const MEDIUM_MAP = 4.01;
-const LONG_MAP = 7.01;
-const VERY_LONG_MAP = 10.01;
+const LONG_MAP = 8.01;
+const VERY_LONG_MAP = 12.01;
 const MARATHON_MAP = Infinity;
 
 const LENGTHKEY = [
