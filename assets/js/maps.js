@@ -36,6 +36,7 @@ let tagtips = {};
 
 $(document).ajaxStop(function () {
     let showgraph = localStorage.getItem("SHOW_MAPS_GRAPH");
+    $("#calculated-length-text").text(calcLength());
     if (showgraph !== null) {
         if (showgraph === "hide") {
             return true;
@@ -56,7 +57,6 @@ $(document).ajaxStop(function () {
     }
 
     //$("#calculated-tier-text").text(calcTier());
-    $("#calculated-length-text").text(calcLength());
 });
 
 function calcLength(){
