@@ -1,10 +1,5 @@
 var globalTable;
-
-
-
 var difficultyArray = {};
-
-
 getDifficultyArray(difficultyArray);
 
 var URI = getURIVars();
@@ -21,18 +16,37 @@ var globalHeader = ["Map", "Pts", "Time", "TPs", "Tier", "Pro Tier", "Length", "
 var normalizeRatings = true;
 
 var RANKING = {
-    10: "GOD",
-    9.5: "DEMIGOD",
-    9: "PRO",
-    8: "PRO",
-    7: "SEMI-PRO",
-    6: "EXPERT",
-    5: "SKILLED",
-    4: "REGULAR",
-    3: "CASUAL",
-    2: "TRAINEE",
-    1: "SCRUB",
-    0: "NEW",
+    30: "GOD",
+    29: "DEMIGOD",
+    28: "PRO+",
+    27: "PRO",
+    26: "PRO",
+    25: "PRO",
+    24: "PRO-",
+    23: "SEMIPRO+",
+    22: "SEMIPRO",
+    21: "SEMIPRO-",
+    20: "EXPERT+",
+    19: "EXPERT",
+    18: "SKILLED+",
+    17: "SKILLED",
+    16: "SKILLED-",
+    15: "REGULAR+",
+    14: "REGULAR",
+    13: "CASUAL+",
+    12: "CASUAL",
+    11: "CASUAL-",
+    10: "TRAINEE+",
+    9: "TRAINEE",
+    8: "TRAINEE-",
+    7: "SCRUB+",
+    6: "SCRUB",
+    5: "SCRUB",
+    4: "SCRUB-",
+    3: "NEWBIE",
+    2: "NEWBIE",
+    1: "NEWBIE",
+    0: "NEWBIE"
 }
 
 var playerInfo = getEmptyPlayer();
@@ -229,9 +243,9 @@ $(document).ready(function () {
             finalRating = finalRating + (goldBonus + silverBonus);
 
 
-            finalRating = Math.min(10, finalRating);
+            finalRating*=3;
 
-            let rankText = (finalRating>=9.5 && finalRating<9.9)?RANKING[9.5]:RANKING[Math.floor(finalRating+.05)];
+            let rankText = RANKING[Math.floor(finalRating)];
 
 
             $("#rank-info-text").attr('title', '('+ finalRating.toFixed(2) +') Not an official ranking!')
@@ -241,9 +255,6 @@ $(document).ready(function () {
         function getPlacementRank(r_val, r_base) {
             return Math.log(r_val) / Math.log(r_base);
 
-        }
-        function sigmoid(val, f_max, k, x_0) {
-            return  f_max / (1 + Math.exp(-1 * k * (val - x_0)));
         }
 
         function resetBarGraph() {

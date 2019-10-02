@@ -5,7 +5,6 @@ layout: default
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"> </script>
 
 <style>
-
     #my-chart {
         margin: 30px auto;
         width: 90%;
@@ -21,17 +20,108 @@ layout: default
     .dropdown-menu {
         width: 180px;
     }
+
+    .graph-label-pro-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .graph-label-tp-container {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .graph-label-pro-container div {
+        color: orange;
+    }
+
+    .graph-label-pro-container span {
+        color: white;
+    }
+
+    .graph-label-tp-container div {
+        color: limegreen;
+    }
+
+    .graph-label-tp-container span {
+        color: white;
+    }
+
+    .graph-label {
+        font-weight: bold;
+        font-size: 1em;
+        width: 300px;
+    }
+
+    .map-info-label {
+        font-weight: bold;
+        font-size: 1em;
+        width: 300px;
+    }
+
+    .map-info-text {
+        font-weight: normal;
+        font-size: 1em;
+    }
+    .map-line{
+        display: flex;
+        justify-content: space-between;
+    }
+    .tier-text{
+        font-weight:bold;
+    }
+    .tag-field{
+        width: 100%; 
+    }
 </style>
 <div class="content-no-wrap">
     <div class="map-info-container">
         <div class="left">
-            <div class="map-screenshot-container" title="Screenshot automatically fetched from Steam workshop. Please report if it contains anime or is NSFW"></div>
+            <div class="map-screenshot-container"
+                title="Screenshot automatically fetched from Steam workshop. Please report if it contains anime or is NSFW">
+            </div>
         </div>
 
         <div class="right">
             <div class="map-description-container">
                 <div class="title-map map-name"></div>
                 <div class="map-description-sub-container">
+                    <div class="map-line">
+                    <div class="map-info-label" title="Official Tier">TP Tier: 
+                            <span class="map-info-text tier-text" id="tier-text"></span>
+                    </div>
+                    <div class="map-info-label" title="">Calculated: 
+                            <span class="map-info-text" id="calculated-tier-text"></span>
+                    </div>
+                    </div>
+                    <div class="map-line">
+                    <div class="map-info-label" title="Based on Jak's Tiers">Pro Tier: 
+                            <span class="map-info-text tier-text" id="protier-text"></span>
+                    </div>
+                    <div class="map-info-label" title="">Calculated:
+                            <span class="map-info-text" id="calculated-protier-text"></span>
+                    </div>
+                    </div>
+{% capture lengthtip %}
+Does not take skips into account. Contains 6 categories instead of 5
+{% endcapture %}
+
+                    <div class="map-line">
+                        <div class="map-info-label" title="Based on Jak's Tiers">Length: 
+                            <span class="map-info-text tier-text" id="length-text"></span>
+                        </div>
+                        <div class="map-info-label" title="{{ lengthtip }}">Calculated: 
+                            <span class="map-info-text" id="calculated-length-text"></span>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="map-line">
+                        <div class="map-info-label tag-field"
+                            title="Custom tags, work in progress. Many are incomplete or inaccurate">Tags:
+                            <span class="map-info-text" id="tag-text"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,22 +129,39 @@ layout: default
 
     <div class="chart-container">
 
-
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false" style="font: 20px sans-serif !important">
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" value="HIDE" id="none-dropdown">None</a>
-            <a class="dropdown-item" value="TIMES" id="times-dropdown">Times</a>
-            <a class="dropdown-item" value="POINTS" id="points-dropdown">Points</a>
-            <a class="dropdown-item" value="POINTS" id="teleports-dropdown">Teleports</a>
-            <a class="dropdown-item" value="POINTS" id="teleport-density-dropdown">TPs/minute</a>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                style="font: 20px sans-serif !important">
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" value="HIDE" id="none-dropdown">None</a>
+                <a class="dropdown-item" value="TIMES" id="times-dropdown">Times</a>
+                <a class="dropdown-item" value="POINTS" id="points-dropdown">Points</a>
+                <a class="dropdown-item" value="POINTS" id="teleports-dropdown">Teleports</a>
+                <a class="dropdown-item" value="POINTS" id="teleport-density-dropdown">TPs/minute</a>
+            </div>
         </div>
-    </div>
 
 
-
+        <div class="graph-label-container">
+            <div class="graph-label-pro-container">
+                <div class="graph-label" id="top-20-pro-average">Top 20 Pro Avg: <span></span></div>
+                <div class="graph-label" id="top-100-pro-average">Top 100 Pro Avg: <span></span></div>
+                <div class="graph-label" id="top-20-pro-sd" title="{% include statistics %}">Top 20 Pro SD:
+                    <span></span></div>
+                <div class="graph-label" id="top-100-pro-sd" title="{% include statistics %}">Top 100 Pro SD:
+                    <span></span></div>
+            </div>
+            <div class="graph-label-tp-container">
+                <div class="graph-label" id="top-20-tp-average">Top 20 TP Avg: <span></span></div>
+                <div class="graph-label" id="top-100-tp-average">Top 100 TP Avg: <span></span></div>
+                <div class="graph-label" id="top-20-tp-sd" title="{% include statistics %}">Top 20 TP SD: <span></span>
+                </div>
+                <div class="graph-label" id="top-100-tp-sd" title="{% include statistics %}">Top 100 TP SD:
+                    <span></span></div>
+            </div>
+        </div>
         <canvas class="map-chart" id="my-chart"></canvas>
     </div>
 

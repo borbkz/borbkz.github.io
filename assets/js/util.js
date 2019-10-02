@@ -32,8 +32,28 @@ const TIERKEY = {
 	"5": ["Very Hard", "red"],
 	"6": ["Death", "black"]
 }
+const VERY_SHORT_MAP = 1.01;
+const SHORT_MAP = 2.01;
+const MEDIUM_MAP = 4.01;
+const LONG_MAP = 7.01;
+const VERY_LONG_MAP = 10.01;
+const MARATHON_MAP = Infinity;
+
+const LENGTHKEY = [
+ ["Not Global", "white", 0],
+ ["Very Short", "lightgreen",VERY_SHORT_MAP],
+ ["Short", "green", SHORT_MAP],
+ ["Medium", "dodgerblue", MEDIUM_MAP],
+ ["Long", "orange", LONG_MAP],
+ ["Very Long", "red", VERY_LONG_MAP],
+ ["Marathon", "black", MARATHON_MAP]
+]
+
 var serverIDRequest = "https://kztimerglobal.com/api/v1.0/servers/";
 
+function sigmoid(val, f_max, k, x_0) {
+	return f_max / (1 + Math.exp(-1 * k * (val - x_0)));
+}
 function isSteamIDEqual(steamID1, steamID2) {
 	return getSteamIDSubstring(steamID1) === getSteamIDSubstring(steamID2);
 }
@@ -287,15 +307,3 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 	first = false;
 	return mapTable;
 }
-
-(function () {
-	let a = Math.random() * 100;
-	if (a <= 5){
-		new BugController({ 'minBugs': 3, 'maxBugs': 6, 'min_frames': 10 });
-	}
-	else if (a <= 10){
-		new SpiderController({ 'minBugs': 1, 'maxBugs': 1, 'min_frames': 7 });
-	}else if (a == 42){
-		new SpiderController({ 'minBugs': 10, 'maxBugs': 20, 'min_frames': 7 });
-	}
-})();

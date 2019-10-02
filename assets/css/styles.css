@@ -660,6 +660,7 @@
         font-weight: bold;
         font-size: 2rem;
         height: 350px;
+        margin-top: 25px;
     }
 
     .left {
@@ -676,6 +677,7 @@
 
     .title-map {
         font-size: 1em;
+        font-weight: bold;
     }
 
     .map-screenshot-container {
@@ -691,12 +693,14 @@
         color: white;
         float: left;
         height: 100%;
-        width: 80%;
+        width: 90%;
         margin: 0 auto;
         background-size: cover;
         background-repeat: no-repeat;
         padding: 10px;
         text-align: center;
+        font-size: .9em;
+        font-weight: normal;
 
     }
 

@@ -305,7 +305,7 @@
         "description": "When a player lands and quickly jumps again before friction has fully reset the prespeed"
     },
     "crouchjump": {
-        "type": "strafe",
+        "type": "tech",
         "description": "When a player manually crouches and jumps in quick succession to gain extra height"
     },
     "climb": {

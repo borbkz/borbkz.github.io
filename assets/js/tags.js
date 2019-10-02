@@ -163,6 +163,14 @@ function getMapArray() {
 
                 var typeColorMap = tagDataMap["type-color"];
                 words[i].color = typeColorMap["other"];
+                $('.ladder-color').css('color', typeColorMap["ladder"]);
+                $('.surf-color').css('color', typeColorMap["surf"]);
+                $('.bhop-color').css('color', typeColorMap["bhop"]);
+                $('.tech-color').css('color', typeColorMap["tech"]);
+                $('.chain-color').css('color', typeColorMap["chain"]);
+                $('.strafe-color').css('color', typeColorMap["strafe"]);
+                $('.booster-color').css('color', typeColorMap["booster"]);
+                $('.meta-color').css('color', typeColorMap["meta"]);
 
                 for (var tag in tagDataMap) {
                     var thisTag = tagDataMap[tag];
