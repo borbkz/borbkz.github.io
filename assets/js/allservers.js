@@ -85,6 +85,12 @@ $(document).ready(function () {
         $('#dropdownMenuButton').text($(this).text());
         $('#dropdownMenuButton').attr('target-id', this.id);
     });
+
+
+
+
+
+
     normalizeRatings = $("#normalize-checkbox").is(':checked');
     printPlayerProfile();
     function printPlayerProfile() {
@@ -110,18 +116,13 @@ $(document).ready(function () {
         $("#bronze-info-text").html(playerInfo["bronzes"] + bronzemedal);
 
         $("#run-info-text").text(`${playerInfo["runs-total"]}/${playerInfo["runs-possible"]} (${runPercentage}%)`);
-        $("#points-info-label").text("Total Points: ")
         $("#points-info-text").text(`${playerInfo["points-total"].toLocaleString("en")} (avg: ${playerInfo["points-average"]})`);
 
 
         if (playerInfo["run-type"] === "pro") {
-            $("#run-info-label").text("Total Pro Runs: ")
-            $("#rank-info-label").text('PRO Rank: ');
-
+            $("#run-info-label").text("Pro Runs: ")
         } else if (playerInfo["run-type"] === "tp") {
-            $("#run-info-label").text("Total TP Runs: ")
-            $("#rank-info-label").text('TP Rank: ');
-
+            $("#run-info-label").text("TP Runs: ")
         }
 
         $(".progress-group-container").empty();
@@ -175,18 +176,50 @@ $(document).ready(function () {
             $(".progress-group-container").append($progressContainer);
 
             deathTierColorText(tierPercentage, tier, $progressBar);
-            $('#tier-total-dropdown').click();
 
 
         }
+
+        let dropdownSelect = localStorage.getItem("SHOW_PROGRESS_BARS");
+        let normalizeSaved = localStorage.getItem("NORMALIZE_PROGRESS");
+
+        if(normalizeSaved !== null){
+            $('#normalize-checkbox').prop('checked', normalizeSaved==="true");
+            normalizeRatings = normalizeSaved === "true";
+        }else{
+            $('#normalize-checkbox').prop('checked', true);
+            normalizeRatings = true;
+        }
+        
+        if (dropdownSelect !== null) {
+            if(dropdownSelect === "hide"){
+                 $('.progress-bar-display-container').hide();
+                 $('#none-dropdown').click();
+            }else{
+                $('#' + dropdownSelect).show();
+                $('#' + dropdownSelect).click();
+            }
+        }else{
+                 $('.progress-bar-display-container').show();
+                 $('#tier-total-dropdown').click();
+        }
+
 
         $("#rank-info-text").text(getRanking());
 
         //checking the checkbox wil trigger new progress bars
         $("#normalize-checkbox").click(function () {
-            normalizeRatings = this.checked;
+            setNormalize(this.checked);
             $('#' + $("#dropdownMenuButton").attr('target-id')).click();
         });
+
+        function setNormalize(flag){
+            normalizeRatings = flag;
+            localStorage.setItem("NORMALIZE_PROGRESS", flag)
+        }
+        function shouldNormalize(){
+            return normalizeRatings;
+        }
 
 
 
@@ -257,77 +290,58 @@ $(document).ready(function () {
 
         }
 
-        function resetBarGraph() {
-            //$('.progress').css("border-radius", "7px");
-            //$('.progress').css("height", "1.5em");
-            //$('.progress-bar-tier').css("border", "solid 2px lightgrey");
-            //$('.progress-bar-tier').css("border-radius", "7px");
-        }
-        function setBarGraph() {
-            //$('.progress').css("border-radius", "0");
-            //$('.progress').css("height", "2.25em");
-            //$('.progress-bar-tier').css("border-radius", "0");
-            //$('.progress-bar-tier').css("border", "none");
-        }
 
-        $('#tier-total-dropdown').click(function () {
+        function showProgressTotal(progressBarID, playerInfoKey, playerInfoSubKey){
+            $('.progress-bar-display-container').show();
+            localStorage.setItem("SHOW_PROGRESS_BARS", progressBarID);
             for (let i = 1; i <= 6; i++) {
-                let curVal = +playerInfo["runs-by-tier"][i];
-                let curMax = playerInfo["runs-by-tier"][playerInfo["tier-max-maps"]];
+                let curVal = +playerInfo[playerInfoKey][i];
+                let curMax = playerInfo[playerInfoKey][playerInfo[playerInfoSubKey]];
                 setProgressBar(curVal, curMax,i);
             }
+
+        }
+        $('#tier-total-dropdown').click(function () {
+            showProgressTotal(this.id, "runs-by-tier", "tier-max-maps");
         });
         $('#tier-records-dropdown').click(function () {
-            for (let i = 1; i <= 6; i++) {
-                let records = +playerInfo["records-by-tier"][i];
-                let curMax = playerInfo["records-by-tier"][playerInfo["records-max-maps"]];
-                setProgressBar(records, curMax,i);
-            }
+            showProgressTotal(this.id, "records-by-tier", "records-max-maps");
         });
         $('#tier-silvers-dropdown').click(function () {
-            for (let i = 1; i <= 6; i++) {
-                let records = +playerInfo["silvers-by-tier"][i];
-                let curMax = playerInfo["silvers-by-tier"][playerInfo["silvers-max-maps"]];
-                setProgressBar(records, curMax, i);
-            }
+            showProgressTotal(this.id, "silvers-by-tier", "silvers-max-maps");
         });
         $('#tier-bronzes-dropdown').click(function () {
-            for (let i = 1; i <= 6; i++) {
-                let records = +playerInfo["bronzes-by-tier"][i];
-                let curMax = playerInfo["bronzes-by-tier"][playerInfo["bronzes-max-maps"]];
-                setProgressBar(records, curMax, i);
-            }
+            showProgressTotal(this.id, "bronzes-by-tier", "bronzes-max-maps");
         });
         $('#tier-average-dropdown').click(function () {
+            $('.progress-bar-display-container').show();
+            localStorage.setItem("SHOW_PROGRESS_BARS", this.id);
             for (let i = 1; i <= 6; i++) {
                 let avgPoints = +playerInfo["points-average-by-tier"][i];
                 let $curProgressBar = $("#progress-bar-" + i);
                 let curPercentage = getPercentage(avgPoints, 0, 1000);
-                if(normalizeRatings){
-                    resetBarGraph();
-                }else{
-                    setBarGraph();
-                }
 
                 deathTierColorText(curPercentage, i, $curProgressBar);
                 setProgressWdith($("#progress-bar-" + i), curPercentage, avgPoints || 0);
                     $('#progress-end-label-'+i).text(avgPoints.toFixed(1));
             }
         });
+        $('#none-dropdown').click(function () {
+            localStorage.setItem("SHOW_PROGRESS_BARS", "hide");
+            $('.progress-bar-display-container').hide();
+        });
 
         function setProgressBar(val, max,tier){
             let progressBar = $("#progress-bar-" + tier);
             let normalizeText = "";
-            if(normalizeRatings){
+            if(shouldNormalize()){
                 max = +playerInfo["runs-possible-by-tier"][tier];
             }
             let percentage = getPercentage(val, 0, max);
-            if(normalizeRatings){
-                resetBarGraph();
+            if(shouldNormalize()){
                 normalizeText = "/" + max + " (" + percentage.toFixed(1) + "%)";
-            }else{
-                setBarGraph();
             }
+
             deathTierColorText(percentage, tier, progressBar);
             setProgressWdith(progressBar, percentage, val+normalizeText);
             if (normalizeRatings) {

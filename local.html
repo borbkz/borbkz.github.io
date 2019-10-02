@@ -10,45 +10,57 @@ layout: default
 		{% capture server-times %}
 		<div class="content-wrap">
 
-					{% include steamid.html searchtip="Enter Your SteamID" buttontext="Fetch Times" %}
-					<div style="margin-right: 35px">
-						<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
-						<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
-					</div>
+			{% include steamid.html searchtip="Enter Your SteamID" buttontext="Fetch Times" %}
+			<div style="margin-right: 35px">
+				<input type="radio" id="tpradio" name="isprorun-radio" value="tpradio" checked>TP Runs
+				<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
+			</div>
+
 
 			<div id="player-info" class="player-info-container">
-				<div class="player-info-text">
+				<div class="player-info-upper">
 
-					<div class="infoline"><span class="infolabel" id="player-info-label">Player: </span> <span
-							class="infotext" id="player-info-text"></span></div>
+					<div class="player-info-text">
 
-					<div class="infoline">
-						<div class="infofield">
-							<span class="infolabel" id="wr-info-label">World Records:</span>
+						<div class="infoline"><span class="infolabel" id="player-info-label">Player: </span> <span
+								class="infotext" id="player-info-text"></span></div>
+
+						<div class="infoline">
+							<span class="infolabel" id="wr-info-label">WRs:</span>
 							<span class="infotext" id="wr-info-text"></span>
-
 						</div>
 						<div title="Times with 900+ pts. {% include point-explanation text='Top 20' %}"
-							class="infofield">
-							<span class="infolabel tier-tooltip" id="silver-info-label">Silver:</span>
+							class="infoline">
+							<span class="infolabel" id="silver-info-label"><span
+									class="tier-tooltip">Silver:</span></span>
 							<span class="infotext" id="silver-info-text"></span>
 						</div>
 						<div title="Times with 800+ pts. {% include point-explanation text='Top 100' %}"
-							class="infofield">
-							<span class="infolabel tier-tooltip" id="bronze-info-label">Bronze:</span>
+							class="infoline">
+							<span class="infolabel" id="bronze-info-label"><span
+									class="tier-tooltip">Bronze:</span></span>
 							<span class="infotext" id="bronze-info-text"></span>
 						</div>
+
+						<div class="infoline"><span class="infolabel" id="run-info-label"> </span> <span
+								class="infotext" id="run-info-text"></span></div>
+
+						<div class="infoline"><span class="infolabel" id="points-info-label">Points:</span> <span
+								class="infotext" id="points-info-text"></span></div>
+
+						<div class="infoline">
+							<span class="infolabel" id="rank-info-label"><span class="tier-tooltip">Rank: </span>
+							</span>
+							<span class="infotext" id="rank-info-text" title="Not official"></span>
+						</div>
 					</div>
+					<div class="progress-graph-container">
 
-					<div class="infoline"><span class="infolabel" id="run-info-label"> </span> <span class="infotext"
-							id="run-info-text"></span></div>
-
-					<div class="infoline"><span class="infolabel" id="points-info-label"> </span> <span class="infotext"
-							id="points-info-text"></span></div>
-
-					<div class="infoline"><span class="infolabel" id="rank-info-label"> </span> <span class="infotext"
-							id="rank-info-text" title="Not official" style="border-bottom: 1px dotted"></span></div>
+					</div>
 				</div>
+
+			</div>
+			<div class="progress-info-container">
 
 				<div class="titleDiv progress-bar-group-title">
 
@@ -57,9 +69,8 @@ layout: default
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
 							style="width: 250px; font: 20px sans-serif !important">
 						</button>
-						<div><div class="center-div" style="width: 300px"><input id='normalize-checkbox' type="checkbox" checked><span class="infolabel"
-								style="font-weight: normal !important">Percentage</span></div></div>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item" id="none-dropdown">None</a>
 							<a class="dropdown-item" id="tier-total-dropdown">Total Completions</a>
 							<a class="dropdown-item" id="tier-average-dropdown">Average Points</a>
 							<a class="dropdown-item" id="tier-records-dropdown"
@@ -71,7 +82,16 @@ layout: default
 						</div>
 					</div>
 				</div>
-				<div class="progress-group-container"> </div>
+
+				<div class="progress-bar-display-container">
+					<div>
+						<div class="center-div" style="width: 300px"><input id='normalize-checkbox' type="checkbox"
+								checked><span class="infolabel" style="font-weight: normal !important">Percentage</span>
+						</div>
+					</div>
+					<div class="progress-group-container"> </div>
+				</div>
+
 			</div>
 
 

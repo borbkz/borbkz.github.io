@@ -1,552 +1,563 @@
  ul {
-     width: 100%;
+	 width: 100%;
 
-     display: inline-block;
-     list-style-type: none;
-     margin: 0 auto;
-     padding: 20px;
-     overflow: hidden;
-     background-color: #333;
+	 display: inline-block;
+	 list-style-type: none;
+	 margin: 0 auto;
+	 padding: 20px;
+	 overflow: hidden;
+	 background-color: #333;
  }
 
 
  a {
-     color: white;
-     text-decoration: none !important;
+	 color: white;
+	 text-decoration: none !important;
  }
 
  .btn:hover {
-     color: white;
-     text-decoration: italic;
+	 color: white;
+	 text-decoration: italic;
  }
 
  li a {
-     float: left;
-     display: block;
-     text-align: center;
-     padding: 14px 16px;
-     text-decoration: none;
+	 float: left;
+	 display: block;
+	 text-align: center;
+	 padding: 14px 16px;
+	 text-decoration: none;
 
-     font: 20px sans-serif;
+	 font: 20px sans-serif;
  }
 
  .page-container {
-     position: relative;
-     min-height: 100vh;
-     margin: 0 auto;
-     width: 1400px;
-     height: 85%;
+	 position: relative;
+	 min-height: 100vh;
+	 margin: 0 auto;
+	 width: 1400px;
+	 height: 85%;
  }
 
  input[type="text"] {
-     background: transparent;
-     border: none;
-     border-bottom: 1px white solid;
-     color: white;
-     font-size: 16px;
-     margin: 0px 10px;
-     min-width: auto;
-     width: 200px;
-     outline: none;
-     padding: 4px 8px;
-     text-align: center;
+	 background: transparent;
+	 border: none;
+	 border-bottom: 1px white solid;
+	 color: white;
+	 font-size: 16px;
+	 margin: 0px 10px;
+	 min-width: auto;
+	 width: 200px;
+	 outline: none;
+	 padding: 4px 8px;
+	 text-align: center;
  }
 
  .content-no-wrap {
-     overflow: auto;
-     background-color: #313A3F;
-     color: white;
-     margin: auto;
-     width: 100%;
-     padding: 20px;
-     padding-right: 10px;
-     padding-left: 10px;
-     padding-bottom: 2.5rem;
+	 overflow: auto;
+	 background-color: #313A3F;
+	 color: white;
+	 margin: auto;
+	 width: 100%;
+	 padding: 20px;
+	 padding-right: 10px;
+	 padding-left: 10px;
+	 padding-bottom: 2.5rem;
  }
 
  .content-wrap {
-     overflow: auto;
-     background-color: #313A3F;
-     height: 85%;
-     color: white;
-     margin: auto;
-     width: 100%;
-     padding: 20px;
-     padding-right: 10px;
-     padding-left: 10px;
-     padding-bottom: 2.5rem;
+	 overflow: auto;
+	 background-color: #313A3F;
+	 height: 85%;
+	 color: white;
+	 margin: auto;
+	 width: 100%;
+	 padding: 20px;
+	 padding-right: 10px;
+	 padding-left: 10px;
+	 padding-bottom: 2.5rem;
  }
 
  footer {
-     position: relative;
-     bottom: 0;
-     width: 100%;
-     height: 2.5rem;
+	 position: relative;
+	 bottom: 0;
+	 width: 100%;
+	 height: 2.5rem;
  }
 
  .handsontable {
-     margin: auto;
+	 margin: auto;
  }
 
  #table-container {
-     height: 100%;
+	 height: 100%;
  }
 
 
  .titleDiv {
-     font: 20px sans-serif;
-     font-weight: bold;
+	 font: 20px sans-serif;
+	 font-weight: bold;
  }
 
  .record-title {
-     text-align: center;
-     font: 25px sans-serif;
-     font-weight: bold;
-     margin: 20px;
+	 text-align: center;
+	 font: 25px sans-serif;
+	 font-weight: bold;
+	 margin: 20px;
  }
 
 
  .innerSelection {
-     padding: 0px;
-     padding-bottom: 5px;
-     padding-top: 5px;
-     margin: 10px;
+	 padding: 0px;
+	 padding-bottom: 5px;
+	 padding-top: 5px;
+	 margin: 10px;
  }
 
  #playername {
-     margin: auto;
-     padding: 20px;
-     font: 20px sans-serif;
-     font-weight: bold;
-     color: white;
+	 margin: auto;
+	 padding: 20px;
+	 font: 20px sans-serif;
+	 font-weight: bold;
+	 color: white;
  }
 
  .runSelection {
-     display: inline-block;
-     text-align: center;
-     margin: 0 auto;
-     padding: 20px;
+	 display: inline-block;
+	 text-align: center;
+	 margin: 0 auto;
+	 padding: 20px;
  }
 
  .textDiv {
-     margin: 0 auto;
-     padding: 2px;
-     text-align: center;
+	 margin: 0 auto;
+	 padding: 2px;
+	 text-align: center;
  }
 
  li aa:hover:not(.active) {
-     background-color: #111;
+	 background-color: #111;
  }
 
  .active {
-     background-color: #EDC397;
+	 background-color: #EDC397;
  }
 
  table {
-     text-align: center;
-     border-collapse: collapse;
-     border: 2px black solid;
-     font: 12px sans-serif;
-     margin: 10px auto;
-     background-color: #cdcdcd;
-     color: black;
+	 text-align: center;
+	 border-collapse: collapse;
+	 border: 2px black solid;
+	 font: 12px sans-serif;
+	 margin: 10px auto;
+	 background-color: #cdcdcd;
+	 color: black;
  }
  tr{
-     height: 10px !important
+	 height: 10px !important
  }
 
  td {
-     padding-top: 12px;
-     padding-bottom: 12px;
-     text-align: center;
+	 padding-top: 12px;
+	 padding-bottom: 12px;
+	 text-align: center;
 
-     border: 1px grey solid;
-     padding: 10px;
+	 border: 1px grey solid;
+	 padding: 10px;
  }
 
  .ht_master tr:nth-of-type(even)>td {
-     background-color: lightgrey;
+	 background-color: lightgrey;
  }
 
  .handsontable th {
-     font: 14px sans-serif;
-     font-weight: bold;
+	 font: 14px sans-serif;
+	 font-weight: bold;
  }
 
 
  th {
-     padding-top: 12px;
-     padding-bottom: 12px;
-     text-align: center;
-     background-color: #EDC397;
+	 padding-top: 12px;
+	 padding-bottom: 12px;
+	 text-align: center;
+	 background-color: #EDC397;
 
-     border: 1px grey solid;
-     padding: 10px;
+	 border: 1px grey solid;
+	 padding: 10px;
  }
 
 
  tr:nth-child(even) {
-     background-color: white;
+	 background-color: white;
  }
 
 
  button {
-     margin: 10px;
+	 margin: 10px;
  }
 
  input {
-     margin: 10px;
+	 margin: 10px;
  }
 
  .medal-icon {
-     max-height: 32px;
-     max-width: 32px;
+	 max-height: 32px;
+	 max-width: 32px;
 
  }
 
  .player-name-container {
-     color: white;
-     font-weight: bold;
+	 color: white;
+	 font-weight: bold;
  }
 
  .record-text-container {
-     padding: 0;
-     padding-left: 20px;
-     margin: 0 auto;
-     text-align: left;
-     color: lightgrey;
-     font: 18px sans-serif;
+	 padding: 0;
+	 padding-left: 20px;
+	 margin: 0 auto;
+	 text-align: left;
+	 color: lightgrey;
+	 font: 18px sans-serif;
  }
 
  .date-run-container {
 
-     color: inherit;
+	 color: inherit;
 
  }
 
  .pro-run-container {
-     font-weight: bold;
-     color: white;
+	 font-weight: bold;
+	 color: white;
  }
 
  .tp-run-container {
-     font-weight: bold;
-     color: white;
+	 font-weight: bold;
+	 color: white;
 
  }
 
  .pro-type-container {
 
-     font-weight: normal;
-     color: lightcoral;
+	 font-weight: normal;
+	 color: lightcoral;
  }
 
  .tp-type-container {
-     font-weight: normal;
-     color: lightskyblue;
+	 font-weight: normal;
+	 color: lightskyblue;
 
  }
 
 
  .map-name-container {
-     /*color: lightgoldenrodyellow;*/
-     color: white;
-     font-weight: bold;
+	 /*color: lightgoldenrodyellow;*/
+	 color: white;
+	 font-weight: bold;
  }
 
  .gold-place-container {
-     color: gold;
+	 color: gold;
  }
 
  .silver-place-container {
-     color: lightsteelblue;
+	 color: lightsteelblue;
  }
 
  .bronze-place-container {
-     color: #cd7f32;
+	 color: #cd7f32;
  }
 
  html,
  body {
-     margin: 0 auto;
-     text-align: center;
-     background-color: #657782;
-     width: 100%;
-     height: 100%;
+	 margin: 0 auto;
+	 text-align: center;
+	 background-color: #657782;
+	 width: 100%;
+	 height: 100%;
 
 
  }
 
  .card-header {
-     background-color: #455762;
-     padding: 0;
+	 background-color: #455762;
+	 padding: 0;
  }
 
  .card {
-     border: 1px solid #657782;
-     background-color: #FEFFFF;
-     background-color: #313A3F;
+	 border: 1px solid #657782;
+	 background-color: #FEFFFF;
+	 background-color: #313A3F;
 
  }
 
  .btn-link {
-     color: white;
+	 color: white;
  }
 
  .card-body {
-     padding: 0;
+	 padding: 0;
  }
 
  #global-accordion-body {
-     padding: 0 !important;
+	 padding: 0 !important;
 
  }
 
  .table-tips {
-     padding: 0px;
-     padding-bottom: 0;
-     font: 14px sans-serif;
-     margin-bottom: 5px;
+	 padding: 0px;
+	 padding-bottom: 0;
+	 font: 14px sans-serif;
+	 margin-bottom: 5px;
  }
 
 
  .center {
-     overflow: auto;
-     background-color: #313A3F;
-     height: 85%;
-     color: white;
-     margin: auto;
-     width: 100%;
-     padding: 20px;
+	 overflow: auto;
+	 background-color: #313A3F;
+	 height: 85%;
+	 color: white;
+	 margin: auto;
+	 width: 100%;
+	 padding: 20px;
  }
 
  .social:hover {
-     -webkit-transform: scale(1.1);
-     -moz-transform: scale(1.1);
-     -o-transform: scale(1.1);
+	 -webkit-transform: scale(1.1);
+	 -moz-transform: scale(1.1);
+	 -o-transform: scale(1.1);
  }
 
  .social {
-     -webkit-transform: scale(0.8);
-     /* Browser Variations: */
+	 -webkit-transform: scale(0.8);
+	 /* Browser Variations: */
 
-     -moz-transform: scale(0.8);
-     -o-transform: scale(0.8);
-     -webkit-transition-duration: 0.5s;
-     -moz-transition-duration: 0.5s;
-     -o-transition-duration: 0.5s;
+	 -moz-transform: scale(0.8);
+	 -o-transform: scale(0.8);
+	 -webkit-transition-duration: 0.5s;
+	 -moz-transition-duration: 0.5s;
+	 -o-transition-duration: 0.5s;
  }
 
  /*
-    Multicoloured Hover Variations
+	Multicoloured Hover Variations
 */
 
  #social-steam:hover {
-     color: #3B5998;
+	 color: #3B5998;
  }
 
  #social-github:hover {
-     color: #4099FF;
+	 color: #4099FF;
  }
 
  #social-em:hover {
-     color: #f39c12;
+	 color: #f39c12;
  }
 
  textarea {
-     margin: 10px;
-     margin-left: auto;
-     margin-right: auto;
-     padding: 10px;
+	 margin: 10px;
+	 margin-left: auto;
+	 margin-right: auto;
+	 padding: 10px;
 
  }
 
  /**** d3 ****/
  .names {
-     fill: none;
-     stroke: #fff;
-     stroke-linejoin: round;
+	 fill: none;
+	 stroke: #fff;
+	 stroke-linejoin: round;
  }
 
  /* Tooltip CSS */
  .d3-tip {
-     line-height: 1.5;
-     font-weight: 400;
-     font-family: "avenir next", Arial, sans-serif;
-     padding: 6px;
-     background: rgba(0, 0, 0, 0.6);
-     color: #FFA500;
-     border-radius: 1px;
-     pointer-events: none;
+	 line-height: 1.5;
+	 font-weight: 400;
+	 font-family: "avenir next", Arial, sans-serif;
+	 padding: 6px;
+	 background: rgba(0, 0, 0, 0.6);
+	 color: #FFA500;
+	 border-radius: 1px;
+	 pointer-events: none;
  }
 
  /* Creates a small triangle extender for the tooltip */
  .d3-tip:after {
-     box-sizing: border-box;
-     display: inline;
-     font-size: 8px;
-     width: 100%;
-     line-height: 1.5;
-     color: rgba(0, 0, 0, 0.6);
-     position: absolute;
-     pointer-events: none;
+	 box-sizing: border-box;
+	 display: inline;
+	 font-size: 8px;
+	 width: 100%;
+	 line-height: 1.5;
+	 color: rgba(0, 0, 0, 0.6);
+	 position: absolute;
+	 pointer-events: none;
 
  }
 
  /* Northward tooltips */
  .d3-tip.n:after {
-     content: "\25BC";
-     margin: -1px 0 0 0;
-     top: 100%;
-     left: 0;
-     text-align: center;
+	 content: "\25BC";
+	 margin: -1px 0 0 0;
+	 top: 100%;
+	 left: 0;
+	 text-align: center;
  }
 
  /* Eastward tooltips */
  .d3-tip.e:after {
-     content: "\25C0";
-     margin: -4px 0 0 0;
-     top: 50%;
-     left: -8px;
+	 content: "\25C0";
+	 margin: -4px 0 0 0;
+	 top: 50%;
+	 left: -8px;
  }
 
  /* Southward tooltips */
  .d3-tip.s:after {
-     content: "\25B2";
-     margin: 0 0 1px 0;
-     top: -8px;
-     left: 0;
-     text-align: center;
+	 content: "\25B2";
+	 margin: 0 0 1px 0;
+	 top: -8px;
+	 left: 0;
+	 text-align: center;
  }
 
  /* Westward tooltips */
  .d3-tip.w:after {
-     content: "\25B6";
-     margin: -4px 0 0 -1px;
-     top: 50%;
-     left: 100%;
+	 content: "\25B6";
+	 margin: -4px 0 0 -1px;
+	 top: 50%;
+	 left: 100%;
  }
 
  /*    text{
-      pointer-events:none;
-    }*/
+	  pointer-events:none;
+	}*/
 
  .details {
-     color: white;
+	 color: white;
  }
 
  #svgContainer {
-     text-align: center;
-     margin: 0 auto;
-     padding: 0;
-     padding-top: 20px;
-     padding-bottom: 20px;
-     width: 800px;
-     height: 600px;
+	 text-align: center;
+	 margin: 0 auto;
+	 padding: 0;
+	 padding-top: 20px;
+	 padding-bottom: 20px;
+	 width: 800px;
+	 height: 600px;
  }
 
  .map-link {
-     cursor: pointer;
+	 cursor: pointer;
  }
 
 
  .dropdown-toggle {
-     width: 250px;
+	 width: 250px;
  }
 
  .dropdown-menu {
-     width: 250px;
-     text-align: center;
+	 width: 250px;
+	 text-align: center;
  }
 
  .dropdown-item {
-     cursor: pointer;
+	 cursor: pointer;
  }
 
 
  /*for svg text tags*/
  text {
-     cursor: pointer;
+	 cursor: pointer;
 
  }
 
 
 
  .player-info-container {
-     width: 80%;
-     height: 500px;
-     clear: both;
-     display: none;
-     margin: 20px auto;
-     padding: 30px;
-     margin-bottom: 5px
+	 width: 80%;
+	 clear: both;
+	 margin: 20px auto;
+	 margin-bottom: 5px
  }
-
+ .progress-info-container{
+	 width: 80%;
+	 clear: both;
+	 margin: 20px auto;
+	 margin-bottom: 30px
+ }
+.player-info-upper{
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 30px;
+}
  .player-info-text {
-     margin-bottom: 20px;
-
+	 width: 30%;
+	 overflow: hidden;
+	 display: flex;
+	 flex-direction: column;
+	 justify-content: space-between;
  }
 
+ .progress-group-container{
+	 display: flex;
+	 flex-direction: column;
+	 justify-content: space-evenly;
+	 height: 200px;
+ }
+ .progress-graph-container{
+	 height: 275px;
+	 background-color: white;
+	 width: 70% ;
+ }
  .infolabel {
-     font: 20px sans-serif;
-     font-weight: bold;
+	 font: 20px sans-serif;
+	 font-weight: bold;
+	 width: 5.2em; 
  }
 
  .infotext {
-     font: 20px sans-serif;
+	 font: 20px sans-serif;
  }
 
  .infoline {
-     text-align: left;
-     margin-bottom: 5px;
+	 text-align: left;
+	 display: flex;
  }
 
  .infofield {
-     display: inline;
-     margin-right: 3em;
+	 display: inline;
+	 margin-right: 3em;
  }
 
  .progress-label {
-     margin: 0;
-     width: 120px;
-     float: left;
-     font: 1.2em sans-serif;
-     text-align: left;
+	 /*width: 120px;*/
+	 font: 1.2em sans-serif;
+	 flex: 1;
+	 text-align: left;
  }
 
  .progress-end-label {
-     margin: 0;
-     margin-left: 1em;
-     width: 200px !important;
-     float: left;
+	 /*width: 120px;*/
      font: 1.2em sans-serif;
-     text-align: center;
+	 flex: 1;
+	 text-align: center;
  }
 
  .progress-container {
-     height: 1.8em;
-     padding: 0px;
-     margin: 2px;
-
      display: flex;
-     align-items: center;
+	 align-items: center;
+	 justify-content: space-between;
  }
 
  .progress {
-     margin-bottom: 10px;
      font-weight: bold;
      font: 14px sans-serif;
      text-align: center;
-     vertical-align: middle;
 
      height: 1.5em;
-     width: 90%;
-     float: right;
+     width: 75%;
  }
 
  div.progress {
-     margin: 0;
-     float: right;
      border-radius: 7px;
  }
 
@@ -771,4 +782,68 @@
     table .dr {
 
         height: 1.2em;
-    }
+	}
+	
+
+
+	.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

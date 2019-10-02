@@ -1,12 +1,35 @@
+<style>
+  .accessories {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: middle;
+  }
+</style>
 <nav>
   <ul>
     {% for item in site.data.navigation %}<li><a href="{{ item.link }}" {% if page.url == item.link %}class="active"
         {% endif %}>{{ item.name }}</a></li>
     {% endfor %}
-    <div style="padding-top: .7em"><input type="text" style="background-color:lightgrey; color: black; height: 1.5em; "
-        id="steamid-persistent-input" oninput="updateCheckPersistentSteamID()" value="Enter Your SteamID"><br>
-      <input id='steamid-persistent-checkbox' type="checkbox"><span style="color:white">Remember this
-        SteamID</span></div>
+
+    <div class="accessories">
+      <div class="remember-steamid-input">
+        <div>
+          <input type="text" style="background-color:lightgrey; color: black; height: 1.5em; "
+            id="steamid-persistent-input" oninput="updateCheckPersistentSteamID()" value="Enter Your SteamID">
+        </div>
+        <input id='steamid-persistent-checkbox' type="checkbox"><span style="color:white">Remember this SteamID</span>
+      </div>
+
+      <div>
+        <label class="switch">
+          <input id="darkmode-switch" type="checkbox">
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+    </div>
+
+
   </ul>
 </nav>
 
@@ -33,7 +56,7 @@
 
     if (!stillUse) {
       localStorage.removeItem(STEAMID_PERSISTENT);
-    }else{
+    } else {
       localStorage.setItem(STEAMID_PERSISTENT, steamIDText);
     }
   });

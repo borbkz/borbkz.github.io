@@ -5,208 +5,216 @@ layout: default
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"> </script>
 
 <style>
-    #my-chart {
-        margin: 30px auto;
-        width: 90%;
-        background-color: white;
+	#my-chart {
+		margin: 30px auto;
+		width: 90%;
+		background-color: white;
 
-    }
+	}
 
-    .dropdown-toggle {
+	.dropdown-toggle {
 
-        width: 180px;
-    }
+		width: 180px;
+	}
 
-    .dropdown-menu {
-        width: 180px;
-    }
+	.dropdown-menu {
+		width: 180px;
+	}
 
-    .graph-label-pro-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-    }
+	.graph-label-pro-container {
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
+	}
 
-    .graph-label-tp-container {
-        display: flex;
-        justify-content: space-evenly;
-    }
+	.graph-label-tp-container {
+		display: flex;
+		justify-content: space-evenly;
+	}
 
-    .graph-label-pro-container div {
-        color: orange;
-    }
+	.graph-label-pro-container div {
+		color: orange;
+	}
 
-    .graph-label-pro-container span {
-        color: white;
-    }
+	.graph-label-pro-container span {
+		color: white;
+	}
 
-    .graph-label-tp-container div {
-        color: limegreen;
-    }
+	.graph-label-tp-container div {
+		color: limegreen;
+	}
 
-    .graph-label-tp-container span {
-        color: white;
-    }
+	.graph-label-tp-container span {
+		color: white;
+	}
 
-    .graph-label {
-        font-weight: bold;
-        font-size: 1em;
-        width: 300px;
-    }
+	.graph-label {
+		font-weight: bold;
+		font-size: 1em;
+		width: 300px;
+	}
 
-    .map-info-label {
-        font-weight: bold;
-        font-size: 1em;
-        width: 300px;
-    }
+	.map-info-label {
+		font-weight: bold;
+		font-size: 1em;
+		width: 300px;
+	}
 
-    .map-info-text {
-        font-weight: normal;
-        font-size: 1em;
-    }
-    .map-line{
-        display: flex;
-        justify-content: space-between;
-    }
-    .tier-text{
-        font-weight:bold;
-    }
-    .tag-field{
-        width: 100%; 
-    }
+	.map-info-text {
+		font-weight: normal;
+		font-size: 1em;
+	}
+	.map-line{
+		display: flex;
+		justify-content: space-between;
+	}
+	.tier-text{
+		font-weight:bold;
+	}
+	.tag-field{
+		width: 100%; 
+	}
 </style>
 <div class="content-no-wrap">
-    <div class="map-info-container">
-        <div class="left">
-            <div class="map-screenshot-container"
-                title="Screenshot automatically fetched from Steam workshop. Please report if it contains anime or is NSFW">
-            </div>
-        </div>
+	<div class="map-info-container">
+		<div class="left">
+			<div class="map-screenshot-container"
+				title="Screenshot automatically fetched from Steam workshop. Please report if it contains anime or is NSFW">
+			</div>
+		</div>
 
-        <div class="right">
-            <div class="map-description-container">
-                <div class="title-map map-name"></div>
-                <div class="map-description-sub-container">
-                    <div class="map-line">
-                    <div class="map-info-label" title="Official Tier">TP Tier: 
-                            <span class="map-info-text tier-text" id="tier-text"></span>
-                    </div>
-                    <div class="map-info-label" title="">Calculated: 
-                            <span class="map-info-text" id="calculated-tier-text"></span>
-                    </div>
-                    </div>
-                    <div class="map-line">
-                    <div class="map-info-label" title="Based on Jak's Tiers">Pro Tier: 
-                            <span class="map-info-text tier-text" id="protier-text"></span>
-                    </div>
-                    <div class="map-info-label" title="">Calculated:
-                            <span class="map-info-text" id="calculated-protier-text"></span>
-                    </div>
-                    </div>
+		<div class="right">
+			<div class="map-description-container">
+				<div class="title-map map-name"></div>
+				<div class="map-description-sub-container">
+					<div class="map-line">
+					<div class="map-info-label" title="Official Tier">TP Tier: 
+							<span class="map-info-text tier-text" id="tier-text"></span>
+					</div>
+					<div class="map-info-label" title="">Calculated: 
+							<span class="map-info-text" id="calculated-tier-text"></span>
+					</div>
+					</div>
+					<div class="map-line">
+					<div class="map-info-label" title="Based on Jak's Tiers">
+						<span class="tier-tooltip">
+							<a href="https://docs.google.com/spreadsheets/d/1_P089G2GEP7ZNNXOnP0l0WnqtlPunxorbmqKpRuB2mQ/edit#gid=0">
+								Pro Tier:
+							</a>
+							</span>
+							<span class="map-info-text tier-text" id="protier-text"></span>
+					</div>
+					<div class="map-info-label" title="">Calculated:
+							<span class="map-info-text" id="calculated-protier-text"></span>
+					</div>
+					</div>
 {% capture lengthtip %}
 Does not take skips into account. Contains 6 categories instead of 5
 {% endcapture %}
 
-                    <div class="map-line">
-                        <div class="map-info-label" title="Based on Jak's Tiers">Length: 
-                            <span class="map-info-text tier-text" id="length-text"></span>
-                        </div>
-                        <div class="map-info-label" title="{{ lengthtip }}">Calculated: 
-                            <span class="map-info-text" id="calculated-length-text"></span>
-                        </div>
-                    </div>
-                    <div class="map-line">
-                        <div class="map-info-label" style="width:450px" title="">Top 20 TP Competitiveness Rating: 
-                            <span class="map-info-text" id="calculated-competitive-text"></span>
-                        </div>
-                    </div>
-                    <div class="map-line">
-                        <div class="map-info-label" style="width:450px" title="">Top 20 Pro Competitiveness Rating: 
-                            <span class="map-info-text" id="calculated-competitive-pro-text"></span>
-                        </div>
-                    </div>
+					<div class="map-line">
+						<div class="map-info-label tiert" title="Based on Jak's Tiers">
+							<span class="tier-tooltip">
+								<a href="https://docs.google.com/spreadsheets/d/1_P089G2GEP7ZNNXOnP0l0WnqtlPunxorbmqKpRuB2mQ/edit#gid=0">
+								Length:
+								</a>
+							</span>
+							<span class="map-info-text tier-text" id="length-text"></span>
+						</div>
+						<div class="map-info-label" title="{{ lengthtip }}">Calculated: 
+							<span class="map-info-text" id="calculated-length-text"></span>
+						</div>
+					</div>
+					<div class="map-line">
+						<div class="map-info-label" style="width:450px" title="">Top 20 TP Competitiveness Rating: 
+							<span class="map-info-text" id="calculated-competitive-text"></span>
+						</div>
+					</div>
+					<div class="map-line">
+						<div class="map-info-label" style="width:450px" title="">Top 20 Pro Competitiveness Rating: 
+							<span class="map-info-text" id="calculated-competitive-pro-text"></span>
+						</div>
+					</div>
+					<div class="map-line">
+						<div class="map-info-label tag-field"
+							title="Custom tags, work in progress. Many are incomplete or inaccurate">Tags:
+							<span class="map-info-text" id="tag-text"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-                    <br>
-                    <div class="map-line">
-                        <div class="map-info-label tag-field"
-                            title="Custom tags, work in progress. Many are incomplete or inaccurate">Tags:
-                            <span class="map-info-text" id="tag-text"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="chart-container">
 
-    <div class="chart-container">
-
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                style="font: 20px sans-serif !important">
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" value="HIDE" id="none-dropdown">None</a>
-                <a class="dropdown-item" value="TIMES" id="times-dropdown">Times</a>
-                <a class="dropdown-item" value="POINTS" id="points-dropdown">Points</a>
-                <a class="dropdown-item" value="POINTS" id="teleports-dropdown">Teleports</a>
-                <a class="dropdown-item" value="POINTS" id="teleport-density-dropdown">TPs/minute</a>
-            </div>
-        </div>
-
-
-        <div class="graph-label-container">
-            <div class="graph-label-pro-container">
-                <div class="graph-label" id="top-20-pro-average">Top 20 Pro Avg: <span></span></div>
-                <div class="graph-label" id="top-100-pro-average">Top 100 Pro Avg: <span></span></div>
-                <div class="graph-label" id="top-20-pro-sd" title="{% include statistics %}">Top 20 Pro SD:
-                    <span></span></div>
-                <div class="graph-label" id="top-100-pro-sd" title="{% include statistics %}">Top 100 Pro SD:
-                    <span></span></div>
-            </div>
-            <div class="graph-label-tp-container">
-                <div class="graph-label" id="top-20-tp-average">Top 20 TP Avg: <span></span></div>
-                <div class="graph-label" id="top-100-tp-average">Top 100 TP Avg: <span></span></div>
-                <div class="graph-label" id="top-20-tp-sd" title="{% include statistics %}">Top 20 TP SD: <span></span>
-                </div>
-                <div class="graph-label" id="top-100-tp-sd" title="{% include statistics %}">Top 100 TP SD:
-                    <span></span></div>
-            </div>
-        </div>
-        <canvas class="map-chart" id="my-chart"></canvas>
-    </div>
+		<div class="dropdown">
+			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+				style="font: 20px sans-serif !important">
+			</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<a class="dropdown-item" value="HIDE" id="none-dropdown">None</a>
+				<a class="dropdown-item" value="TIMES" id="times-dropdown">Times</a>
+				<a class="dropdown-item" value="POINTS" id="points-dropdown">Points</a>
+				<a class="dropdown-item" value="POINTS" id="teleports-dropdown">Teleports</a>
+				<a class="dropdown-item" value="POINTS" id="teleport-density-dropdown">TPs/minute</a>
+			</div>
+		</div>
 
 
-    <div class="fancy-container">
-        <div class="record-pro-all-container">
-            <div class="record-type-title">
-                <h3>Pro Top 100</h3>
-            </div>
+		<div class="graph-label-container">
+			<div class="graph-label-pro-container">
+				<div class="graph-label" id="top-20-pro-average">Top 20 Pro Avg: <span></span></div>
+				<div class="graph-label" id="top-100-pro-average">Top 100 Pro Avg: <span></span></div>
+				<div class="graph-label" id="top-20-pro-sd" title="{% include statistics %}">Top 20 Pro SD:
+					<span></span></div>
+				<div class="graph-label" id="top-100-pro-sd" title="{% include statistics %}">Top 100 Pro SD:
+					<span></span></div>
+			</div>
+			<div class="graph-label-tp-container">
+				<div class="graph-label" id="top-20-tp-average">Top 20 TP Avg: <span></span></div>
+				<div class="graph-label" id="top-100-tp-average">Top 100 TP Avg: <span></span></div>
+				<div class="graph-label" id="top-20-tp-sd" title="{% include statistics %}">Top 20 TP SD: <span></span>
+				</div>
+				<div class="graph-label" id="top-100-tp-sd" title="{% include statistics %}">Top 100 TP SD:
+					<span></span></div>
+			</div>
+		</div>
+		<canvas class="map-chart" id="my-chart"></canvas>
+	</div>
 
-            <div class="content-wrap" style="height: 600px">
-                <table class="pro-table record-table">
-                </table>
-            </div>
-        </div>
-        <div class="record-tp-all-container">
-            <div class="record-type-title">
-                <h3>TP Top 100</h3>
-            </div>
-            <div class="content-wrap" style="height: 600px">
-                <table class="tp-table record-table">
-                </table>
-            </div>
-        </div>
-    </div>
+
+	<div class="fancy-container">
+		<div class="record-pro-all-container">
+			<div class="record-type-title">
+				<h3>Pro Top 100</h3>
+			</div>
+
+			<div class="content-wrap" style="height: 600px">
+				<table class="pro-table record-table">
+				</table>
+			</div>
+		</div>
+		<div class="record-tp-all-container">
+			<div class="record-type-title">
+				<h3>TP Top 100</h3>
+			</div>
+			<div class="content-wrap" style="height: 600px">
+				<table class="tp-table record-table">
+				</table>
+			</div>
+		</div>
+	</div>
 
 
-    <div class="content-no-wrap">
-        <div id="table-container">
-            {% include tooltip.html id="maps-tooltip" text="maps-only" %}
-            <div class="handsontable" id="spreadsheet"> </div>
-        </div>
+	<div class="content-no-wrap">
+		<div id="table-container">
+			{% include tooltip.html id="maps-tooltip" text="maps-only" %}
+			<div class="handsontable" id="spreadsheet"> </div>
+		</div>
 
-    </div>
+	</div>
 </div>
 
 
