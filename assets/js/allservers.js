@@ -221,10 +221,22 @@ function getEmptyPlayer() {
     }
 
 }
+
+var radioTier =  -1;
+
+$(document).ajaxStop(function(){
+
+        if(radioTier < 0){
+            radioTier = playerInfo["tier-max-maps"];
+        }
+
+        $('#tier-'+radioTier+'-radio').click();
+
+})
 $(document).ready(function () {
     $("input[name=tier-radio]").on("change", function () {
-        let tier = $("input[name=tier-radio]:checked").val();
-        createChart(tier);
+        radioTier = $("input[name=tier-radio]:checked").val();
+        createChart(radioTier);
     });
     $('.dropdown-menu a').click(function () {
         $('#dropdownMenuButton').text($(this).text());
@@ -321,7 +333,6 @@ $(document).ready(function () {
 
 
         }
-        $('#tier-'+playerInfo["tier-max-maps"]+'-radio').click();
 
         let dropdownSelect = localStorage.getItem("SHOW_PROGRESS_BARS");
         let normalizeSaved = localStorage.getItem("NORMALIZE_PROGRESS");
@@ -806,6 +817,14 @@ $(document).ready(function () {
             })
 
             printPlayerProfile();
+
+            console.log(radioTier);
+            if(radioTier < 0){
+            radioTier = playerInfo["tier-max-maps"];
+
+
+            }
+            createChart(radioTier);
         }); //end json
     }
 
