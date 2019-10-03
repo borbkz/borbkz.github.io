@@ -451,7 +451,8 @@ $(document).ready(function () {
 
             }else if (completionRate > .99) {
                     protip = "Achievement Unlocked: Completionist";
-
+            }else if (completionRate > .95){
+                    protip = "Almost there!"
             }
             if (protip !== "") {
                 $("#run-info-label>span").addClass('tier-tooltip');
