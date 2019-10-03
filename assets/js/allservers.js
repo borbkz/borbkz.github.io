@@ -70,7 +70,7 @@ function createChart(tier) {
     let linecolor = "black";
 
     let titleMargin = 0;
-    let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"]) / 1000; 
+    let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"]) / 1000;
 
     let months = Math.floor((xmax - xmin) / (30));
     let remainingDays = (xmax - xmin) - 30 * months;
@@ -80,7 +80,7 @@ function createChart(tier) {
     if (months < 1) {
         duration = remainingDays + " Days";
     }
-    if( remainingDays < 1){
+    if (remainingDays < 1) {
         duration = months + " Months";
     }
 
@@ -89,7 +89,7 @@ function createChart(tier) {
 
     let title = () => `${tiertext} Tier: ${Math.abs(percentageIncrease.toFixed(1))}% ${improvementText} Over The Last ${duration}`;
 
-    const monthNames = ["","Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    const monthNames = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
 
@@ -103,7 +103,7 @@ function createChart(tier) {
                         data: data,
                         backgroundColor: tiercolor,
                         label: tiertext,
-                        borderColor: linecolor
+                        borderColor: linecolor,
                     }, {
                         label: "Best Fit (LLS)",
                         data: bestfit,
@@ -112,7 +112,8 @@ function createChart(tier) {
                         borderWidth: 2,
                         fill: false,
                         tension: 0,
-                        showLine: true
+                        showLine: true,
+                        radius: 0
                     }]
                 },
                 plugins: [{
@@ -143,7 +144,7 @@ function createChart(tier) {
                         display: false,
                     },
 
-                    events: ['mousemove'], 
+                    events: ['mousemove'],
                     onHover: (event, chartElement) => {
                         event.target.style.cursor = chartElement[0] ? 'default' : 'grab';
                     },
@@ -163,9 +164,9 @@ function createChart(tier) {
 
                                 let pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
-                                let vals = ["map", "time",  "tp", "date"];
-                                for(let i = 0; i < vals.length; i++){
-                                    if(!(vals[i] in pointData)){
+                                let vals = ["map", "time", "tp", "date"];
+                                for (let i = 0; i < vals.length; i++) {
+                                    if (!(vals[i] in pointData)) {
                                         return "N/A";
                                     }
                                 }
@@ -175,17 +176,17 @@ function createChart(tier) {
                                 let originaldate = pointData["date"];
                                 let map = pointData["map"];
                                 let time = pointData["time"];
-                                try{
+                                try {
                                     originaldate = originaldate.substring(0, originaldate.indexOf("T"));
-                                }catch(e){
+                                } catch (e) {
                                     console.log(e);
 
                                 }
                                 //let simpleDate = new Date(timestamp * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
-                                    labelStrings.push(map);
-                                    labelStrings.push(points + " Pts, " + tps + " TPs");
-                                    labelStrings.push(time);
-                                    labelStrings.push(originaldate);
+                                labelStrings.push(map);
+                                labelStrings.push(points + " Pts, " + tps + " TPs");
+                                labelStrings.push(time);
+                                labelStrings.push(originaldate);
 
                                 return labelStrings;
                             }
@@ -227,9 +228,9 @@ function createChart(tier) {
 
                                     let mydate = new Date(value * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).split('-');
 
-                                    let month = monthNames[parseInt(mydate[1],10)];
+                                    let month = monthNames[parseInt(mydate[1], 10)];
 
-                                    return month + " " + mydate[0]; 
+                                    return month + " " + mydate[0];
                                 }
                             }
                         }]
@@ -248,14 +249,15 @@ function createChart(tier) {
                 borderColor: linecolor
             }, {
                 label: "Best Fit (LLS)",
-                data: linearLeastSquares(data),
+                data: bestfit,
                 backgroundColor: 'black',
                 borderColor: linecolor,
                 borderWidth: 2,
                 fill: false,
                 tension: 0,
-                showLine: true
-            }]
+                showLine: true,
+                radius: 0,
+            }],
         }
         myChart.options.title.text = title();
         myChart.update();
@@ -312,8 +314,8 @@ $(document).ajaxStop(function () {
 })
 $(document).ready(function () {
 
-    $('#reset-zoom').click(function(){
-        if(typeof myChart !== 'undefined'){
+    $('#reset-zoom').click(function () {
+        if (typeof myChart !== 'undefined') {
             myChart.resetZoom();
 
         }
