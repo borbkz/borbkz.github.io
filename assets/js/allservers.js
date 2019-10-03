@@ -149,12 +149,13 @@ function createChart(tier) {
                                 let pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
                                 let labelStrings = [];
-                                let timestamp = pointData["x"]
-                                let points = pointData["y"]
+                                let timestamp = pointData["x"];
+                                let points = pointData["y"];
+                                let tps = pointData["tp"];
 
                                 let simpleDate = new Date(timestamp * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
                                 labelStrings.push(pointData["map"]);
-                                labelStrings.push(points);
+                                labelStrings.push(points + " Pts, " + tps + " TPs");
                                 labelStrings.push(pointData["time"]);
                                 labelStrings.push(simpleDate);
 
@@ -704,7 +705,7 @@ $(document).ready(function () {
                     tptier = difficultyArray[field["map_name"]][0];
 
                     if (tptier !== 0) {
-                        var datapoint = { x: mapday, y: points, 'map': map, 'time': time };
+                        var datapoint = { x: mapday, y: points, 'map': map, 'time': time, 'tp': teleports };
 
                         if (tptier == 3)
                             hardArray.push(datapoint);
@@ -839,7 +840,6 @@ $(document).ready(function () {
 
             printPlayerProfile();
 
-            console.log(radioTier);
             if (radioTier < 0) {
                 radioTier = playerInfo["tier-max-maps"];
 
