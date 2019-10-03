@@ -99,17 +99,17 @@ function createChart(tier) {
     let titleMargin = 0;
     let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"]) / (xmax - xmin);
 
-    let months = Math.floor((xmax-xmin)/(30));
-    let remainingDays = (xmax-xmin) - 30 * months;
+    let months = Math.floor((xmax - xmin) / (30));
+    let remainingDays = (xmax - xmin) - 30 * months;
 
-    console.log((xmax-xmin) + " days = "  + months + " months, remaining days: " + remainingDays);
+    console.log((xmax - xmin) + " days = " + months + " months, remaining days: " + remainingDays);
 
     let duration = months + " Months, " + remainingDays + " Days";
-    if(months < 1){
+    if (months < 1) {
         duration = remainingDays + " Days";
     }
 
-    let improvementText = (percentageIncrease>0.0?"Improvement":"Deterioration")
+    let improvementText = (percentageIncrease > 0.0 ? "Improvement" : "Deterioration")
 
     let title = () => `${Math.abs(percentageIncrease.toFixed(1))}% Pts ${improvementText} Over The Last ${duration}`;
 
@@ -174,10 +174,21 @@ function createChart(tier) {
                                 labelStrings.push(pointData["time"]);
                                 labelStrings.push(simpleDate);
 
-                                return labelStrings; 
+                                return labelStrings;
                             }
 
                         }
+                    },
+                    pan: {
+                        enabled: true,
+                        mode: 'x',
+                        speed: .1,
+                        threshold: .1
+                    },
+                    zoom: {
+                        enabled: true,
+                        mode: 'x',
+                        speed: .1
                     },
                     scales: {
                         yAxes: [{
@@ -189,7 +200,8 @@ function createChart(tier) {
                             type: 'linear',
                             position: 'bottom',
                             ticks: {
-                                maxTicksLimit: 30,
+                                maxRotation: 0,
+                                maxTicksLimit: 7,
                                 callback: function (value, index, values) {
                                     return new Date(value * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
                                 }
@@ -221,6 +233,7 @@ function createChart(tier) {
         }
         myChart.options.title.text = title();
         myChart.update();
+        myChart.resetZoom();
     }
 
 }
@@ -272,6 +285,15 @@ $(document).ajaxStop(function () {
 
 })
 $(document).ready(function () {
+
+    $('#reset-zoom').click(function(){
+        if(typeof myChart !== 'undefined'){
+            myChart.resetZoom();
+
+        }
+
+    });
+
     $("input[name=tier-radio]").on("change", function () {
         radioTier = $("input[name=tier-radio]:checked").val();
         createChart(radioTier);

@@ -22,6 +22,8 @@ let datapoints = {
 }
 let tagtips = {};
 
+var myChart;
+
 //$('#none-dropdown').click();
 //} else if (showgraph === "time") {
 //$('#times-dropdown').click();
@@ -212,7 +214,7 @@ function createChart(prodata, tpdata, step, type) {
     title = 'Teleport Frequency Progression for Top 100';
 
     }
-    var myChart = new Chart(ctx, {
+    myChart = new Chart(ctx, {
         type: graphType,
         
         data: {

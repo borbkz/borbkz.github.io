@@ -6,6 +6,10 @@ layout: default
 <script type="text/javascript" src="/assets/js/local.js?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"> </script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.4"></script>
+
 <div class="content-no-wrap">
 
 	<div class="accordion" id="accordion-times">
@@ -61,7 +65,7 @@ layout: default
 					<div class="progress-graph-container">
 
 						<canvas class="progress-graph" id="my-chart"></canvas>
-						<div class="tier-selection">
+						<div class="tier-selection" style="display: flex; align-items: center">
 							<span>
 								<input type="radio" id="tier-1-radio" name="tier-radio" value="1" checked>Very Easy
 							</span>
@@ -79,6 +83,7 @@ layout: default
 								Hard
 							</span>
 							<span> <input type="radio" id="tier-6-radio" name="tier-radio" value="6">Death </span>
+						<button id="reset-zoom">Reset zoom</button>
 
 
 						</div>
