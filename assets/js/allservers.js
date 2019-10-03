@@ -96,6 +96,7 @@ function createChart(tier) {
     let xmax = bestfit[1]["x"];
     let linecolor = "black";
 
+    let titleMargin = 0;
 
     if (typeof myChart === 'undefined') {
         myChart = new Chart(ctx,
@@ -120,7 +121,7 @@ function createChart(tier) {
                 plugins: [{
                     beforeInit: function (chart, options) {
                         chart.legend.afterFit = function () {
-                            this.height = this.height + 20
+                            this.height = this.height + titleMargin;
                         };
                     }
                 }],
