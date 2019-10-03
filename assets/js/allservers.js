@@ -70,7 +70,7 @@ function createChart(tier) {
     let linecolor = "black";
 
     let titleMargin = 0;
-    let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"]) / 1000;
+    let percentageIncrease = (100 * (bestfit[1]["y"] - bestfit[0]["y"]) / 1000) || 0;
 
     let months = Math.floor((xmax - xmin) / (30));
     let remainingDays = (xmax - xmin) - 30 * months;
@@ -85,7 +85,7 @@ function createChart(tier) {
     }
 
 
-    let improvementText = (percentageIncrease > 0.0 ? "Improvement" : "Deterioration")
+    let improvementText = (percentageIncrease >= 0.0 ? "Improvement" : "Deterioration")
 
     let title = () => `${tiertext} Tier: ${Math.abs(percentageIncrease.toFixed(1))}% ${improvementText} Over The Last ${duration}`;
 
