@@ -372,12 +372,3 @@ $(document).ready(function () {
 });
 
 
-
-(function () {
-	let a = Math.ceil((Math.random() * 4));
-	if (a == 1){
-		new BugController({ 'minBugs': 3, 'maxBugs': 6, 'min_frames': 10 });
-	} if(a == 2){
-		new SpiderController({ 'minBugs': 1, 'maxBugs': 1, 'min_frames': 7 });
-	}
-})();
