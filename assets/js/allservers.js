@@ -146,7 +146,7 @@ function createChart(tier) {
 
                     events: ['mousemove'],
                     onHover: (event, chartElement) => {
-                        event.target.style.cursor = chartElement[0] ? 'default' : 'grab';
+                        //event.target.style.cursor = chartElement[0] ? 'default' : 'grab';
                     },
 
                     responsive: false,
