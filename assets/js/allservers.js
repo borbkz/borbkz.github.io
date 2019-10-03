@@ -109,7 +109,7 @@ function createChart(tier) {
                         borderColor: linecolor
                     }, {
                         data: linearLeastSquares(data),
-                        backgroundColor: tiercolor,
+                        backgroundColor: 'white',
                         borderColor: linecolor,
                         borderWidth: 2,
                         fill: false,
@@ -170,7 +170,7 @@ function createChart(tier) {
                 borderColor: linecolor
             }, {
                 data: linearLeastSquares(data),
-                backgroundColor: tiercolor,
+                backgroundColor: 'white',
                 borderColor: linecolor,
                 borderWidth: 2,
                 fill: false,
