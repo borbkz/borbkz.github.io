@@ -452,9 +452,12 @@ $(document).ready(function () {
 
                 }
 
-            }
+            }else{}
             if (protip !== "") {
                 $("#run-info-label>span").addClass('tier-tooltip');
+            }else{
+                $("#run-info-label>span").removeClass('tier-tooltip');
+
             }
             $("#run-info-label").attr('title', protip);
             $("#rank-info-text").attr('title', '(' + finalRating.toFixed(2) + ') ' + tip);
