@@ -97,8 +97,8 @@ function createChart(tier) {
     let linecolor = "black";
 
     let titleMargin = 0;
-    let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"])/(xmax-xmin);
-    let title=() => tiertext + " Tier Point Progression Over Time (" + (percentageIncrease>0.0?"+":"")+percentageIncrease.toFixed(2) + " %)";
+    let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"]) / (xmax - xmin);
+    let title = () => tiertext + " Tier Point Progression Over Time (" + (percentageIncrease > 0.0 ? "+" : "") + percentageIncrease.toFixed(2) + " %)";
 
     if (typeof myChart === 'undefined') {
         myChart = new Chart(ctx,
@@ -140,7 +140,28 @@ function createChart(tier) {
                     },
                     responsive: false,
                     tooltips: {
-                        enabled: false
+                        enabled: true,
+                        mode: 'label',
+                        callbacks: {
+
+                            label: function (tooltipItem, data) {
+
+                                let pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+
+                                let labelStrings = [];
+                                let timestamp = pointData["x"]
+                                let points = pointData["y"]
+
+                                let simpleDate = new Date(timestamp * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
+                                labelStrings.push(pointData["map"]);
+                                labelStrings.push(points);
+                                labelStrings.push(pointData["time"]);
+                                labelStrings.push(simpleDate);
+
+                                return labelStrings; 
+                            }
+
+                        }
                     },
                     scales: {
                         yAxes: [{
@@ -181,7 +202,7 @@ function createChart(tier) {
                 showLine: true
             }]
         }
-        myChart.options.title.text = title(); 
+        myChart.options.title.text = title();
         myChart.update();
     }
 
@@ -222,15 +243,15 @@ function getEmptyPlayer() {
 
 }
 
-var radioTier =  -1;
+var radioTier = -1;
 
-$(document).ajaxStop(function(){
+$(document).ajaxStop(function () {
 
-        if(radioTier < 0){
-            radioTier = playerInfo["tier-max-maps"];
-        }
+    if (radioTier < 0) {
+        radioTier = playerInfo["tier-max-maps"];
+    }
 
-        $('#tier-'+radioTier+'-radio').click();
+    $('#tier-' + radioTier + '-radio').click();
 
 })
 $(document).ready(function () {
@@ -256,7 +277,7 @@ $(document).ready(function () {
 
         $("#player-info").show();
 
-        $("#player-info-text").text(playerInfo["player-name"].substring(0,20));
+        $("#player-info-text").text(playerInfo["player-name"].substring(0, 20));
 
         var goldmedal = "", silvermedal = "", bronzemedal = "";
 
@@ -432,19 +453,19 @@ $(document).ready(function () {
 
             let rankText = RANKING[Math.floor(finalRating)];
 
-            let completionRate = playerInfo["runs-total"]/playerInfo["runs-possible"];
+            let completionRate = playerInfo["runs-total"] / playerInfo["runs-possible"];
 
 
             let runtype = playerInfo["run-type"];
             let protip = "";
-            if(runtype === "pro"){
-                if( completionRate> .99){
+            if (runtype === "pro") {
+                if (completionRate > .99) {
                     protip = "Go out and PRO-create!";
-                }else if(completionRate > .95){
+                } else if (completionRate > .95) {
                     protip = "PRO-bably cheating";
-                }else if (completionRate > .90){
+                } else if (completionRate > .90) {
                     protip = "PRO-tector of the realms";
-                }else if (completionRate > .85){
+                } else if (completionRate > .85) {
                     protip = "One True PRO-phet"
                 } else if (completionRate > .80) {
                     protip = "The PRO-fessor";
@@ -460,15 +481,15 @@ $(document).ready(function () {
 
                 }
 
-            }else if (completionRate > .99) {
-                    protip = "Achievement Unlocked: Completionist";
-            }else if (completionRate > .95){
-                    protip = "Almost there!"
+            } else if (completionRate > .99) {
+                protip = "Achievement Unlocked: Completionist";
+            } else if (completionRate > .95) {
+                protip = "Almost there!"
             }
             if (protip !== "") {
                 $("#run-info-label>span").addClass('tier-tooltip');
                 $("#run-info-label").attr('title', protip);
-            }else{
+            } else {
                 $("#run-info-label>span").removeClass('tier-tooltip');
                 $("#run-info-label").attr('title', "");
             }
@@ -683,7 +704,7 @@ $(document).ready(function () {
                     tptier = difficultyArray[field["map_name"]][0];
 
                     if (tptier !== 0) {
-                        var datapoint = { x: mapday, 'y': points };
+                        var datapoint = { x: mapday, y: points, 'map': map, 'time': time };
 
                         if (tptier == 3)
                             hardArray.push(datapoint);
@@ -819,8 +840,8 @@ $(document).ready(function () {
             printPlayerProfile();
 
             console.log(radioTier);
-            if(radioTier < 0){
-            radioTier = playerInfo["tier-max-maps"];
+            if (radioTier < 0) {
+                radioTier = playerInfo["tier-max-maps"];
 
 
             }
