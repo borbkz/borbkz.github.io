@@ -166,7 +166,7 @@ function createChart(tier) {
                                 let vals = ["map", "time",  "tp", "date"];
                                 for(let i = 0; i < vals.length; i++){
                                     if(!(vals[i] in pointData)){
-                                        return "";
+                                        return "N/A";
                                     }
                                 }
                                 let labelStrings = [];
