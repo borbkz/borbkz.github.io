@@ -1,9 +1,10 @@
 <style>
+  /*
   .accessories {
     display: flex;
     justify-content: space-evenly;
     align-items: middle;
-  }
+  }*/
 </style>
 <nav>
   <ul>
@@ -19,24 +20,37 @@
         </div>
         <input id='steamid-persistent-checkbox' type="checkbox"><span style="color:white">Remember this SteamID</span>
       </div>
-
-      <div>
-        <label class="switch">
-          <input id="darkmode-switch" type="checkbox">
-          <span class="slider round"></span>
+<!--
+      <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+          <input type="checkbox" id="checkbox" />
+          <div class="slider round"></div>
         </label>
       </div>
+    -->
 
+      <div>
+      </div>
     </div>
-
-
   </ul>
 </nav>
 
 <script>
+  //const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+
+  //function switchTheme(e) {
+    //if (e.target.checked) {
+      //document.documentElement.setAttribute('data-theme', 'dark');
+    //} else {
+      //document.documentElement.setAttribute('data-theme', 'light');
+    //}
+  //}
+
+  //toggleSwitch.addEventListener('change', switchTheme, false);
+
+
   const $steamIDPersistentCheckbox = $('#steamid-persistent-checkbox');
   const $steamIDPersistentInput = $('#steamid-persistent-input');
-
 
   function useSteamIDPersistent() {
     return localStorage.getItem(USE_STEAMID_PERSISTENT) !== null &&

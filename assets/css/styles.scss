@@ -1,3 +1,25 @@
+---
+---
+
+
+:root {
+    --primary-color: #302AE6;
+    --secondary-color: #536390;
+    --font-color: #424242;
+    --bg-color: #fff;
+    --heading-color: #292922;
+}
+
+
+[data-theme="dark"] {
+    --primary-color: #9A97F3;
+    --secondary-color: #818cab;
+    --font-color: #e1e1ff;
+    --bg-color: #161625;
+    --heading-color: #818cab;
+}
+
+
  ul {
 	 width: 100%;
 
@@ -273,8 +295,6 @@
 	 background-color: #657782;
 	 width: 100%;
 	 height: 100%;
-
-
  }
 
  .card-header {
@@ -284,7 +304,6 @@
 
  .card {
 	 border: 1px solid #657782;
-	 background-color: #FEFFFF;
 	 background-color: #313A3F;
 
  }
@@ -494,7 +513,7 @@
 	 overflow: hidden;
 	 display: flex;
 	 flex-direction: column;
-	 justify-content: space-between;
+	 justify-content: flex-start; 
  }
 
  .progress-group-container{
@@ -503,24 +522,41 @@
 	 justify-content: space-evenly;
 	 height: 200px;
  }
+
  .progress-graph-container{
-	 height: 275px;
-	 background-color: white;
-	 width: 70% ;
+	 width: 85%;
  }
+ .progress-graph{
+	 width: 100%;
+	 background-color: white;
+ }
+.tier-selection{
+	display: flex;
+	justify-content: space-evenly;
+}
  .infolabel {
-	 font: 20px sans-serif;
+	 font-size: 1.2em; 
 	 font-weight: bold;
-	 width: 5.2em; 
+	 width: 4em; 
  }
 
+ .divider{
+	 border-bottom: 1px solid white;
+	 margin-top: 15px;
+	 margin-bottom: 15px;
+	 width: 80%;
+	 font-weight: bold;
+	 font-size: 1.2em;
+ }
  .infotext {
-	 font: 20px sans-serif;
+	 font-size: 1.2em; 
  }
 
  .infoline {
 	 text-align: left;
 	 display: flex;
+	 margin: .25em 0;
+	 align-items: middle;
  }
 
  .infofield {
@@ -554,7 +590,7 @@
      text-align: center;
 
      height: 1.5em;
-     width: 75%;
+     width: 70%;
  }
 
  div.progress {
@@ -783,67 +819,41 @@
 
         height: 1.2em;
 	}
+
+.onoffswitch {
+    position: relative; width: 90px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 20px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "Light";
+    background-color: #34A7C1; color: #FFFFFF;
+    text-align: center;
+}
+.onoffswitch-inner:after {
+    content: "Dark";
+    background-color: #EEEEEE; color: #999999;
+    text-align: center;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
 	
-
-
-	.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}

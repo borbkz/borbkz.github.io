@@ -133,52 +133,6 @@ function calculateLength() {
     return 5;
 }
 
-function average(array, max) {
-    if(typeof max === 'undefined')
-        max = array.length;
-    if (array.length == 0)
-        return NaN;
-
-    let length = Math.min(array.length, max);
-    let sum = 0;
-    for (let i = 0; i <length; i++) {
-        sum += array[i];
-    }
-    return (sum / length);
-}
-
-
-function coefficientOfVariation(arr, max){
-    let normFactor = average(arr,max);
-    return 100 * stddev(arr,max)/normFactor;
-}
-function stddev(array, max) {
-    if(typeof max === 'undefined')
-        max = array.length;
-    if (array.length == 0)
-        return NaN;
-    
-    let N = Math.min(array.length, max); 
-    let u = average(array,max);
-    let diffsquare =  0;
-
-    for(let i = 0; i < N; i ++){
-        diffsquare += Math.pow(array[i]- u, 2);
-    }
-    let variance = diffsquare * (1/N);
-
-    return Math.sqrt(variance);
-}
-
-function normalizeValues(data) {
-    let max = Math.max.apply(Math, data);
-    for (let i = 0; i < data.length; i++) {
-        if (max != 0) {
-            data[i] /= max;
-        }
-    }
-    return data;
-}
 
 
 
@@ -253,8 +207,14 @@ function createChart(prodata, tpdata, step, type) {
     }
 
     labels[0] = "WR";
+    title = (type.charAt(0).toUpperCase() + type.slice(1)) + ' Progression for Top 100';
+    if(type === "teleport-density"){
+    title = 'Teleport Frequency Progression for Top 100';
+
+    }
     var myChart = new Chart(ctx, {
         type: graphType,
+        
         data: {
             labels: labels,
             datasets: [{
@@ -280,11 +240,20 @@ function createChart(prodata, tpdata, step, type) {
             ]
         },
         options: {
+            title: {
+                display: true,
+                text: title 
+            },
             responsive: false,
             tooltips: {
                 mode: 'label',
                 callbacks: tooltipCallback
-            },
+                },
+                elements: {
+                    point:{
+                        radius: 1
+                    }
+                },
             scales: {
                 yAxes: [{
                     id: 'A',

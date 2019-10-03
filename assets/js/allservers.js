@@ -49,7 +49,146 @@ var RANKING = {
     0: "NEWBIE"
 }
 
+var myChart;
+
+var easyArray = [];
+var hardArray = [];
+
+var dateArray = [[], [], [], [], [], [], []];
 var playerInfo = getEmptyPlayer();
+
+function linearLeastSquares(data) {
+    let xsum = 0, ysum = 0, xx = 0, xy = 0;
+    let xmin = Infinity, xmax = -Infinity;
+    for (let i = 0; i < data.length; i++) {
+        let x = data[i]["x"];
+        let y = data[i]["y"];
+
+        if (x < xmin) {
+            xmin = x;
+        }
+        if (x > xmax) {
+            xmax = x;
+        }
+        xsum += x;
+        ysum += y;
+        xx += (x * x);
+        xy += (x * y);
+    }
+    let N = data.length;
+    let slope = (N * xy - (xsum * ysum));
+    slope /= ((N * xx) - (xsum * xsum));
+    let intercept = (ysum - slope * xsum) / N;
+
+    let f = x => slope * x + intercept;
+
+    return [{ x: xmin, y: f(xmin) }, { x: xmax, y: f(xmax) }];
+}
+function createChart(tier) {
+
+    let ctx = document.getElementById('my-chart').getContext('2d');
+    let tiertext = TIERKEY[tier][0];
+    let tiercolor = TIERKEY[tier][1];
+
+    let data = dateArray[tier];
+    let bestfit = linearLeastSquares(data);
+    let xmin = bestfit[0]["x"];
+    let xmax = bestfit[1]["x"];
+    let linecolor = "black";
+
+    if (tiercolor === linecolor) {
+        linecolor = "red";
+    }
+
+    if (typeof myChart === 'undefined') {
+        myChart = new Chart(ctx,
+            {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        data: data,
+                        backgroundColor: tiercolor,
+                        label: tiertext,
+                        borderColor: linecolor
+                    }, {
+                        data: linearLeastSquares(data),
+                        backgroundColor: tiercolor,
+                        borderColor: linecolor,
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0,
+                        showLine: true
+                    }]
+                },
+                plugins: [{
+                    beforeInit: function (chart, options) {
+                        chart.legend.afterFit = function () {
+                            this.height = this.height + 20
+                        };
+                    }
+                }],
+                options: {
+                    title: {
+                        display: true,
+                        text: tiertext + " Tier Point Progression Over Time",
+                        fontStyle: "bold",
+                        fontSize: "16",
+
+                    },
+                    legend: {
+                        display: false
+                    },
+                    responsive: false,
+                    tooltips: {
+                        enabled: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+
+                            }
+                        }],
+                        xAxes: [{
+                            type: 'linear',
+                            position: 'bottom',
+                            ticks: {
+                                maxTicksLimit: 30,
+                                callback: function (value, index, values) {
+                                    return new Date(value * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
+                                }
+                            }
+                        }]
+                    }
+                }
+            }
+
+        );
+    }
+    else {
+        myChart.data = {
+            datasets: [{
+                data: data,
+                backgroundColor: tiercolor,
+                label: tiertext,
+                borderColor: linecolor
+            }, {
+                data: linearLeastSquares(data),
+                backgroundColor: tiercolor,
+                borderColor: linecolor,
+                borderWidth: 2,
+                fill: false,
+                tension: 0,
+                showLine: true
+            }]
+        }
+        myChart.options.title.text = tiertext + " Tier Point Progression Over Time";
+        myChart.update();
+    }
+
+}
+
+
+
 
 function getEmptyPlayer() {
     //records = 1000 points
@@ -66,6 +205,7 @@ function getEmptyPlayer() {
         "points-total": 0,
         "points-average": 0,
         "runs-by-tier": new Array(7).fill(0),
+        "dates-by-tier": [[], [], [], [], [], [], []],
         "runs-possible-by-tier": new Array(7).fill(0),
         "points-total-by-tier": new Array(7).fill(0),
         "points-average-by-tier": new Array(7).fill(0),
@@ -75,21 +215,25 @@ function getEmptyPlayer() {
         "tier-max-maps": 1,
         "records-max-maps": 1,
         "silvers-max-maps": 1,
-        "bronzes-max-maps": 1
+        "bronzes-max-maps": 1,
+        "newest": 0,
+        "oldest": 0
     }
 
 }
 $(document).ready(function () {
-
+    $("input[name=tier-radio]").on("change", function () {
+        let tier = $("input[name=tier-radio]:checked").val();
+        createChart(tier);
+    });
     $('.dropdown-menu a').click(function () {
         $('#dropdownMenuButton').text($(this).text());
         $('#dropdownMenuButton').attr('target-id', this.id);
     });
 
 
-
-
-
+    //might have to switch to non-linear regression later due to 
+    //sensitivity to outliers
 
     normalizeRatings = $("#normalize-checkbox").is(':checked');
     printPlayerProfile();
@@ -120,9 +264,7 @@ $(document).ready(function () {
 
 
         if (playerInfo["run-type"] === "pro") {
-            $("#run-info-label").text("Pro Runs: ")
         } else if (playerInfo["run-type"] === "tp") {
-            $("#run-info-label").text("TP Runs: ")
         }
 
         $(".progress-group-container").empty();
@@ -167,7 +309,7 @@ $(document).ready(function () {
             $progressBarContainer.append($progressBar);
 
             var $progressLabel = $(`<div class="progress-label">${tierText}</div>`);
-            var $progressEndLabel= $(`<div class="progress-end-label" id="progress-end-label-${tier}"></div>`);
+            var $progressEndLabel = $(`<div class="progress-end-label" id="progress-end-label-${tier}"></div>`);
 
             var $progressContainer = $('<div class=progress-container></div>');
             $progressContainer.append($progressLabel);
@@ -179,29 +321,30 @@ $(document).ready(function () {
 
 
         }
+        $('#tier-'+playerInfo["tier-max-maps"]+'-radio').click();
 
         let dropdownSelect = localStorage.getItem("SHOW_PROGRESS_BARS");
         let normalizeSaved = localStorage.getItem("NORMALIZE_PROGRESS");
 
-        if(normalizeSaved !== null){
-            $('#normalize-checkbox').prop('checked', normalizeSaved==="true");
+        if (normalizeSaved !== null) {
+            $('#normalize-checkbox').prop('checked', normalizeSaved === "true");
             normalizeRatings = normalizeSaved === "true";
-        }else{
+        } else {
             $('#normalize-checkbox').prop('checked', true);
             normalizeRatings = true;
         }
-        
+
         if (dropdownSelect !== null) {
-            if(dropdownSelect === "hide"){
-                 $('.progress-bar-display-container').hide();
-                 $('#none-dropdown').click();
-            }else{
+            if (dropdownSelect === "hide") {
+                $('.progress-bar-display-container').hide();
+                $('#none-dropdown').click();
+            } else {
                 $('#' + dropdownSelect).show();
                 $('#' + dropdownSelect).click();
             }
-        }else{
-                 $('.progress-bar-display-container').show();
-                 $('#tier-total-dropdown').click();
+        } else {
+            $('.progress-bar-display-container').show();
+            $('#tier-total-dropdown').click();
         }
 
 
@@ -213,11 +356,11 @@ $(document).ready(function () {
             $('#' + $("#dropdownMenuButton").attr('target-id')).click();
         });
 
-        function setNormalize(flag){
+        function setNormalize(flag) {
             normalizeRatings = flag;
             localStorage.setItem("NORMALIZE_PROGRESS", flag)
         }
-        function shouldNormalize(){
+        function shouldNormalize() {
             return normalizeRatings;
         }
 
@@ -264,24 +407,22 @@ $(document).ready(function () {
             let pointsRating = sigmoid(normalizedPoints, 1.0, steepPoints, pointsMid);
 
 
-            let pointsWeight = .1, placementWeight = .8, avgWeight = 1- (placementWeight + pointsWeight);
-            let finalRating = pointsWeight * pointsRating + placementWeight * placementRating + avgWeight * (playerInfo["points-average"]/1000);
-           //console.log("points " + pointsRating + " placement " + placementRating);
+            let pointsWeight = .1, placementWeight = .8, avgWeight = 1 - (placementWeight + pointsWeight);
+            let finalRating = pointsWeight * pointsRating + placementWeight * placementRating + avgWeight * (playerInfo["points-average"] / 1000);
             finalRating = (10 * Math.max(0, finalRating || 0));
 
-            let goldBonus = Math.min(playerInfo["world-records"], Math.min(1.25, Math.log(10+playerInfo["world-records"])/3 ));
-            let silverBonus = Math.min(playerInfo["silvers"]/20, Math.min(0.5, Math.log(10+playerInfo["silvers"])/8 ));
+            let goldBonus = Math.min(playerInfo["world-records"], Math.min(1.25, Math.log(10 + playerInfo["world-records"]) / 3));
+            let silverBonus = Math.min(playerInfo["silvers"] / 20, Math.min(0.5, Math.log(10 + playerInfo["silvers"]) / 8));
 
-            //console.log("final " + finalRating + " gold bonus " + goldBonus + " silverBonus " + silverBonus);
             finalRating = finalRating + (goldBonus + silverBonus);
 
 
-            finalRating*=3;
+            finalRating *= 3;
 
             let rankText = RANKING[Math.floor(finalRating)];
 
 
-            $("#rank-info-text").attr('title', '('+ finalRating.toFixed(2) +') Not an official ranking!')
+            $("#rank-info-text").attr('title', '(' + finalRating.toFixed(2) + ') Not an official ranking!')
 
             return rankText;// + " ("+finalRating.toFixed(1)+")";
         }
@@ -291,13 +432,13 @@ $(document).ready(function () {
         }
 
 
-        function showProgressTotal(progressBarID, playerInfoKey, playerInfoSubKey){
+        function showProgressTotal(progressBarID, playerInfoKey, playerInfoSubKey) {
             $('.progress-bar-display-container').show();
             localStorage.setItem("SHOW_PROGRESS_BARS", progressBarID);
             for (let i = 1; i <= 6; i++) {
                 let curVal = +playerInfo[playerInfoKey][i];
                 let curMax = playerInfo[playerInfoKey][playerInfo[playerInfoSubKey]];
-                setProgressBar(curVal, curMax,i);
+                setProgressBar(curVal, curMax, i);
             }
 
         }
@@ -323,7 +464,7 @@ $(document).ready(function () {
 
                 deathTierColorText(curPercentage, i, $curProgressBar);
                 setProgressWdith($("#progress-bar-" + i), curPercentage, avgPoints || 0);
-                    $('#progress-end-label-'+i).text(avgPoints.toFixed(1));
+                $('#progress-end-label-' + i).text(avgPoints.toFixed(1));
             }
         });
         $('#none-dropdown').click(function () {
@@ -331,25 +472,25 @@ $(document).ready(function () {
             $('.progress-bar-display-container').hide();
         });
 
-        function setProgressBar(val, max,tier){
+        function setProgressBar(val, max, tier) {
             let progressBar = $("#progress-bar-" + tier);
             let normalizeText = "";
-            if(shouldNormalize()){
+            if (shouldNormalize()) {
                 max = +playerInfo["runs-possible-by-tier"][tier];
             }
             let percentage = getPercentage(val, 0, max);
-            if(shouldNormalize()){
+            if (shouldNormalize()) {
                 normalizeText = "/" + max + " (" + percentage.toFixed(1) + "%)";
             }
 
             deathTierColorText(percentage, tier, progressBar);
-            setProgressWdith(progressBar, percentage, val+normalizeText);
+            setProgressWdith(progressBar, percentage, val + normalizeText);
             if (normalizeRatings) {
                 $('#progress-end-label-' + tier).css('text-align', 'right');
             } else {
                 $('#progress-end-label-' + tier).css('text-align', 'center');
             }
-            $('#progress-end-label-'+tier).text(val+normalizeText);
+            $('#progress-end-label-' + tier).text(val + normalizeText);
         }
 
         function deathTierColorText(percentage, tier, bar) {
@@ -367,7 +508,7 @@ $(document).ready(function () {
         }
         function getPercentage(value, min, max) {
             // OR with 0 in case of NaN
-            return(100 * value / max) || 0;
+            return (100 * value / max) || 0;
 
         }
 
@@ -412,6 +553,7 @@ $(document).ready(function () {
 
     function retrieveStats(steamID, teleports) {
 
+        dateArray = [[], [], [], [], [], [], []];
         playerInfo = getEmptyPlayer();
         //temp max limit based on ~440 maps, eventually should change to indexdb storage 
         //so you dont fetch every map all the time, and just fetch the latest runs
@@ -435,7 +577,7 @@ $(document).ready(function () {
         $.getJSON(requestURL, function (data) {
             if (data.length == 0) {
                 alert("No Times Found for " + steamID);
-            $("#steamButton").attr('value', 'Fetch Times');
+                $("#steamButton").attr('value', 'Fetch Times');
                 return true;
             }
             var maps = [];
@@ -459,6 +601,9 @@ $(document).ready(function () {
             window.history.pushState("object or string", "Title", "?steamid=" + steam_id + "&teleports=" +
                 teleports);;
 
+            let getday = x => Math.floor(x / (24 * 60 * 60 * 1000));
+            var oldestDate = getday(Date.now())
+            var newestDate = 0;
             $.each(data, function (i, field) {
 
                 var map = field["map_name"];
@@ -472,11 +617,15 @@ $(document).ready(function () {
                     date = "N/A",
                     server = "N/A";
 
-                time = getTimeFromSeconds(field["time"]);
 
                 teleports = field["teleports"];
                 points = field["points"];
-                date = field["updated_on"];
+                date = field["created_on"];
+
+                let mapday = getday(new Date(date));
+
+                time = getTimeFromSeconds(field["time"]);
+
                 if (typeof field["server_name"] === "string") {
                     server = field["server_name"].substring(0, 35);
                 }
@@ -484,6 +633,24 @@ $(document).ready(function () {
                     tptier = difficultyArray[field["map_name"]][0];
 
                     if (tptier !== 0) {
+                        var datapoint = { x: mapday, 'y': points };
+
+                        if (tptier == 3)
+                            hardArray.push(datapoint);
+                        if (tptier == 1)
+                            easyArray.push(datapoint);
+
+                        dateArray[tptier].push(datapoint);
+
+                        if (mapday < oldestDate) {
+                            oldestDate = mapday;
+                        }
+                        if (mapday > newestDate) {
+                            newestDate = mapday;
+                        }
+
+                        playerInfo["dates-by-tier"][tptier].push({ "date": date, "points": points });
+
                         if (+points === 1000) {
                             playerInfo["world-records"]++;
                             playerInfo["records-by-tier"][tptier]++;
@@ -531,6 +698,8 @@ $(document).ready(function () {
 
             }); //.each
 
+            playerInfo["oldest"] = oldestDate;
+            playerInfo["newest"] = newestDate;
 
             var cols = new Array(globalHeader.length);
             cols[globalHeader.indexOf("Map")] = { className: "htLeft" };
@@ -550,7 +719,6 @@ $(document).ready(function () {
                 if (maptier != 0 && finishedGlobals[map].length >= 4) {
                     playerInfo["runs-total"]++;
                     playerInfo["runs-by-tier"][maptier]++;
-
                 }
                 if (finishedGlobals[map].length < 4 && includeKZPro) {
                     unfinished = Array(globalHeader.length).fill("N/A");

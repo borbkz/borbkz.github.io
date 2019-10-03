@@ -4,6 +4,8 @@ layout: default
 ---
 <script type="text/javascript" src="/assets/js/allservers.js?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
 <script type="text/javascript" src="/assets/js/local.js?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"> </script>
+
 <div class="content-no-wrap">
 
 	<div class="accordion" id="accordion-times">
@@ -22,9 +24,10 @@ layout: default
 
 					<div class="player-info-text">
 
-						<div class="infoline"><span class="infolabel" id="player-info-label">Player: </span> <span
+						<div class="infoline"><span class="infolabel" id="player-info-label">Player:</span> <span
 								class="infotext" id="player-info-text"></span></div>
 
+						<div class="divider">Pro Runs</div>
 						<div class="infoline">
 							<span class="infolabel" id="wr-info-label">WRs:</span>
 							<span class="infotext" id="wr-info-text"></span>
@@ -42,20 +45,43 @@ layout: default
 							<span class="infotext" id="bronze-info-text"></span>
 						</div>
 
-						<div class="infoline"><span class="infolabel" id="run-info-label"> </span> <span
+						<div class="infoline"><span class="infolabel" id="run-info-label">Runs:</span> <span
 								class="infotext" id="run-info-text"></span></div>
 
-						<div class="infoline"><span class="infolabel" id="points-info-label">Points:</span> <span
+						<div class="infoline"><span class="infolabel" id="points-info-label">Pts:</span> <span
 								class="infotext" id="points-info-text"></span></div>
 
 						<div class="infoline">
-							<span class="infolabel" id="rank-info-label"><span class="tier-tooltip">Rank: </span>
+							<span class="infolabel" id="rank-info-label"><span class="tier-tooltip">Rank:</span>
 							</span>
 							<span class="infotext" id="rank-info-text" title="Not official"></span>
 						</div>
 					</div>
+
 					<div class="progress-graph-container">
 
+						<canvas class="progress-graph" id="my-chart"></canvas>
+						<div class="tier-selection">
+							<span>
+								<input type="radio" id="tier-1-radio" name="tier-radio" value="1" checked>Very Easy
+							</span>
+							<span>
+								<input type="radio" id="tier-2-radio" name="tier-radio" value="2">Easy
+							</span>
+							<span>
+								<input type="radio" id="tier-3-radio" name="tier-radio" value="3">Medium
+							</span>
+							<span>
+								<input type="radio" id="tier-4-radio" name="tier-radio" value="4">Hard
+							</span>
+							<span>
+								<input type="radio" id="tier-5-radio" name="tier-radio" value="5">Very
+								Hard
+							</span>
+							<span> <input type="radio" id="tier-6-radio" name="tier-radio" value="6">Death </span>
+
+
+						</div>
 					</div>
 				</div>
 
