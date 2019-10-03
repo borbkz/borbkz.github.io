@@ -51,8 +51,6 @@ var RANKING = {
 
 var myChart;
 
-var easyArray = [];
-var hardArray = [];
 
 var dateArray = [[], [], [], [], [], [], []];
 var playerInfo = getEmptyPlayer();
@@ -64,7 +62,9 @@ function createChart(tier) {
     let tiercolor = TIERKEY[tier][1];
 
     let data = dateArray[tier];
+
     let bestfit = linearLeastSquares(data);
+
     let xmin = bestfit[0]["x"];
     let xmax = bestfit[1]["x"];
     let linecolor = "black";
@@ -92,6 +92,7 @@ function createChart(tier) {
     const monthNames = ["","Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
+
     if (typeof myChart === 'undefined') {
         myChart = new Chart(ctx,
             {
@@ -105,7 +106,7 @@ function createChart(tier) {
                         borderColor: linecolor
                     }, {
                         label: "Best Fit (LLS)",
-                        data: linearLeastSquares(data),
+                        data: bestfit,
                         backgroundColor: 'black',
                         borderColor: linecolor,
                         borderWidth: 2,
@@ -160,7 +161,6 @@ function createChart(tier) {
 
                             label: function (tooltipItem, data) {
 
-                                $('#my-chart').css('cursor', 'pointer');
                                 let pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
                                 let vals = ["map", "time",  "tp", "date"];
@@ -772,11 +772,6 @@ $(document).ready(function () {
 
                     if (tptier !== 0) {
                         var datapoint = { x: mapday, y: points, 'map': map, 'time': time, 'tp': teleports, 'date': date };
-
-                        if (tptier == 3)
-                            hardArray.push(datapoint);
-                        if (tptier == 1)
-                            easyArray.push(datapoint);
 
                         dateArray[tptier].push(datapoint);
 

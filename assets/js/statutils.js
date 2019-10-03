@@ -76,7 +76,7 @@ function linearLeastSquares(data) {
 
     let f = x => slope * x + intercept;
 
-    return [{ x: xmin, y: f(xmin) }, { x: xmax, y: f(xmax) }];
+    return [{ "x": xmin, "y": f(xmin) }, { "x": xmax, "y": f(xmax) }];
 }
 
 
