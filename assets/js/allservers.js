@@ -57,33 +57,6 @@ var hardArray = [];
 var dateArray = [[], [], [], [], [], [], []];
 var playerInfo = getEmptyPlayer();
 
-function linearLeastSquares(data) {
-    let xsum = 0, ysum = 0, xx = 0, xy = 0;
-    let xmin = Infinity, xmax = -Infinity;
-    for (let i = 0; i < data.length; i++) {
-        let x = data[i]["x"];
-        let y = data[i]["y"];
-
-        if (x < xmin) {
-            xmin = x;
-        }
-        if (x > xmax) {
-            xmax = x;
-        }
-        xsum += x;
-        ysum += y;
-        xx += (x * x);
-        xy += (x * y);
-    }
-    let N = data.length;
-    let slope = (N * xy - (xsum * ysum));
-    slope /= ((N * xx) - (xsum * xsum));
-    let intercept = (ysum - slope * xsum) / N;
-
-    let f = x => slope * x + intercept;
-
-    return [{ x: xmin, y: f(xmin) }, { x: xmax, y: f(xmax) }];
-}
 function createChart(tier) {
 
     let ctx = document.getElementById('my-chart').getContext('2d');
@@ -168,29 +141,51 @@ function createChart(tier) {
                     legend: {
                         display: false,
                     },
+
+                    events: ['mousemove'], 
+                    onHover: (event, chartElement) => {
+                        event.target.style.cursor = chartElement[0] ? 'default' : 'grab';
+                    },
+
                     responsive: false,
                     tooltips: {
                         displayColors: false,
                         enabled: true,
                         mode: 'label',
+                        filter: function (tooltipItem) {
+                            return tooltipItem.datasetIndex === 0;
+                        },
+
                         callbacks: {
 
                             label: function (tooltipItem, data) {
 
+                                $('#my-chart').css('cursor', 'pointer');
                                 let pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
+                                let vals = ["map", "time",  "tp", "date"];
+                                for(let i = 0; i < vals.length; i++){
+                                    if(!(vals[i] in pointData)){
+                                        return "";
+                                    }
+                                }
                                 let labelStrings = [];
-                                let timestamp = pointData["x"];
                                 let points = pointData["y"];
                                 let tps = pointData["tp"];
                                 let originaldate = pointData["date"];
-                                originaldate = originaldate.substring(0, originaldate.indexOf("T"));
+                                let map = pointData["map"];
+                                let time = pointData["time"];
+                                try{
+                                    originaldate = originaldate.substring(0, originaldate.indexOf("T"));
+                                }catch(e){
+                                    console.log(e);
 
+                                }
                                 //let simpleDate = new Date(timestamp * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
-                                labelStrings.push(pointData["map"]);
-                                labelStrings.push(points + " Pts, " + tps + " TPs");
-                                labelStrings.push(pointData["time"]);
-                                labelStrings.push(originaldate);
+                                    labelStrings.push(map);
+                                    labelStrings.push(points + " Pts, " + tps + " TPs");
+                                    labelStrings.push(time);
+                                    labelStrings.push(originaldate);
 
                                 return labelStrings;
                             }
@@ -220,7 +215,6 @@ function createChart(tier) {
                                 fontSize: 16,
                                 fotStyle: 'bold'
                             }
-
 
                         }],
                         xAxes: [{
@@ -901,7 +895,7 @@ $(document).ready(function () {
 
             $("#global-tooltip").show();
             globalTable = genTable(spreadsheetContainer, maps, globalHeader, [globalHeader.indexOf("Map"), globalHeader.indexOf("Time"),
-            globalHeader.indexOf("Server"), globalHeader.indexOf("Tier"), globalHeader.indexOf("Pro Tier"), globalHeader.indexOf("Length")], cols, { column: globalHeader.indexOf("Pts"), sortOrder: "desc" });
+            globalHeader.indexOf("Server"), globalHeader.indexOf("Tier"), globalHeader.indexOf("Pro Tier"), globalHeader.indexOf("Length"), globalHeader.indexOf("Date")], cols, { column: globalHeader.indexOf("Pts"), sortOrder: "desc" });
 
             globalTable.updateSettings({
                 hiddenColumns: {
