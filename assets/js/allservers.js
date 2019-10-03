@@ -96,9 +96,6 @@ function createChart(tier) {
     let xmax = bestfit[1]["x"];
     let linecolor = "black";
 
-    if (tiercolor === linecolor) {
-        linecolor = "red";
-    }
 
     if (typeof myChart === 'undefined') {
         myChart = new Chart(ctx,
