@@ -102,7 +102,6 @@ function createChart(tier) {
     let months = Math.floor((xmax - xmin) / (30));
     let remainingDays = (xmax - xmin) - 30 * months;
 
-    console.log((xmax - xmin) + " days = " + months + " months, remaining days: " + remainingDays);
 
     let duration = months + " Months, " + remainingDays + " Days";
     if (months < 1) {
@@ -117,6 +116,9 @@ function createChart(tier) {
 
     let title = () => `${tiertext} Tier: ${Math.abs(percentageIncrease.toFixed(1))}% ${improvementText} Over The Last ${duration}`;
 
+    const monthNames = ["","Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
     if (typeof myChart === 'undefined') {
         myChart = new Chart(ctx,
             {
@@ -180,12 +182,14 @@ function createChart(tier) {
                                 let timestamp = pointData["x"];
                                 let points = pointData["y"];
                                 let tps = pointData["tp"];
+                                let originaldate = pointData["date"];
+                                originaldate = originaldate.substring(0, originaldate.indexOf("T"));
 
-                                let simpleDate = new Date(timestamp * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
+                                //let simpleDate = new Date(timestamp * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
                                 labelStrings.push(pointData["map"]);
                                 labelStrings.push(points + " Pts, " + tps + " TPs");
                                 labelStrings.push(pointData["time"]);
-                                labelStrings.push(simpleDate);
+                                labelStrings.push(originaldate);
 
                                 return labelStrings;
                             }
@@ -223,9 +227,14 @@ function createChart(tier) {
                             position: 'bottom',
                             ticks: {
                                 maxRotation: 0,
-                                maxTicksLimit: 10,
+                                maxTicksLimit: 12,
                                 callback: function (value, index, values) {
-                                    return new Date(value * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
+
+                                    let mydate = new Date(value * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).split('-');
+
+                                    let month = monthNames[parseInt(mydate[1],10)];
+
+                                    return month + " " + mydate[0]; 
                                 }
                             }
                         }]
@@ -765,7 +774,7 @@ $(document).ready(function () {
                     tptier = difficultyArray[field["map_name"]][0];
 
                     if (tptier !== 0) {
-                        var datapoint = { x: mapday, y: points, 'map': map, 'time': time, 'tp': teleports };
+                        var datapoint = { x: mapday, y: points, 'map': map, 'time': time, 'tp': teleports, 'date': date };
 
                         if (tptier == 3)
                             hardArray.push(datapoint);
