@@ -111,7 +111,7 @@ function createChart(tier) {
 
     let improvementText = (percentageIncrease > 0.0 ? "Improvement" : "Deterioration")
 
-    let title = () => `${Math.abs(percentageIncrease.toFixed(1))}% Pts ${improvementText} Over The Last ${duration}`;
+    let title = () => `${tiertext} Tier: ${Math.abs(percentageIncrease.toFixed(1))}% Pts ${improvementText} Over The Last ${duration}`;
 
     if (typeof myChart === 'undefined') {
         myChart = new Chart(ctx,
@@ -151,7 +151,7 @@ function createChart(tier) {
 
                     },
                     legend: {
-                        display: true,
+                        display: false,
                     },
                     responsive: false,
                     tooltips: {
