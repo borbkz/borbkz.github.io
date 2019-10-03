@@ -421,11 +421,8 @@ $(document).ready(function () {
 
             let rankText = RANKING[Math.floor(finalRating)];
 
-            let tip = "";
             let completionRate = playerInfo["runs-total"]/playerInfo["runs-possible"];
-            if(completionRate>.99){
-                tip = "Achievement Unlocked: Completionist"
-            }
+
 
             let runtype = playerInfo["run-type"];
             let protip = "";
@@ -452,15 +449,18 @@ $(document).ready(function () {
 
                 }
 
-            }else{}
-            if (protip !== "") {
-                $("#run-info-label>span").addClass('tier-tooltip');
-            }else{
-                $("#run-info-label>span").removeClass('tier-tooltip');
+            }else if (completionRate > .99) {
+                    protip = "Achievement Unlocked: Completionist";
 
             }
-            $("#run-info-label").attr('title', protip);
-            $("#rank-info-text").attr('title', '(' + finalRating.toFixed(2) + ') ' + tip);
+            if (protip !== "") {
+                $("#run-info-label>span").addClass('tier-tooltip');
+                $("#run-info-label").attr('title', protip);
+            }else{
+                $("#run-info-label>span").removeClass('tier-tooltip');
+                $("#run-info-label").attr('title', "");
+            }
+            $("#rank-info-text").attr('title', finalRating.toFixed(2));
 
             return rankText;// + " ("+finalRating.toFixed(1)+")";
         }
