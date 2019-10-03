@@ -97,7 +97,7 @@ function createChart(tier) {
     let linecolor = "black";
 
     let titleMargin = 0;
-    let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"]) / (xmax - xmin);
+    let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"]) / 1000; 
 
     let months = Math.floor((xmax - xmin) / (30));
     let remainingDays = (xmax - xmin) - 30 * months;
