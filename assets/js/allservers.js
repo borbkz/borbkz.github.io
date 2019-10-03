@@ -241,24 +241,29 @@ function createChart(tier) {
         );
     }
     else {
-        myChart.data = {
-            datasets: [{
-                data: data,
-                backgroundColor: tiercolor,
-                label: tiertext,
-                borderColor: linecolor
-            }, {
-                label: "Best Fit (LLS)",
-                data: bestfit,
-                backgroundColor: 'black',
-                borderColor: linecolor,
-                borderWidth: 2,
-                fill: false,
-                tension: 0,
-                showLine: true,
-                radius: 0,
-            }],
-        }
+        myChart.data.datasets[0].data = data;
+        myChart.data.datasets[0].backgroundColor = tiercolor;
+        myChart.data.datasets[0].label = tiertext;
+        myChart.data.datasets[1].data = bestfit;
+
+        //myChart.data = {
+            //datasets: [{
+                //data: data,
+                //backgroundColor: tiercolor,
+                //label: tiertext,
+                //borderColor: linecolor
+            //}, {
+                //label: "Best Fit (LLS)",
+                //data: bestfit,
+                //backgroundColor: 'black',
+                //borderColor: linecolor,
+                //borderWidth: 2,
+                //fill: false,
+                //tension: 0,
+                //showLine: true,
+                //radius: 0,
+            //}],
+        //}
         myChart.options.title.text = title();
         myChart.update();
         myChart.resetZoom();
