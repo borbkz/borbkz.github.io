@@ -55,7 +55,13 @@ layout: default
 		color: white;
 	}
 
+	.left-align{
+	}
+	.right-align{
+
+	}
 	.graph-label {
+		width: 320px;
 		font-weight: bold;
 		font-size: 1em;
 	}
@@ -171,19 +177,19 @@ Does not take skips into account. Contains 6 categories instead of 5
 
 		<div class="graph-label-container">
 			<div class="graph-label-pro-container">
-				<div class="graph-label" id="top-20-pro-average">Top 20 Pro Avg: <span></span></div>
+				<div class="graph-label left-align" id="top-20-pro-average">Top 20 Pro Avg: <span></span></div>
 				<div class="graph-label" id="top-100-pro-average">Top 100 Pro Avg: <span></span></div>
 				<div class="graph-label" id="top-20-pro-sd" title="{% include statistics %}">Top 20 Pro SD:
 					<span></span></div>
-				<div class="graph-label" id="top-100-pro-sd" title="{% include statistics %}">Top 100 Pro SD:
+				<div class="graph-label right-align" id="top-100-pro-sd" title="{% include statistics %}">Top 100 Pro SD:
 					<span></span></div>
 			</div>
 			<div class="graph-label-tp-container">
-				<div class="graph-label" id="top-20-tp-average">Top 20 TP Avg: <span></span></div>
+				<div class="graph-label left-align" id="top-20-tp-average">Top 20 TP Avg: <span></span></div>
 				<div class="graph-label" id="top-100-tp-average">Top 100 TP Avg: <span></span></div>
 				<div class="graph-label" id="top-20-tp-sd" title="{% include statistics %}">Top 20 TP SD: <span></span>
 				</div>
-				<div class="graph-label" id="top-100-tp-sd" title="{% include statistics %}">Top 100 TP SD:
+				<div class="graph-label right-align" id="top-100-tp-sd" title="{% include statistics %}">Top 100 TP SD:
 					<span></span></div>
 			</div>
 		</div>
