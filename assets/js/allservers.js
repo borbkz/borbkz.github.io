@@ -108,10 +108,14 @@ function createChart(tier) {
     if (months < 1) {
         duration = remainingDays + " Days";
     }
+    if( remainingDays < 1){
+        duration = months + " Months";
+    }
+
 
     let improvementText = (percentageIncrease > 0.0 ? "Improvement" : "Deterioration")
 
-    let title = () => `${tiertext} Tier: ${Math.abs(percentageIncrease.toFixed(1))}% Pts ${improvementText} Over The Last ${duration}`;
+    let title = () => `${tiertext} Tier: ${Math.abs(percentageIncrease.toFixed(1))}% ${improvementText} Over The Last ${duration}`;
 
     if (typeof myChart === 'undefined') {
         myChart = new Chart(ctx,
@@ -194,14 +198,22 @@ function createChart(tier) {
                         yAxes: [{
                             ticks: {
 
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Points',
+                                fontSize: 16,
+                                fotStyle: 'bold'
                             }
+
+
                         }],
                         xAxes: [{
                             type: 'linear',
                             position: 'bottom',
                             ticks: {
                                 maxRotation: 0,
-                                maxTicksLimit: 7,
+                                maxTicksLimit: 10,
                                 callback: function (value, index, values) {
                                     return new Date(value * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).replace(/-/g, '/');
                                 }
