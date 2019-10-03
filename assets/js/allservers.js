@@ -241,7 +241,7 @@ $(document).ready(function () {
 
         $("#player-info").show();
 
-        $("#player-info-text").text(playerInfo["player-name"]);
+        $("#player-info-text").text(playerInfo["player-name"].substring(0,20));
 
         var goldmedal = "", silvermedal = "", bronzemedal = "";
 
