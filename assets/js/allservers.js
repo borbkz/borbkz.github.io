@@ -368,7 +368,9 @@ $(document).ready(function () {
 
 
         if (playerInfo["run-type"] === "pro") {
+            $('#runtype-divider').text("Pro Runs");
         } else if (playerInfo["run-type"] === "tp") {
+            $('#runtype-divider').text("TP Runs");
         }
 
         $(".progress-group-container").empty();
