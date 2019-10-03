@@ -97,6 +97,8 @@ function createChart(tier) {
     let linecolor = "black";
 
     let titleMargin = 0;
+    let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"])/(xmax-xmin);
+    let title=() => tiertext + " Tier Point Progression Over Time (" + (percentageIncrease>0.0?"+":"")+percentageIncrease.toFixed(2) + " %)";
 
     if (typeof myChart === 'undefined') {
         myChart = new Chart(ctx,
@@ -128,7 +130,7 @@ function createChart(tier) {
                 options: {
                     title: {
                         display: true,
-                        text: tiertext + " Tier Point Progression Over Time",
+                        text: title(),
                         fontStyle: "bold",
                         fontSize: "16",
 
@@ -179,7 +181,7 @@ function createChart(tier) {
                 showLine: true
             }]
         }
-        myChart.options.title.text = tiertext + " Tier Point Progression Over Time";
+        myChart.options.title.text = title(); 
         myChart.update();
     }
 
