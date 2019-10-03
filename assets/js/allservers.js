@@ -98,7 +98,20 @@ function createChart(tier) {
 
     let titleMargin = 0;
     let percentageIncrease = 100 * (bestfit[1]["y"] - bestfit[0]["y"]) / (xmax - xmin);
-    let title = () => tiertext + " Tier Point Progression Over Time (" + (percentageIncrease > 0.0 ? "+" : "") + percentageIncrease.toFixed(2) + " %)";
+
+    let months = Math.floor((xmax-xmin)/(30));
+    let remainingDays = (xmax-xmin) - 30 * months;
+
+    console.log((xmax-xmin) + " days = "  + months + " months, remaining days: " + remainingDays);
+
+    let duration = months + " Months, " + remainingDays + " Days";
+    if(months < 1){
+        duration = remainingDays + " Days";
+    }
+
+    let improvementText = (percentageIncrease>0.0?"Improvement":"Deterioration")
+
+    let title = () => `${Math.abs(percentageIncrease.toFixed(1))}% Pts ${improvementText} Over The Last ${duration}`;
 
     if (typeof myChart === 'undefined') {
         myChart = new Chart(ctx,
@@ -106,13 +119,15 @@ function createChart(tier) {
                 type: 'scatter',
                 data: {
                     datasets: [{
+                        label: tiertext,
                         data: data,
                         backgroundColor: tiercolor,
                         label: tiertext,
                         borderColor: linecolor
                     }, {
+                        label: "Best Fit (LLS)",
                         data: linearLeastSquares(data),
-                        backgroundColor: 'white',
+                        backgroundColor: 'black',
                         borderColor: linecolor,
                         borderWidth: 2,
                         fill: false,
@@ -136,7 +151,7 @@ function createChart(tier) {
 
                     },
                     legend: {
-                        display: false
+                        display: true,
                     },
                     responsive: false,
                     tooltips: {
@@ -194,8 +209,9 @@ function createChart(tier) {
                 label: tiertext,
                 borderColor: linecolor
             }, {
+                label: "Best Fit (LLS)",
                 data: linearLeastSquares(data),
-                backgroundColor: 'white',
+                backgroundColor: 'black',
                 borderColor: linecolor,
                 borderWidth: 2,
                 fill: false,
