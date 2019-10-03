@@ -170,6 +170,7 @@ function createChart(tier) {
                     },
                     responsive: false,
                     tooltips: {
+                        displayColors: false,
                         enabled: true,
                         mode: 'label',
                         callbacks: {
