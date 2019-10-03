@@ -421,8 +421,43 @@ $(document).ready(function () {
 
             let rankText = RANKING[Math.floor(finalRating)];
 
+            let tip = "";
+            let completionRate = playerInfo["runs-total"]/playerInfo["runs-possible"];
+            if(completionRate>.99){
+                tip = "Achievement Unlocked: Completionist"
+            }
 
-            $("#rank-info-text").attr('title', '(' + finalRating.toFixed(2) + ') Not an official ranking!')
+            let runtype = playerInfo["run-type"];
+            let protip = "";
+            if(runtype === "pro"){
+                if( completionRate> .99){
+                    protip = "Go out and PRO-create!";
+                }else if(completionRate > .95){
+                    protip = "PRO-bably cheating";
+                }else if (completionRate > .90){
+                    protip = "PRO-tector of the realms";
+                }else if (completionRate > .85){
+                    protip = "One True PRO-phet"
+                } else if (completionRate > .80) {
+                    protip = "The PRO-fessor";
+                } else if (completionRate > .75) {
+                    protip = "A Pro's Pro";
+                } else if (completionRate > .70) {
+                    protip = "PRO-digy";
+                } else if (completionRate > .65) {
+                    protip = "PRO-ficient prorunner";
+                } else if (completionRate > .60) {
+                    protip = "Pro-lific prorunner";
+                } else {
+
+                }
+
+            }
+            if (protip !== "") {
+                $("#run-info-label>span").addClass('tier-tooltip');
+            }
+            $("#run-info-label").attr('title', protip);
+            $("#rank-info-text").attr('title', '(' + finalRating.toFixed(2) + ') ' + tip);
 
             return rankText;// + " ("+finalRating.toFixed(1)+")";
         }
