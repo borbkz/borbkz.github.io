@@ -194,13 +194,14 @@ function createChart(tier) {
                     },
                     pan: {
                         enabled: true,
-                        mode: 'x',
+                        mode: 'xy',
                         speed: .1,
                         threshold: .1
                     },
                     zoom: {
                         enabled: true,
-                        mode: 'x',
+                        drag: false,
+                        mode: 'xy',
                         speed: .1
                     },
                     scales: {
