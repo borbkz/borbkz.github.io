@@ -400,7 +400,7 @@ function createMapDistribution(map, c, d, loc, scale, mytime) {
             data: {
                 labels: times,
                 datasets: [{
-                    label: 'Probability That Time is Optimal',
+                    label: 'Percentile',
                     data: datas,
                     borderColor: 'rgba(153,204,255,1)',
                     backgroundColor: 'rgba(153, 204, 255, .3)',
