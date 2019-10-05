@@ -290,7 +290,13 @@ var radioTier = -1;
 
 
 function createMap(mapName, mapTime) {
-    $('#distribution-btn').change();
+
+    if(!$('#distribution-btn').parent().hasClass('active')){
+
+    $('#distribution-btn').click();
+    }
+
+    //go to top of map
     $('#map-info-link').attr('href', 'maps.html?map=' + mapName);
     window.scrollTo(0,0);
     let has_teleports = $('input[name=isprorun-radio]:checked').val() !== "proradio";
@@ -310,7 +316,7 @@ function createMap(mapName, mapTime) {
             }
 
             let map = data[0];
-            createMapDistribution(mapName, map['c'], map['d'], map['loc'], map['scale']);
+            createMapDistribution(mapName, map['c'], map['d'], map['loc'], map['scale'], mapTime);
         });
     });
 }
@@ -325,9 +331,10 @@ function createDefaultDistribution() {
 }
 
 var distributionChart;
-function createMapDistribution(map, c, d, loc, scale) {
+function createMapDistribution(map, c, d, loc, scale, mytime) {
 
-
+    $('#map-info-link').attr('href','/maps.html?map='+map);
+    $('#map-info-link').text(map + " (Click here for more details)");
 
     let times = [], datas = [];
 
@@ -352,14 +359,33 @@ function createMapDistribution(map, c, d, loc, scale) {
         }
 
         times.push(index);
-        datas.push(Math.min(1.0, .0005 + y));
+        datas.push(Math.min(1.0, .0005 + y));//fudge
 
         index += step;
     }
 
+    let myTimeRadius = 0;
+    let myTimeFill = false;
+    let myTimeBackgroundColor = 'rgba(0,0,0,0)';
+    let myTimeBorderColor = 'rgba(255,0,0,0)';
+    let myTimeX = -1, myTimeY = -1;
+
+    if(typeof mytime !== 'undefined'){
+        let mytimesplit = mytime.split(":");
+
+        if(mytimesplit.length == 3){
+            myTimeX = Math.floor((+mytimesplit[0] * 3600 + +mytimesplit[1] * 60 + +mytimesplit[2])||0);
+        }
+
+        myTimeRadius = 7;
+        myTimeFill = true;
+        myTimeBackgroundColor = 'rgba(255,0,102,.6)';
+        myTimeBorderColor = 'rgba(255,0,102,1)';
+        myTimeY = survival(myTimeX, c,d,loc,scale)
+    }
+
 
     let ctx = $('#distribution-chart')[0];
-
 
         let chartConfig = {
             type: 'line',
@@ -367,12 +393,21 @@ function createMapDistribution(map, c, d, loc, scale) {
                 labels: times,
                 datasets: [{
                     data: datas,
-                    borderColor: 'blue',
-                    backgroundColor: 'rgba(0, 0, 0, 0)',
-                    fill: false,
+                    borderColor: 'rgba(153,204,255,1)',
+                    backgroundColor: 'rgba(153, 204, 255, .3)',
+                    borderWidth: 3,
+                    fill: true,
                     radius: 0,
 
-                }]
+                },{
+                    data: [{x:myTimeX, y:myTimeY}],
+                    borderColor: myTimeBorderColor, 
+                    backgroundColor: myTimeBackgroundColor,
+                    fill: myTimeFill,
+                    radius: myTimeRadius,
+                }
+            
+            ]
             },
             options: {
                 responsive: true,
@@ -440,6 +475,7 @@ function createMapDistribution(map, c, d, loc, scale) {
         distributionChart = new Chart(ctx,chartConfig);
         
     } else {
+
         distributionChart.destroy();
         distributionChart = new Chart(ctx,chartConfig);
     }
@@ -655,8 +691,7 @@ $(document).ready(function () {
 
 
     function defaultMenuButton() {
-        $('.type-selection-btn:first').change();
-        $('.type-selection-btn:first').parent().addClass('active');
+        $('.type-selection-btn:first').click();
         //$('.player-info-upper').hide();
         //$('#completion-btn').change();
     }
@@ -691,8 +726,13 @@ $(document).ready(function () {
         var runPercentage = (100 * playerInfo["runs-total"] / playerInfo["runs-possible"] || 0).toFixed(1);
 
         $("#player-info").show();
-
-        $("#player-info-text").text(playerInfo["player-name"].substring(0, 20));
+        let shortname = playerInfo["player-name"].substring(0,20);
+        let playerTitle = "Your Times Across All Servers";
+        if(shortname !== "N/A"){
+            playerTitle = shortname + "'s Times Across All Servers";
+        }
+        $("#player-info-text").text(shortname);
+        $('#allservers-title').text(playerTitle);
 
         var goldmedal = "", silvermedal = "", bronzemedal = "";
 
@@ -1064,7 +1104,7 @@ $(document).ready(function () {
                 $("#steamButton").attr('value', 'Fetch Times');
                 return true;
             }
-            var maps = [];
+            window.maps = [];
 
 
             //remember logic is flipped, has teleports = true means TP
@@ -1232,20 +1272,33 @@ $(document).ready(function () {
                 }
 
             }
-            if (globalTable)
+            if (globalTable){
+
                 globalTable.destroy();
+            }
 
             $("#steamButton").attr('value', 'Fetch Times');
 
             $("#global-tooltip").show();
 
 
+
             cols[0] = {
                 className: "htLeft",
                 readOnly: true,
                 renderer: function (instance, td, row, col, prop, value, cellProperties) {
+                    let timeInSec = -1;
+                    let myRow = maps.filter(function(m){
+                        return m[0] === value;
+                    });
+                    if(myRow.length != 0 ){
+                        if(myRow[0][globalHeader.indexOf("Time")] !== "N/A"){
+                            timeInSec = myRow[0][globalHeader.indexOf("Time")];
+                        }
+                    }
+
                     Handsontable.renderers.TextRenderer.apply(this, arguments);
-                    td.innerHTML = `<span class="map-link" style="color: black !important" onclick="createMap('${value}')"><a>` + value + '</a></span>';
+                    td.innerHTML = `<span class="map-link" style="color: black !important" onclick="createMap('${value}','${timeInSec}')">` + value + '</span>';
                     return td;
                 }
             };

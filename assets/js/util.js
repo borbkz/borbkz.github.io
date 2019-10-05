@@ -244,7 +244,7 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort, 
 	}
 
 	if (linkToMapPage) {
-
+console.log("NO")
 		myColumns[0] = {
 			className: "htLeft",
 			readOnly: true,
