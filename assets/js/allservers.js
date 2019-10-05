@@ -122,6 +122,13 @@ function createProgressionChart(tier) {
                     }
                 }],
                 options: {
+                    elements:{
+
+                        line:{
+                            cubicInterpolationMode: 'monotone',
+
+                        }
+                    },
                     layout: {
                         padding: {
                             left: 0,
@@ -332,7 +339,7 @@ function createMapDistribution(map, c, d, loc, scale) {
     let title = () => 'Burr XII survival function for ' + map +
         ` (c: ${c.toFixed(precision)}, d: ${d.toFixed(precision)}, loc: ${loc.toFixed(precision)}, scale: ${scale.toFixed(precision)})`;
     //increment by seconds until 1 minute
-    let threshold = .995;
+    let threshold = .999;
     while (index < MAXHOURS * 60 * 60) {
         let y = survival(index, c, d, loc, scale);
 
@@ -528,7 +535,7 @@ function createPowerChart() {
 
     let data = [];
     for (let i = 0; i < labels.length; i++) {
-        data.push(Math.max(200, Math.random() * 1000));
+        data.push(Math.max(20, Math.random() * 100));
     }
 
     let ctx = $('#power-chart')[0];
@@ -568,8 +575,8 @@ function createPowerChart() {
                 ticks: {
                     beginAtZero: true,
                     min: 0,
-                    max: 1000,
-                    stepSize: 200,
+                    max: 100,
+                    stepSize: 20,
                 },
                 gridLines: {
                     color: 'white',
@@ -584,7 +591,7 @@ function createPowerChart() {
             },
             title: {
                 display: true,
-                text: 'Points Average By Category (work in progress, currently random)',
+                text: 'Skill Level by Category (work in progress, currently random)',
                 fontColor: 'white',
                 fontSize: 20,
             }
