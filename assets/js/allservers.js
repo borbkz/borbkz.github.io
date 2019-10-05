@@ -479,7 +479,7 @@ function createServerChart() {
         let chartConfig = {
         type: 'pie',
         data: {
-            labels: serverNames.map(x => x.substring(0, 15) + '...'),
+            labels: serverNames.map(x => x.substring(0, 15).trim()+ '...'),
             datasets: [{
                 label: serverNames,
                 backgroundColor: backgroundColors,
