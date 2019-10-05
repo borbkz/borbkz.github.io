@@ -93,9 +93,7 @@ function createProgressionChart(tier) {
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
 
-    if (typeof myChart === 'undefined') {
-        myChart = new Chart(ctx,
-            {
+    let chartConfig = {
                 type: 'scatter',
                 data: {
                     datasets: [{
@@ -233,19 +231,14 @@ function createProgressionChart(tier) {
                         }]
                     }
                 }
-            }
+            }//end config
 
-        );
-    }
-    else {
-        myChart.data.datasets[0].data = data;
-        myChart.data.datasets[0].backgroundColor = tiercolor;
-        myChart.data.datasets[0].label = tiertext;
-        myChart.data.datasets[1].data = bestfit;
+    if (typeof myChart === 'undefined') {
+        myChart = new Chart(ctx,chartConfig);
 
-        myChart.options.title.text = title();
-        myChart.update();
-        myChart.resetZoom();
+    }else{
+        myChart.destroy();
+        myChart = new Chart(ctx,chartConfig);
     }
 
 }
@@ -297,14 +290,16 @@ function createMap(mapName, mapTime) {
 
     $.getJSON(MAP_ID_URL + mapName, function (data) {
 
-        if (typeof data === 'undefined') {
-            window.location.href = '/404';
+        if (typeof data === 'undefined' || data.length ===  0) {
+                alert("Not enough times have been registered!")
+                return true;
         }
         let mapid = data[0]['id'];
 
         $.getJSON(MAP_NAME_URL + '&has_teleports=' + has_teleports + '&map_ids=' + mapid, function (data) {
-            if (typeof data === 'undefined') {
-                window.location.href = '/404';
+            if (typeof data === 'undefined' || data.length === 0) {
+                alert("Not enough times have been registered!")
+                return true;
             }
 
             let map = data[0];
@@ -356,10 +351,10 @@ function createMapDistribution(map, c, d, loc, scale) {
     }
 
 
-    if (typeof distributionChart === 'undefined') {
+    let ctx = $('#distribution-chart')[0];
 
 
-        distributionChart = new Chart($('#distribution-chart')[0], {
+        let chartConfig = {
             type: 'line',
             data: {
                 labels: times,
@@ -430,22 +425,21 @@ function createMapDistribution(map, c, d, loc, scale) {
                     }]
                 }
             }
-        });
+    } 
+    
+    if (typeof distributionChart === 'undefined') {
+        distributionChart = new Chart(ctx,chartConfig);
+        
     } else {
-        console.log("update")
-        distributionChart.data.datasets[0].data = datas;
-        distributionChart.data.labels = times;
-        distributionChart.options.title.text = title();
-        distributionChart.options.scales.xAxes[0].ticks.min = xMin;
-        //distributionChart.resetZoom();
-
-        distributionChart.update();
+        distributionChart.destroy();
+        distributionChart = new Chart(ctx,chartConfig);
     }
 
 
 }
 
 
+let serverChart;
 function createServerChart() {
 
 
@@ -471,7 +465,9 @@ function createServerChart() {
         data.push(otherCompletionsTotal);
     }
     let ctx = $('#server-chart')[0];
-    let serverChart = new Chart(ctx, {
+
+
+        let chartConfig = {
         type: 'pie',
         data: {
             labels: serverNames.map(x => x.substring(0, 15) + '...'),
@@ -513,9 +509,18 @@ function createServerChart() {
                 text: 'Percentage of Total Completions by Server (' + serverTotalCompletions + " Maps Total)",
             }
         }
-    });
+    }
+
+
+    if (typeof serverChart === 'undefined') {
+        serverChart = new Chart(ctx,chartConfig);
+    } else {
+        serverChart.destroy();
+        serverChart = new Chart(ctx,chartConfig);
+    }
 
 }
+let powerChart;
 function createPowerChart() {
     let labels = ["Ladder", "Surf", "Bhop", "Tech", "Combo"];
 
@@ -523,7 +528,11 @@ function createPowerChart() {
     for (let i = 0; i < labels.length; i++) {
         data.push(Math.max(200, Math.random() * 1000));
     }
-    new Chart(document.getElementById("power-chart"), {
+
+    let ctx = $('#power-chart')[0];
+
+
+        let chartConfig = {
         type: 'radar',
         data: {
             labels: labels,
@@ -578,7 +587,15 @@ function createPowerChart() {
                 fontSize: 20,
             }
         }
-    });
+    }
+
+
+    if (typeof powerChart === 'undefined') {
+        powerChart = new Chart(ctx, chartConfig);
+    } else {
+        powerChart.destroy();
+        powerChart = new Chart(ctx, chartConfig);
+    }
 }
 
 $(document).ajaxStop(function () {

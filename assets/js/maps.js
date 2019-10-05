@@ -214,7 +214,7 @@ function createChart(prodata, tpdata, step, type) {
     title = 'Teleport Frequency Progression for Top 100';
 
     }
-    myChart = new Chart(ctx, {
+    let chartConfig = {
         type: graphType,
         
         data: {
@@ -276,7 +276,16 @@ function createChart(prodata, tpdata, step, type) {
                 }]
             }
         }
-    });
+    }
+
+    if(typeof myChart === 'undefined'){
+        myChart = new Chart(ctx,chartConfig);
+    }else{
+        myChart.destroy();
+        myChart = new Chart(ctx,chartConfig);
+
+    }
+
 
 }
 
