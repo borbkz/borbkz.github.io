@@ -244,8 +244,16 @@ function createProgressionChart(tier) {
         myChart = new Chart(ctx,chartConfig);
 
     }else{
-        myChart.destroy();
-        myChart = new Chart(ctx,chartConfig);
+        //myChart.destroy();
+        myChart.data.datasets[0].data = data;
+        myChart.data.datasets[0].backgroundColor = tiercolor;
+        myChart.data.datasets[0].label = tiertext;
+        myChart.data.datasets[1].data = bestfit;
+
+        myChart.options.title.text = title();
+        myChart.update();
+        myChart.resetZoom();
+
     }
 
 }
