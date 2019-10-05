@@ -292,6 +292,7 @@ var radioTier = -1;
 function createMap(mapName, mapTime) {
     $('#distribution-btn').change();
     $('#map-info-link').attr('href', 'maps.html?map=' + mapName);
+    window.scrollTo(0,0);
     let has_teleports = $('input[name=isprorun-radio]:checked').val() !== "proradio";
 
     $.getJSON(MAP_ID_URL + mapName, function (data) {
@@ -333,7 +334,7 @@ function createMapDistribution(map, c, d, loc, scale) {
     let index = 0;
     let step = 1;
     let precision = 5;
-    let title = () => 'Player Distributions for  ' + map +
+    let title = () => 'Burr XII survival function for ' + map +
         ` (c: ${c.toFixed(precision)}, d: ${d.toFixed(precision)}, loc: ${loc.toFixed(precision)}, scale: ${scale.toFixed(precision)})`;
     //increment by seconds until 1 minute
     let threshold = .995;
@@ -424,8 +425,7 @@ function createMapDistribution(map, c, d, loc, scale) {
                             }
                         },
                         scaleLabel: {
-                            display: true,
-                            labelString: 'Top Percentile'
+                            display: false,
                         },
                     }]
                 }
@@ -1218,7 +1218,7 @@ $(document).ready(function () {
                 readOnly: true,
                 renderer: function (instance, td, row, col, prop, value, cellProperties) {
                     Handsontable.renderers.TextRenderer.apply(this, arguments);
-                    td.innerHTML = `<span class="map-link" style="color: black !important" onclick="createMap('${value}')"><a href="#">` + value + '</a></span>';
+                    td.innerHTML = `<span class="map-link" style="color: black !important" onclick="createMap('${value}')"><a>` + value + '</a></span>';
                     return td;
                 }
             };
