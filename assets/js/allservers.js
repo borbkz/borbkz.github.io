@@ -454,7 +454,7 @@ function createServerChart() {
 
     let otherColors = 'lightgrey';
     let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850",
-        'khaki', 'green', 'peru', 'orange',];
+        'khaki', 'green', 'peru', 'orange','#ff5050','#77b300'];
     backgroundColors.push(otherColors);
     let maxNamedServers = backgroundColors.length - 1;
 
