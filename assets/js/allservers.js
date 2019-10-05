@@ -783,6 +783,7 @@ $(document).ready(function () {
             $('#tier-total-dropdown').click();
         }
 
+            //$('.dropdown-item:first').click();
 
         $("#rank-info-text").text(getRanking());
 
