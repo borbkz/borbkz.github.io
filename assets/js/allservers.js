@@ -364,6 +364,7 @@ function createMapDistribution(map, c, d, loc, scale) {
                     backgroundColor: 'rgba(0, 0, 0, 0)',
                     fill: false,
                     radius: 0,
+
                 }]
             },
             options: {
@@ -399,7 +400,8 @@ function createMapDistribution(map, c, d, loc, scale) {
                         display: true,
                         ticks: {
                             min: xMin,
-                            maxTicks: 20,
+                            maxTicksLimit: 30,
+                            autoskip: true,
                             callback: function (value, index, values) {
 
                                 return getShortTimeFromSeconds(value);
@@ -426,7 +428,7 @@ function createMapDistribution(map, c, d, loc, scale) {
                 }
             }
     } 
-    
+
     if (typeof distributionChart === 'undefined') {
         distributionChart = new Chart(ctx,chartConfig);
         
