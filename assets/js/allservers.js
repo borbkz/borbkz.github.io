@@ -392,6 +392,7 @@ function createMapDistribution(map, c, d, loc, scale, mytime) {
             data: {
                 labels: times,
                 datasets: [{
+                    label: 'Probability of Time Being Better Than WR',
                     data: datas,
                     borderColor: 'rgba(153,204,255,1)',
                     backgroundColor: 'rgba(153, 204, 255, .3)',
@@ -400,6 +401,7 @@ function createMapDistribution(map, c, d, loc, scale, mytime) {
                     radius: 0,
 
                 },{
+                    label: 'Your Time',
                     data: [{x:myTimeX, y:myTimeY}],
                     borderColor: myTimeBorderColor, 
                     backgroundColor: myTimeBackgroundColor,
@@ -435,7 +437,7 @@ function createMapDistribution(map, c, d, loc, scale, mytime) {
                     intersect: false,
                 },
                 legend: {
-                    display: false,
+                    display: true,
                 },
                 scales: {
                     xAxes: [{
@@ -604,7 +606,7 @@ function createPowerChart() {
                     }
                 },
             },
-            legend: {
+                legend: {
                 display: false,
             },
             scale: {
