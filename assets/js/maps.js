@@ -226,7 +226,8 @@ function createChart(prodata, tpdata, step, type) {
                 backgroundColor: probackgroundFill,
                 borderColor: probackgroundFill,
                 yAxisID: 'A',
-                borderWidth: 1
+                borderWidth: 2,
+                radius: 0,
             },
 
             {
@@ -236,7 +237,8 @@ function createChart(prodata, tpdata, step, type) {
                 backgroundColor: tpbackgroundFill,
                 borderColor: tpbackgroundFill,
                 yAxisID: 'A',
-                borderWidth: 1
+                borderWidth: 2,
+                radius: 0,
             }
 
             ]
@@ -248,8 +250,13 @@ function createChart(prodata, tpdata, step, type) {
             },
             responsive: false,
             tooltips: {
-                mode: 'label',
+                mode: 'index',
+                intersect: false,
                 callbacks: tooltipCallback
+                },
+                hover:{
+                    mode:'index',
+                    intersect: false,
                 },
                 elements: {
                     point:{
