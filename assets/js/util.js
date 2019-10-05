@@ -5,6 +5,8 @@ const difficultyJSON = jsonPath + "maps.json";
 const headerJSON = jsonPath + "header.json";
 const STEAMID_PERSISTENT = "STEAMID-PERSISTENT";
 const USE_STEAMID_PERSISTENT = "USE-STEAMID-PERSISTENT";
+const MAP_ID_URL = "https://kztimerglobal.com/api/v1.0/maps?name=";
+const MAP_NAME_URL = "https://kztimerglobal.com/api/v1.0/record_filters/distributions?stages=0&mode_ids=200&tickrates=128";
 
 const MAX_MAPS_TOTAL = 500;
 const TROPHY = {
@@ -149,11 +151,23 @@ function getTimeFromSeconds(seconds) {
 
 	return hours + ":" + min + ":" + seconds;
 }
+
+function getShortTimeFromSeconds(d){
+  d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+
+    var hDisplay = h > 0 ? h + ' h ' : "";
+    var mDisplay = m > 0 ? m + ' m ' : "";
+    var sDisplay = s > 0 ? s + ' s' : "";
+    return hDisplay + mDisplay + sDisplay; 
+}
 function sanitizeName(name) {
 	return name.replace(/<\/?[^>]+(>|$)/g, "");
 }
 
-function genTable(container, maps, header, filterArray, myColumns, initialSort) {
+function genTable(container, maps, header, filterArray, myColumns, initialSort, linkToMapPage) {
 
 	colWidth = 1000;
 	initialSort = initialSort || 0;
@@ -229,14 +243,19 @@ function genTable(container, maps, header, filterArray, myColumns, initialSort) 
 		sortOrder: "asc"
 	}
 
-	 myColumns[0] = {
-		 className: "htLeft",
-		 readOnly:true,
-				renderer: function(instance, td, row, col, prop, value, cellProperties) {
-					Handsontable.renderers.TextRenderer.apply(this, arguments);
-					td.innerHTML = '<span class="map-link"><a href="/maps.html?map=' + value + '">' + value + '</a></span>';
-					return td;
-				}};
+	if (linkToMapPage) {
+
+		myColumns[0] = {
+			className: "htLeft",
+			readOnly: true,
+			renderer: function (instance, td, row, col, prop, value, cellProperties) {
+				Handsontable.renderers.TextRenderer.apply(this, arguments);
+				td.innerHTML = '<span class="map-link"><a href="/maps.html?map=' + value + '">' + value + '</a></span>';
+				return td;
+			}
+		};
+	}
+
 
 	var mapTable = new Handsontable(container, {
 		data: maps,

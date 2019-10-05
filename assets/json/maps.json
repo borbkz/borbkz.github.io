@@ -375,7 +375,7 @@
   ["kz_slumpfrageous",3,3,"Short",null,null,null,null,null,"climb"  ],
   ["kz_smallmap",4,4,"Very Short",3,3,3,3,4,"tech surf| ladder-surf-bhop chain| dropdown |bhop to tech surf"  ],
   ["kz_snowman_v2",2,3,"Short",null,null,null,null,null,"climb"  ],
-  ["kz_snowtrain_fix",3,3,"Short",null,null,null,null,null,"climb"  ],
+  ["kz_snowtrain_fix",0,3,"Short",null,null,null,null,null,"climb"  ],
   ["kz_solidarity_v2",3,4,"Medium",null,null,null,null,null,""  ],
   ["kz_spacemario_h",6,6,"Long",4,5,6,5,6,"hard ladder| hard surf| hard tech| hard singlehop| wallstrafe| boxtech| gap jump| angled surf| keys| bhop crouch | corridor jump"  ],
   ["kz_spacus",3,3,"Short",null,null,null,null,null,"180 tech surf | crouchjump| tech surf| headbanger | pixel-surf skip"  ],

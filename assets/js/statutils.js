@@ -1,40 +1,40 @@
 
 function sigmoid(val, f_max, k, x_0) {
-	return f_max / (1 + Math.exp(-1 * k * (val - x_0)));
+    return f_max / (1 + Math.exp(-1 * k * (val - x_0)));
 }
 function average(array, max) {
-    if(typeof max === 'undefined')
+    if (typeof max === 'undefined')
         max = array.length;
     if (array.length == 0)
         return NaN;
 
     let length = Math.min(array.length, max);
     let sum = 0;
-    for (let i = 0; i <length; i++) {
+    for (let i = 0; i < length; i++) {
         sum += array[i];
     }
     return (sum / length);
 }
 
 
-function coefficientOfVariation(arr, max){
-    let normFactor = average(arr,max);
-    return 100 * stddev(arr,max)/normFactor;
+function coefficientOfVariation(arr, max) {
+    let normFactor = average(arr, max);
+    return 100 * stddev(arr, max) / normFactor;
 }
 function stddev(array, max) {
-    if(typeof max === 'undefined')
+    if (typeof max === 'undefined')
         max = array.length;
     if (array.length == 0)
         return NaN;
-    
-    let N = Math.min(array.length, max); 
-    let u = average(array,max);
-    let diffsquare =  0;
 
-    for(let i = 0; i < N; i ++){
-        diffsquare += Math.pow(array[i]- u, 2);
+    let N = Math.min(array.length, max);
+    let u = average(array, max);
+    let diffsquare = 0;
+
+    for (let i = 0; i < N; i++) {
+        diffsquare += Math.pow(array[i] - u, 2);
     }
-    let variance = diffsquare * (1/N);
+    let variance = diffsquare * (1 / N);
 
     return Math.sqrt(variance);
 }
@@ -80,13 +80,37 @@ function linearLeastSquares(data) {
 }
 
 
+
+//probability density function for burr12
+function PDF(x, c, d, loc, scale) {
+    let y = (x - loc) / scale;
+    let a = c * d * Math.pow(y, c - 1);
+    let inner = 1 + Math.pow(y, c);
+    let b = Math.pow(inner, -d - 1);
+
+    let res = (a * b) / scale;
+    return res;
+}
+
+//cumulative distribution function for burr12
+function CDF(x, c, d, loc, scale) {
+    let y = (x - loc) / scale;
+    let b = 1 + Math.pow(y, c);
+
+    return 1 - Math.pow(b, -d);
+}
+//Every night, the distribution is shifted so that the fastest player is at a 1 in the survival function
+function survival(x, c, d, loc, scale) {
+    return 1 - CDF(x, c, d, loc, scale);
+}
+
 //less sensitive to outliers
-function leastMeanSquares(data){
+function leastMeanSquares(data) {
 
 }
 
 
-function leastTrimmedSquares(data){
+function leastTrimmedSquares(data) {
 
 
 }

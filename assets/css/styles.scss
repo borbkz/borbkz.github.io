@@ -20,6 +20,15 @@
 }
 
 
+ html,
+ body {
+	 margin: 0 auto;
+	 text-align: center;
+	 background-color: #657782;
+	 width: 100%;
+	 height: 100%;
+ }
+
  ul {
 	 width: 100%;
 
@@ -38,6 +47,7 @@
  }
 
  .btn:hover {
+	 cursor: pointer;
 	 color: white;
 	 text-decoration: italic;
  }
@@ -213,7 +223,7 @@
 
 
  button {
-	 margin: 10px;
+	/* margin: 10px;*/
  }
 
  input {
@@ -286,15 +296,6 @@
 
  .bronze-place-container {
 	 color: #cd7f32;
- }
-
- html,
- body {
-	 margin: 0 auto;
-	 text-align: center;
-	 background-color: #657782;
-	 width: 100%;
-	 height: 100%;
  }
 
  .card-header {
@@ -500,35 +501,52 @@
  .progress-info-container{
 	 width: 80%;
 	 clear: both;
-	 margin: 20px auto;
-	 margin-bottom: 30px
  }
 .player-info-upper{
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 30px;
+	margin: 3em 0 4em; 
 }
  .player-info-text {
 	 width: 30%;
 	 overflow: hidden;
 	 display: flex;
 	 flex-direction: column;
-	 justify-content: flex-start; 
+	 justify-content: flex-end; 
+ }
+ .progress-bar-display-container{
+
  }
 
  .progress-group-container{
 	 display: flex;
 	 flex-direction: column;
 	 justify-content: space-between;
-	 height: 200px;
+	 height: 250px;
  }
 
  .progress-graph-container{
-	 width: 85%;
+	 width: 100%;
+	 margin: 0 auto;
+ }
+ .progress-distribution-container{
+
+	 background-color: white;
+	 width: 100%;
+	 margin: 0 auto;
+ }
+ .progress-radar-container{
+	 width: 100%; 
+	 margin: 0 auto;
+ }
+ .progress-pie-container{
+	 width: 100%; 
+	 margin: 0 auto;
  }
  .progress-graph{
 	 width: 100%;
 	 background-color: white;
+	 margin-bottom:15px;
  }
 .tier-selection{
 	display: flex;
@@ -590,7 +608,7 @@
      text-align: center;
 
      height: 1.5em;
-     width: 70%;
+     width: 75%;
  }
 
  div.progress {
@@ -607,7 +625,7 @@
      font: 16px sans-serif;
      font-weight: bold;
      border: 1px solid darkgrey;
-     border-radius: 7px;
+	 border-radius: 7px;
  }
 
  div.wtHider {

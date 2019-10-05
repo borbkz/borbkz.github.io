@@ -11,6 +11,46 @@ layout: default
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.4"></script>
 
 <style>
+	.player-info-button-group {
+		width: 80%;
+		height: 2.5em;
+		margin-top: 30px;
+		vertical-align: middle;
+	}
+
+	.player-info-button-group .btn {
+		font-size: 1.3em;
+		margin: auto auto;
+
+	}
+
+
+	.player-info-container {
+
+		border: none;
+	}
+
+
+	.progress-info-container {
+		border: none;
+	}
+
+	.player-info-upper {
+		border: none;
+	}
+
+	.player-name {
+		text-align: center;
+		width: 80%;
+	}
+
+	.player-info-inner {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		margin-top: 30px;
+		border: none;
+	}
 </style>
 
 <div class="content-no-wrap">
@@ -25,138 +65,201 @@ layout: default
 				<input type="radio" id="proradio" name="isprorun-radio" value="proradio">Pro Runs
 			</div>
 
+			<div class="btn-group btn-group-toggle player-info-button-group" data-toggle="buttons">
+
+				<label class="btn btn-secondary">
+					<input class="type-selection-btn" type="radio" name="player-options" id="completion-btn"
+						autocomplete="off" target="completion-info-container">Completions
+				</label>
+				<label class="btn btn-secondary">
+					<input class="type-selection-btn" type="radio" name="player-options" id="progression-btn"
+						autocomplete="off" target="progression-info-container">Progression
+				</label>
+				<label class="btn btn-secondary">
+					<input class="type-selection-btn" type="radio" name="player-options" id="distribution-btn"
+						autocomplete="off" target="distribution-info-container">Map Distribution
+				</label>
+				<label class="btn btn-secondary">
+					<input class="type-selection-btn" type="radio" name="player-options" id="power-btn"
+						autocomplete="off" target="power-info-container">Power Level
+				</label>
+				<label class="btn btn-secondary">
+					<input class="type-selection-btn" type="radio" name="player-options" id="server-btn"
+						autocomplete="off" target="server-info-container">Server Stats
+				</label>
+			</div>
 
 			<div id="player-info" class="player-info-container">
-				<div class="player-info-upper">
 
-					<div class="player-info-text">
-
-						<div class="infoline"><span class="infolabel" id="player-info-label">Player:</span> <span
-								class="infotext" id="player-info-text"></span></div>
-
-						<div class="divider" id="runtype-divider">Pro Runs</div>
-						<div class="infoline">
-							<span class="infolabel" id="wr-info-label">WRs:</span>
-							<span class="infotext" id="wr-info-text"></span>
-						</div>
-						<div title="Times with 900+ pts. {% include point-explanation text='Top 20' %}"
-							class="infoline">
-							<span class="infolabel" id="silver-info-label"><span
-									class="tier-tooltip">Silver:</span></span>
-							<span class="infotext" id="silver-info-text"></span>
-						</div>
-						<div title="Times with 800+ pts. {% include point-explanation text='Top 100' %}"
-							class="infoline">
-							<span class="infolabel" id="bronze-info-label"><span
-									class="tier-tooltip">Bronze:</span></span>
-							<span class="infotext" id="bronze-info-text"></span>
-						</div>
-
-						<div class="infoline"><span class="infolabel" id="run-info-label"><span>Runs:</span></span> <span
-								class="infotext" id="run-info-text"></span></div>
-
-						<div class="infoline"><span class="infolabel" id="points-info-label">Pts:</span> <span
-								class="infotext" id="points-info-text"></span></div>
-
-						<div class="infoline">
-							<span class="infolabel" id="rank-info-label" title="Not an official ranking"><span class="tier-tooltip">Rank:</span>
-							</span>
-							<span class="infotext" id="rank-info-text"></span>
-						</div>
-					</div>
+				<div class="player-info-upper" id="progression-info-container">
 
 					<div class="progress-graph-container">
 
 						<canvas class="progress-graph" id="my-chart"></canvas>
 						<div class="tier-selection" style="display: flex; align-items: center">
 							<span>
-								<input type="radio" id="tier-1-radio" name="tier-radio" value="1" checked>Very Easy
+								<input class="progress-tier-radio" type="radio" id="tier-1-radio" name="tier-radio"
+									value="1" checked>Very Easy
 							</span>
 							<span>
-								<input type="radio" id="tier-2-radio" name="tier-radio" value="2">Easy
+								<input class="progress-tier-radio" type="radio" id="tier-2-radio" name="tier-radio"
+									value="2">Easy
 							</span>
 							<span>
-								<input type="radio" id="tier-3-radio" name="tier-radio" value="3">Medium
+								<input class="progress-tier-radio" type="radio" id="tier-3-radio" name="tier-radio"
+									value="3">Medium
 							</span>
 							<span>
-								<input type="radio" id="tier-4-radio" name="tier-radio" value="4">Hard
+								<input class="progress-tier-radio" type="radio" id="tier-4-radio" name="tier-radio"
+									value="4">Hard
 							</span>
 							<span>
-								<input type="radio" id="tier-5-radio" name="tier-radio" value="5">Very
+								<input class="progress-tier-radio" type="radio" id="tier-5-radio" name="tier-radio"
+									value="5">Very
 								Hard
 							</span>
-							<span> <input type="radio" id="tier-6-radio" name="tier-radio" value="6">Death </span>
-						<button id="reset-zoom">Reset zoom</button>
+							<span> <input class="progress-tier-radio" type="radio" id="tier-6-radio" name="tier-radio"
+									value="6">Death </span>
+							<button id="reset-zoom">Reset zoom</button>
 
 
 						</div>
 					</div>
+
 				</div>
+				<div class="player-info-upper" id="completion-info-container">
 
-			</div>
-			<div class="progress-info-container">
+					<div class="player-info-inner">
 
-				<div class="titleDiv progress-bar-group-title">
+						<div class="player-info-text">
 
-					<div class="dropdown">
-						<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-							style="width: 250px; font: 20px sans-serif !important">
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" id="none-dropdown">None</a>
-							<a class="dropdown-item" id="tier-total-dropdown">Total Completions</a>
-							<a class="dropdown-item" id="tier-average-dropdown">Average Points</a>
-							<a class="dropdown-item" id="tier-records-dropdown"
-								title="Nothing to see here. A record is a record!">🏆 World Records</a>
-							<a class="dropdown-item" id="tier-silvers-dropdown"
-								title="{% include point-explanation text='Top 20' %}">🥈 Silver (900+ pts)</a>
-							<a class="dropdown-item" id="tier-bronzes-dropdown"
-								title="{% include point-explanation text='Top 100'%}">🥉 Bronze (800+ pts)</a>
+							<div>
+
+								<div class="player-name">
+									<span class="infolabel" id="player-info-text"></span>
+								</div>
+							</div>
+
+							<div class="divider" id="runtype-divider">Pro Runs</div>
+							<div class="infoline">
+								<span class="infolabel" id="wr-info-label">WRs:</span>
+								<span class="infotext" id="wr-info-text"></span>
+							</div>
+							<div title="Times with 900+ pts. {% include point-explanation text='Top 20' %}"
+								class="infoline">
+								<span class="infolabel" id="silver-info-label"><span
+										class="tier-tooltip">Silver:</span></span>
+								<span class="infotext" id="silver-info-text"></span>
+							</div>
+							<div title="Times with 800+ pts. {% include point-explanation text='Top 100' %}"
+								class="infoline">
+								<span class="infolabel" id="bronze-info-label"><span
+										class="tier-tooltip">Bronze:</span></span>
+								<span class="infotext" id="bronze-info-text"></span>
+							</div>
+
+							<div class="infoline"><span class="infolabel" id="run-info-label"><span>Runs:</span></span>
+								<span class="infotext" id="run-info-text"></span></div>
+
+							<div class="infoline"><span class="infolabel" id="points-info-label">Pts:</span> <span
+									class="infotext" id="points-info-text"></span></div>
+
+							<div class="infoline">
+								<span class="infolabel" id="rank-info-label" title="Not an official ranking"><span
+										class="tier-tooltip">Rank:</span>
+								</span>
+								<span class="infotext" id="rank-info-text"></span>
+							</div>
 						</div>
+						<div class="progress-info-container">
+
+							<div class="titleDiv progress-bar-group-title">
+
+								<div class="dropdown">
+									<button class="btn btn-secondary dropdown-toggle" type="button"
+										id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false" style="width: 250px; font: 20px sans-serif !important">
+									</button>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+										<a class="dropdown-item" id="none-dropdown">None</a>
+										<a class="dropdown-item" id="tier-total-dropdown">Total Completions</a>
+										<a class="dropdown-item" id="tier-average-dropdown">Average Points</a>
+										<a class="dropdown-item" id="tier-records-dropdown"
+											title="Nothing to see here. A record is a record!">🏆 World Records</a>
+										<a class="dropdown-item" id="tier-silvers-dropdown"
+											title="{% include point-explanation text='Top 20' %}">🥈 Silver (900+
+											pts)</a>
+										<a class="dropdown-item" id="tier-bronzes-dropdown"
+											title="{% include point-explanation text='Top 100'%}">🥉 Bronze (800+
+											pts)</a>
+									</div>
+								</div>
+							</div>
+
+							<div class="progress-bar-display-container">
+								<div>
+									<div class="center-div" style="width: 300px"><input id='normalize-checkbox'
+											type="checkbox" checked><span class="infolabel"
+											style="font-weight: normal !important">Percentage</span>
+									</div>
+								</div>
+								<div class="progress-group-container"> </div>
+							</div>
+
+						</div>
+
 					</div>
 				</div>
 
-				<div class="progress-bar-display-container">
-					<div>
-						<div class="center-div" style="width: 300px"><input id='normalize-checkbox' type="checkbox"
-								checked><span class="infolabel" style="font-weight: normal !important">Percentage</span>
-						</div>
+
+				<div class="player-info-upper" id="power-info-container">
+					<div class="progress-radar-container">
+						<canvas id="power-chart"></canvas>
 					</div>
-					<div class="progress-group-container"> </div>
 				</div>
 
+					<div style="font-size: 1.3em"><a href="" id="map-info-link">Go to Map Info Page</a></div>
+				<div class="player-info-upper" id="distribution-info-container">
+					<div class="progress-distribution-container">
+						<canvas id="distribution-chart"></canvas>
+					</div>
+				</div>
+
+				<div class="player-info-upper" id="server-info-container">
+					<div class="progress-pie-container">
+						<canvas id="server-chart"></canvas>
+					</div>
+
+				</div>
+
+				<div id="global-table-container">
+					{% include tooltip.html text="default" id="global-tooltip" %}
+
+					<div class="handsontable" id="spreadsheet-global"> </div>
+				</div>
 			</div>
+			{% endcapture %}
 
-
-			<div id="global-table-container">
-				{% include tooltip.html text="default" id="global-tooltip" %}
-
-				<div class="handsontable" id="spreadsheet-global"> </div>
+			{% capture local-times %}
+			<div class="content-wrap">
+				<div class="textDiv">
+					<textarea rows="7" cols="100" id="inputMapsTextArea">{% include tips.html %}</textarea>
+					<div class="inputSelection">
+						<div class="innerSelection">
+							<button id="convertButton">Generate</button>
+							<a id="downloadButton" href="" download="kzmaps.csv"><button>Download</button></a>
+						</div>
+					</div>
+					<div id="local-table-container">
+						{% include tooltip.html text="default" id="personal-tooltip" %}
+						<div class="handsontable" id="spreadsheet-local"> </div>
+					</div>
+				</div>
 			</div>
+			{% endcapture %}
+
+			{% include collapse.html parent-id="accordion-times" id="allservers" title="Your Times Across All Servers" content=server-times status="show" %}
+			{% include collapse.html parent-id="accordion-times" id="local" title="Server Finished Maps Tool" content=local-times status="show" %}
 		</div>
-		{% endcapture %}
 
-		{% capture local-times %}
-		<div class="content-wrap">
-			<div class="textDiv">
-				<textarea rows="7" cols="100" id="inputMapsTextArea">{% include tips.html %}</textarea>
-				<div class="inputSelection">
-					<div class="innerSelection">
-						<button id="convertButton">Generate</button>
-						<a id="downloadButton" href="" download="kzmaps.csv"><button>Download</button></a>
-					</div>
-				</div>
-				<div id="local-table-container">
-					{% include tooltip.html text="default" id="personal-tooltip" %}
-					<div class="handsontable" id="spreadsheet-local"> </div>
-				</div>
-			</div>
-		</div>
-		{% endcapture %}
-
-		{% include collapse.html parent-id="accordion-times" id="allservers" title="Your Times Across All Servers" content=server-times status="show" %}
-		{% include collapse.html parent-id="accordion-times" id="local" title="Server Finished Maps Tool" content=local-times status="show" %}
 	</div>
-
-</div>

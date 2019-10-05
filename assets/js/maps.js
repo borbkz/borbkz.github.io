@@ -477,7 +477,7 @@ function getMaps() {
             className: "htLeft"
         };
 
-        genTable(spreadsheetContainer, maps, header, [...Array(header.length).keys()], cols);
+        genTable(spreadsheetContainer, maps, header, [...Array(header.length).keys()], cols, {column: 0, sortOrder:'asc'}, true);
 
 
     }); //end json

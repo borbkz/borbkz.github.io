@@ -55,7 +55,7 @@ var myChart;
 var dateArray = [[], [], [], [], [], [], []];
 var playerInfo = getEmptyPlayer();
 
-function createChart(tier) {
+function createProgressionChart(tier) {
 
     let ctx = document.getElementById('my-chart').getContext('2d');
     let tiertext = TIERKEY[tier][0];
@@ -141,15 +141,14 @@ function createChart(tier) {
 
                     },
                     legend: {
+                    },
+                    label: {
                         display: false,
                     },
 
                     events: ['mousemove'],
-                    onHover: (event, chartElement) => {
-                        //event.target.style.cursor = chartElement[0] ? 'default' : 'grab';
-                    },
 
-                    responsive: false,
+                    responsive: true,
                     tooltips: {
                         displayColors: false,
                         enabled: true,
@@ -208,7 +207,8 @@ function createChart(tier) {
                     scales: {
                         yAxes: [{
                             ticks: {
-
+                                max: 1000,
+                                min: 0,
                             },
                             scaleLabel: {
                                 display: true,
@@ -225,11 +225,8 @@ function createChart(tier) {
                                 maxRotation: 0,
                                 maxTicksLimit: 12,
                                 callback: function (value, index, values) {
-
                                     let mydate = new Date(value * 24 * 60 * 60 * 1000).toJSON().slice(0, 10).split('-');
-
                                     let month = monthNames[parseInt(mydate[1], 10)];
-
                                     return month + " " + mydate[0];
                                 }
                             }
@@ -246,24 +243,6 @@ function createChart(tier) {
         myChart.data.datasets[0].label = tiertext;
         myChart.data.datasets[1].data = bestfit;
 
-        //myChart.data = {
-            //datasets: [{
-                //data: data,
-                //backgroundColor: tiercolor,
-                //label: tiertext,
-                //borderColor: linecolor
-            //}, {
-                //label: "Best Fit (LLS)",
-                //data: bestfit,
-                //backgroundColor: 'black',
-                //borderColor: linecolor,
-                //borderWidth: 2,
-                //fill: false,
-                //tension: 0,
-                //showLine: true,
-                //radius: 0,
-            //}],
-        //}
         myChart.options.title.text = title();
         myChart.update();
         myChart.resetZoom();
@@ -301,36 +280,370 @@ function getEmptyPlayer() {
         "silvers-max-maps": 1,
         "bronzes-max-maps": 1,
         "newest": 0,
-        "oldest": 0
+        "oldest": 0,
+        "server-completions": {},
     }
 
 }
 
 var radioTier = -1;
 
-$(document).ajaxStop(function () {
 
-    if (radioTier < 0) {
-        radioTier = playerInfo["tier-max-maps"];
+function createMap(mapName, mapTime) {
+    $('#distribution-btn').change();
+    $('#map-info-link').attr('href', 'maps.html?map=' + mapName);
+    let has_teleports = $('input[name=isprorun-radio]:checked').val() !== "proradio";
+
+    $.getJSON(MAP_ID_URL + mapName, function (data) {
+
+        if (typeof data === 'undefined') {
+            window.location.href = '/404';
+        }
+        let mapid = data[0]['id'];
+
+        $.getJSON(MAP_NAME_URL + '&has_teleports=' + has_teleports + '&map_ids=' + mapid, function (data) {
+            if (typeof data === 'undefined') {
+                window.location.href = '/404';
+            }
+
+            let map = data[0];
+            createMapDistribution(mapName, map['c'], map['d'], map['loc'], map['scale']);
+        });
+    });
+}
+
+function createDefaultDistribution() {
+    let c = 12.080335928402382;
+    let d = 0.31754654878247446;
+    let loc = -0.47595114150014428;
+    let scale = 57.161919391160936;
+    let map = 'bkz_cg_coldbhop';
+    createMapDistribution(map, c, d, loc, scale);
+}
+
+var distributionChart;
+function createMapDistribution(map, c, d, loc, scale) {
+
+
+
+    let times = [], datas = [];
+
+    let MAXHOURS = 3;
+    let xMin = 0;
+    let index = 0;
+    let step = 1;
+    let precision = 5;
+    let title = () => 'Player Distributions for  ' + map +
+        ` (c: ${c.toFixed(precision)}, d: ${d.toFixed(precision)}, loc: ${loc.toFixed(precision)}, scale: ${scale.toFixed(precision)})`;
+    //increment by seconds until 1 minute
+    let threshold = .995;
+    while (index < MAXHOURS * 60 * 60) {
+        let y = survival(index, c, d, loc, scale);
+
+        if (y < .05) {
+            break
+        };
+
+        if (y < threshold && xMin == 0) {
+            xMin = index;
+        }
+
+        times.push(index);
+        datas.push(Math.min(1.0, .0005 + y));
+
+        index += step;
     }
 
-    $('#tier-' + radioTier + '-radio').click();
+
+    if (typeof distributionChart === 'undefined') {
+
+
+        distributionChart = new Chart($('#distribution-chart')[0], {
+            type: 'line',
+            data: {
+                labels: times,
+                datasets: [{
+                    data: datas,
+                    borderColor: 'blue',
+                    backgroundColor: 'rgba(0, 0, 0, 0)',
+                    fill: false,
+                    radius: 0,
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: title(),
+                    fontSize: 16,
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            let pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+
+                            let percentile = pointData * 100;
+                            return percentile.toFixed(2) + '%';
+                        }
+                    }
+
+                },
+                hover: {
+
+                    mode: 'index',
+                    intersect: false,
+                },
+                legend: {
+                    display: false,
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        ticks: {
+                            min: xMin,
+                            maxTicks: 20,
+                            callback: function (value, index, values) {
+
+                                return getShortTimeFromSeconds(value);
+                            }
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            min: 0,
+                            max: 1,
+                            callback: function (value, index, values) {
+
+                                let toppercentile = value * 100;
+
+                                return toppercentile.toFixed(0) + "%";
+
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Top Percentile'
+                        },
+                    }]
+                }
+            }
+        });
+    } else {
+        console.log("update")
+        distributionChart.data.datasets[0].data = datas;
+        distributionChart.data.labels = times;
+        distributionChart.options.title.text = title();
+        distributionChart.options.scales.xAxes[0].ticks.min = xMin;
+        //distributionChart.resetZoom();
+
+        distributionChart.update();
+    }
+
+
+}
+
+
+function createServerChart() {
+
+
+    let otherColors = 'lightgrey';
+    let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850",
+        'khaki', 'green', 'peru', 'orange',];
+    backgroundColors.push(otherColors);
+    let maxNamedServers = backgroundColors.length - 1;
+
+    let serverCompletions = Object.values(playerInfo["server-completions"]);
+    serverCompletions.sort((a, b) => b[1] - a[1]);
+
+    let data = serverCompletions.map(x => x[1]).slice(0, maxNamedServers);
+    let serverNames = serverCompletions.map(x => x[0]).slice(0, maxNamedServers);
+
+    let serverTotalCompletions = serverCompletions.reduce((a, b) => a + b[1], 0);
+
+    let otherCompletionsTotal = 0;
+    if (serverCompletions.length > maxNamedServers) {
+        let otherServers = serverCompletions.slice(maxNamedServers);
+        otherCompletionsTotal = otherServers.reduce((a, b) => a + b[1], 0);
+        serverNames.push("Other")
+        data.push(otherCompletionsTotal);
+    }
+    let ctx = $('#server-chart')[0];
+    let serverChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: serverNames.map(x => x.substring(0, 15) + '...'),
+            datasets: [{
+                label: serverNames,
+                backgroundColor: backgroundColors,
+                data: data,
+            }]
+        },
+        options: {
+            responsive: true,
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        let pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+
+                        var label = data.datasets[tooltipItem.datasetIndex].label[tooltipItem.index] || "";
+                        var labelStrings = [];
+
+                        labelStrings.push(label);
+                        let percentage = 100 * (pointData / serverTotalCompletions)
+                        labelStrings.push(pointData + " Maps (" + percentage.toFixed(1) + "%)");
+
+                        return labelStrings;
+                    }
+                },
+            },
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: 'white',
+                    fontSize: 16,
+                }
+            },
+            title: {
+                display: true,
+                fontColor: 'white',
+                fontSize: 20,
+                text: 'Percentage of Total Completions by Server (' + serverTotalCompletions + " Maps Total)",
+            }
+        }
+    });
+
+}
+function createPowerChart() {
+    let labels = ["Ladder", "Surf", "Bhop", "Tech", "Combo"];
+
+    let data = [];
+    for (let i = 0; i < labels.length; i++) {
+        data.push(Math.max(200, Math.random() * 1000));
+    }
+    new Chart(document.getElementById("power-chart"), {
+        type: 'radar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Points Average",
+                    fill: true,
+                    backgroundColor: "rgba(135,206,235,0.2)",
+                    borderColor: "rgba(135,206,235,1)",
+                    pointBorderColor: "#fff",
+                    pointBackgroundColor: "rgba(135,206,235,1)",
+                    pointBorderColor: "#fff",
+                    data: data,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        let pointData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return pointData;
+                    }
+                },
+            },
+            legend: {
+                display: false,
+            },
+            scale: {
+                ticks: {
+                    beginAtZero: true,
+                    min: 0,
+                    max: 1000,
+                    stepSize: 200,
+                },
+                gridLines: {
+                    color: 'white',
+                },
+                angleLines: {
+                    color: 'white',
+                },
+                pointLabels: {
+                    fontColor: 'white',
+                    fontSize: 16,
+                },
+            },
+            title: {
+                display: true,
+                text: 'Points Average By Category (work in progress, currently random)',
+                fontColor: 'white',
+                fontSize: 20,
+            }
+        }
+    });
+}
+
+$(document).ajaxStop(function () {
 
 })
 $(document).ready(function () {
 
+
+    createPowerChart();
+    createServerChart();
+    createDefaultDistribution();
+
+
+
+    function defaultProgressionPlot() {
+        //if (radioTier < 0) {
+        //radioTier = playerInfo["tier-max-maps"];
+        //}
+        //$('#tier-' + radioTier + '-radio').click();
+        $('.progress-tier-radio:first').change();
+    }
+    $('.type-selection-btn').change(function () {
+        $('.player-info-upper').hide();
+        let target_id = $(this).attr('target');
+        $('#' + target_id).show();
+        //canvas elements dont' scale well if it was drawn while hidden
+
+    });
+
+    $('#progression-btn').change(function () {
+        defaultProgressionPlot();
+    });
+    $('#distribution-btn').change(function () {
+        createDefaultDistribution();
+    });
+
+    $('#power-btn').change(function () {
+        createPowerChart();
+    });
+
+    $('#server-btn').change(function () {
+        createServerChart();
+    });
+
+
+    function defaultMenuButton() {
+        $('.type-selection-btn:first').change();
+        $('.type-selection-btn:first').parent().addClass('active');
+        //$('.player-info-upper').hide();
+        //$('#completion-btn').change();
+    }
+
+    defaultMenuButton();
+
     $('#reset-zoom').click(function () {
         if (typeof myChart !== 'undefined') {
             myChart.resetZoom();
-
         }
-
     });
 
     $("input[name=tier-radio]").on("change", function () {
         radioTier = $("input[name=tier-radio]:checked").val();
-        createChart(radioTier);
+        createProgressionChart(radioTier);
     });
+
     $('.dropdown-menu a').click(function () {
         $('#dropdownMenuButton').text($(this).text());
         $('#dropdownMenuButton').attr('target-id', this.id);
@@ -603,13 +916,14 @@ $(document).ready(function () {
             $('.progress-bar-display-container').show();
             localStorage.setItem("SHOW_PROGRESS_BARS", this.id);
             for (let i = 1; i <= 6; i++) {
-                let avgPoints = +playerInfo["points-average-by-tier"][i];
+                let avgPoints = +playerInfo["points-average-by-tier"][i] || 0;
                 let $curProgressBar = $("#progress-bar-" + i);
                 let curPercentage = getPercentage(avgPoints, 0, 1000);
 
+                $curProgressBar.text('');
                 deathTierColorText(curPercentage, i, $curProgressBar);
                 setProgressWdith($("#progress-bar-" + i), curPercentage, avgPoints || 0);
-                $('#progress-end-label-' + i).text(avgPoints.toFixed(1));
+                $('#progress-end-label-' + i).text(avgPoints.toFixed(0));
             }
         });
         $('#none-dropdown').click(function () {
@@ -619,23 +933,21 @@ $(document).ready(function () {
 
         function setProgressBar(val, max, tier) {
             let progressBar = $("#progress-bar-" + tier);
-            let normalizeText = "";
+            let normalizeText = val;
+            let bartext = val;
             if (shouldNormalize()) {
                 max = +playerInfo["runs-possible-by-tier"][tier];
             }
             let percentage = getPercentage(val, 0, max);
             if (shouldNormalize()) {
-                normalizeText = "/" + max + " (" + percentage.toFixed(1) + "%)";
+                normalizeText = percentage.toFixed(1) + "%";
+                bartext = val + '/' + max;
             }
+            $('#progress-bar-' + tier).text(bartext);
 
             deathTierColorText(percentage, tier, progressBar);
             setProgressWdith(progressBar, percentage, val + normalizeText);
-            if (normalizeRatings) {
-                $('#progress-end-label-' + tier).css('text-align', 'right');
-            } else {
-                $('#progress-end-label-' + tier).css('text-align', 'center');
-            }
-            $('#progress-end-label-' + tier).text(val + normalizeText);
+            $('#progress-end-label-' + tier).text(normalizeText);
         }
 
         function deathTierColorText(percentage, tier, bar) {
@@ -762,7 +1074,6 @@ $(document).ready(function () {
                     date = "N/A",
                     server = "N/A";
 
-
                 teleports = field["teleports"];
                 points = field["points"];
                 date = field["created_on"];
@@ -789,6 +1100,12 @@ $(document).ready(function () {
                             newestDate = mapday;
                         }
 
+                        let serverCompletions = playerInfo["server-completions"];
+                        if (server in serverCompletions) {
+                            serverCompletions[server][1]++;
+                        } else {
+                            serverCompletions[server] = [server, 1];
+                        }
                         playerInfo["dates-by-tier"][tptier].push({ "date": date, "points": points });
 
                         if (+points === 1000) {
@@ -870,10 +1187,8 @@ $(document).ready(function () {
                     var ptsIndex = globalHeader.indexOf("Pts");
                     unfinished[ptsIndex] = 0;
 
-
                     maps.push(unfinished);
                 }
-
             }
 
             for (var i = 0; i < maps.length; i++) {
@@ -896,8 +1211,19 @@ $(document).ready(function () {
             $("#steamButton").attr('value', 'Fetch Times');
 
             $("#global-tooltip").show();
+
+
+            cols[0] = {
+                className: "htLeft",
+                readOnly: true,
+                renderer: function (instance, td, row, col, prop, value, cellProperties) {
+                    Handsontable.renderers.TextRenderer.apply(this, arguments);
+                    td.innerHTML = `<span class="map-link" style="color: black !important" onclick="createMap('${value}')"><a href="#">` + value + '</a></span>';
+                    return td;
+                }
+            };
             globalTable = genTable(spreadsheetContainer, maps, globalHeader, [globalHeader.indexOf("Map"), globalHeader.indexOf("Time"),
-            globalHeader.indexOf("Server"), globalHeader.indexOf("Tier"), globalHeader.indexOf("Pro Tier"), globalHeader.indexOf("Length"), globalHeader.indexOf("Date")], cols, { column: globalHeader.indexOf("Pts"), sortOrder: "desc" });
+            globalHeader.indexOf("Server"), globalHeader.indexOf("Tier"), globalHeader.indexOf("Pro Tier"), globalHeader.indexOf("Length"), globalHeader.indexOf("Date")], cols, { column: globalHeader.indexOf("Pts"), sortOrder: "desc" }, false);
 
             globalTable.updateSettings({
                 hiddenColumns: {
@@ -908,12 +1234,7 @@ $(document).ready(function () {
 
             printPlayerProfile();
 
-            if (radioTier < 0) {
-                radioTier = playerInfo["tier-max-maps"];
-
-
-            }
-            createChart(radioTier);
+            defaultProgressionPlot();
         }); //end json
     }
 
@@ -922,13 +1243,10 @@ $(document).ready(function () {
 
         var steamID = $('#steamIDText').val();
 
-
-
         var ispro = $('input[name=isprorun-radio]:checked').val();
         var teleports = true;
         if (ispro === "proradio")
             teleports = false;
-
 
         retrieveStats(steamID, teleports);
     });
