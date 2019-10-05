@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<style>
+		body {
+			color: white;
+		}
+	</style>
+	<script>
+		let MAXPOINTS = 10000;
+		let c, d, loc, scale;
+		arrayX = [];
+		arrayY = [];
+		arrayX2 = [];
+		arrayY2 = [];
+		maplist = [];
+		let map_id;
+		let trace1;
+		let trace2;
+		let minPoints = 0.1;
+
+		function mapSearch(map) {
+			arrayX = [];
+			arrayY = [];
+			arrayX2 = [];
+			arrayY2 = [];
+
+
+			fetch('https://kztimerglobal.com/api/v1.0/maps?name=' + map)
+				.then(function (response) {
+					return response.json();
+				})
+				.then(function (map) {
+					map_id = map[0].id;
+				})
+				.then(() => {
+					fetch('https://kztimerglobal.com/api/v1.0/record_filters/distributions?map_ids=' + map_id +
+							'&stages=0&mode_ids=' + document.getElementById("mode").value +
+							'&tickrates=128&has_teleports=' + document.getElementById('runtype').value)
+						.then(function (response) {
+							return response.json();
+						})
+						.then(function (map_distribution) {
+							c = map_distribution[0].c;
+							d = map_distribution[0].d;
+							loc = map_distribution[0].loc;
+							scale = map_distribution[0].scale;
+							topscale = map_distribution[0].top_scale;
+						})
+						.then(() => {
+						   //burr();
+							myBurr(c,d,loc,scale);
+						    myPercentile(c,d,loc,scale);
+							//perc();
+						})
+						.then(() => {
+							var data = [trace1, trace2];
+							var layout = {
+								title: 'Burr12 Data Distribution for ' + document.getElementById(
+									"map_search").value,
+								yaxis: {
+									title: 'Burr',
+									autotick: false,
+									ticks: 'outside',
+									tick0: 0,
+									dtick: 0.002,
+									ticklen: 8,
+									tickwidth: 2,
+									autorange: true,
+									tickcolor: '#000'
+								},
+								yaxis2: {
+									title: 'Percentile',
+									titlefont: {
+										color: 'rgb(148, 103, 189)'
+									},
+									tickfont: {
+										color: 'rgb(148, 103, 189)'
+									},
+									overlaying: 'y',
+									side: 'right',
+									autotick: false,
+									ticks: 'outside',
+									tick0: 0,
+									dtick: 0.2,
+									ticklen: 8,
+									tickwidth: 2,
+									autorange: true,
+									tickcolor: '#000'
+								},
+								xaxis: {
+									title: 'Time (in seconds)',
+									autorange: true
+								}
+							};
+
+							Plotly.newPlot('tester', data, layout);
+						});
+				});
+		}
+
+function PDF(x, c, d, loc, scale) {
+    let y = (x - loc) / scale;
+    let a = c * d * Math.pow(y, c - 1);
+    let inner = 1 + Math.pow(y, c);
+    let b = Math.pow(inner, -d - 1);
+
+    let res = (a * b) / scale;
+    return res;
+}
+
+//cumulative distribution function for burr12
+function CDF(x, c, d, loc, scale) {
+    let y = (x - loc) / scale;
+    let b = 1 + Math.pow(y, c);
+
+    return 1 - Math.pow(b, -d);
+}
+//Every night, the distribution is shifted so that the fastest player is at a 1 in the survival function
+function survival(x, c, d, loc, scale) {
+    return 1 - CDF(x, c, d, loc, scale);
+}
+
+
+		function myBurr(c,d,loc,scale) {
+			for (let x = 0; x < MAXPOINTS; x++) {
+				let y = PDF(x, c, d, loc, scale);
+
+
+				let ppf =1-CDF(x,c,d,loc,scale);
+				if(ppf< minPoints)break;
+
+				arrayX2.push(x);
+				arrayY2.push(y/survival(x,c,d,loc,scale));
+
+			}
+			trace1 = {
+				x: arrayX2,
+				y: arrayY2,
+				name: "borb burr",
+				type: "scatter",
+
+			}
+
+		}
+
+		function myPercentile(c, d, local, scale) {
+			for (let x = 0; x < MAXPOINTS; x++) {
+				let y = 1-CDF(x,c,d,loc,scale);
+
+				if(y<minPoints)
+				break;
+				arrayX.push(x);
+					arrayY.push(y);
+			}
+			trace2 = {
+				x: arrayX,
+				y: arrayY,
+				name: "borb percentile",
+				yaxis: 'y2',
+				type: "scatter"
+			};
+		}
+
+		function burr() {
+			for (let i = 0; i < MAXPOINTS; i++) {
+				t = ((i - loc) / scale)
+
+				//We're doing this calc twice, which is bad.  Once in perc and once here.  combine
+				var score = Math.pow(1 + Math.pow(t, c), -d);
+				if (score < minPoints) {
+					break;
+				}
+				arrayX2.push(i);
+				let y = (c * d * Math.pow(t, c - 1)) * Math.pow(1 + Math.pow(t, c), -d - 1) / scale;
+
+				arrayY2.push(y);
+
+
+			}
+
+			trace1 = {
+				x: arrayX2,
+				y: arrayY2,
+				name: "burr",
+				type: "scatter"
+			}
+		}
+
+		function perc() {
+			for (let i = 0; i < MAXPOINTS; i++) {
+				t = ((i - loc) / scale);
+
+				var percentile = Math.pow(1 + Math.pow(t, c), -d);
+				if (percentile < minPoints) {
+					break;
+				}
+				arrayX.push(i);
+				arrayY.push(percentile);
+			}
+			trace2 = {
+				x: arrayX,
+				y: arrayY,
+				name: "percentile",
+				yaxis: 'y2',
+				type: "scatter"
+			};
+		}
+
+
+		window.onload = function () {
+			fetch("https://kztimerglobal.com/api/v1.0/maps?is_validated=true&limit=1000")
+				.then(function (response) {
+					return response.json();
+				})
+				.then(function (maps) {
+					for (i = 0; i < maps.length; i++) {
+						maplist.push(maps[i]);
+					}
+				});
+
+			// If enter is pressed while there is text in the search bar, it searches. If no text, it switches back to the normal view.
+			document.getElementById("map_search").addEventListener("keydown", function (e) {
+				if (e.keyCode === 13) {
+					if (document.getElementById("map_search").value.length > 0) {
+						for (i = 0; i < maplist.length; i++) {
+							if (maplist[i].name.includes(document.getElementById("map_search").value)) {
+								document.getElementById("map_search").value = maplist[i].name;
+							}
+						}
+
+						if (document.getElementById("map_search").value.startsWith("kz_") ||
+							document.getElementById("map_search").value.startsWith("bkz_") ||
+							document.getElementById("map_search").value.startsWith("xc_") ||
+							document.getElementById("map_search").value.startsWith("skz_")) {
+							mapSearch(document.getElementById("map_search").value);
+						} else {
+							return;
+						}
+					}
+				}
+			});
+		}
+
+		/*
+		c: 6.2707074820484925 d: 1.0966440093675578 loc: -1.0041013623220505 scale: 135.45516506429988
+		# record_filter_id, c, d, loc, scale, created_on, updated_on, updated_by_id
+		202, 258.5443101066165, 0.005586059408684786, -1.5203185089465547, 413.2936538646625, 2018-07-10 00:00:00, 2018-07-12 00:00:00, 0
+		204, 6.2707074820484925, 1.0966440093675578, -1.0041013623220505, 135.45516506429988, 2018-07-10 00:00:00, 2018-07-12 00:00:00, 0
+		205, 1.7411734267897307, 0.8338011369349945, -0.04915357143327335, 241.0588950559124, 2018-07-10 00:00:00, 2018-07-12 00:00:00, 0
+		207, 253.55732573293307, 0.008797581530909605, -1.34974734396451, 107.42755389771447, 2018-07-10 00:00:00, 2018-07-12 00:00:00, 0
+		*/
+	</script>
+</head>
+
+<body style="background-color: #212122">
+	<input id="map_search" type="text" placeholder="map name"></input>
+	<br>
+	Game Mode: <select id="mode">
+		<option value="200">KZTimer</option>
+		<option value="201">SimpleKZ</option>
+		<option value="202">Vanilla</option>
+	</select><br>
+	Type of Run: <select id="runtype">
+		<option value="false">Pro</option>
+		<option value="true">TP</option>
+	</select><br>
+	<div id="tester" style="width:1200px;height:550px;"></div>
+</body>
+
+</html>
