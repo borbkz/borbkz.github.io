@@ -603,6 +603,10 @@ $(document).ajaxStop(function () {
 })
 $(document).ready(function () {
 
+        let oldHideStatus = localStorage.getItem("SHOW_PROGRESS_BARS");
+        if(oldHideStatus!==null && oldHideStatus==="hide"){
+            localStorage.removeItem('SHOW_PROGRESS_BARS');
+        }
 
     createPowerChart();
     createServerChart();
@@ -943,10 +947,6 @@ $(document).ready(function () {
                 setProgressWdith($("#progress-bar-" + i), curPercentage, avgPoints || 0);
                 $('#progress-end-label-' + i).text(avgPoints.toFixed(0));
             }
-        });
-        $('#none-dropdown').click(function () {
-            localStorage.setItem("SHOW_PROGRESS_BARS", "hide");
-            $('.progress-bar-display-container').hide();
         });
 
         function setProgressBar(val, max, tier) {
