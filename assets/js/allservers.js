@@ -342,9 +342,9 @@ function createMapDistribution(map, c, d, loc, scale, mytime) {
     let xMin = 0;
     let index = 0;
     let step = 1;
-    let precision = 5;
+    let precision = 4;
     let title = () => 'Burr XII survival function for ' + map +
-        ` (c: ${c.toFixed(precision)}, d: ${d.toFixed(precision)}, loc: ${loc.toFixed(precision)}, scale: ${scale.toFixed(precision)})`;
+        ` (c = ${c.toFixed(precision)}, d = ${d.toFixed(precision)}, loc = ${loc.toFixed(precision)}, scale = ${scale.toFixed(precision)})`;
     //increment by seconds until 1 minute
     let threshold = .9999;
     while (index < MAXHOURS * 60 * 60) {
